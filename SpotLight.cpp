@@ -24,3 +24,8 @@ float SpotLight::getOuterCone()
 	return outerCone;
 }
 
+void SpotLight::setDirection(glm::vec3 dir)
+{
+	this->direction = dir;
+}
+

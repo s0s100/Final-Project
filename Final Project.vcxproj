@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\s0s10\Desktop\Final project\Final Project\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\s0s10\Desktop\Final project\Final Project\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\s0s10\Desktop\Final project\Current github version\Final Project\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\s0s10\Desktop\Final project\Current github version\Final Project\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

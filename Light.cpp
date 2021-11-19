@@ -17,3 +17,18 @@ glm::vec4 Light::getColor()
 {
 	return Light::color;
 }
+
+void Light::setPosition(glm::vec3 pos)
+{
+	this->position = pos;
+}
+
+void Light::setColor(glm::vec4 col)
+{
+	this->color = col;
+}
+
+void Light::addPosition(glm::vec3 addedPos)
+{
+	this->position += addedPos;
+}

@@ -14,8 +14,17 @@ public:
 
 	Light(glm::vec3 position, glm::vec4 color);
 
+	void addPosition(glm::vec3 addedPos);
+
+	/*
+		Getters/setters
+	*/
+
 	glm::vec3 getPosition();
 	glm::vec4 getColor();
+
+	void setPosition(glm::vec3 pos);
+	void setColor(glm::vec4 col);
 };
 
 #endif

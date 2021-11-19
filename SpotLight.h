@@ -21,6 +21,8 @@ public:
 	glm::vec3 getDirection();
 	float getInnerCone();
 	float getOuterCone();
+
+	void setDirection(glm::vec3 dir);
 };
 
 #endif

@@ -17,6 +17,8 @@ public:
 	* Getters/setters
 	*/
 	glm::vec3 getDirection();
+
+	void setDirection(glm::vec3 dir);
 };
 
 #endif

@@ -1,12 +1,13 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 #include "LightFactory.h"
 
 LightFactory::LightFactory(){}
 
-DirectionalLight LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
+DirectionalLight& LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
 {
 	DirectionalLight result = DirectionalLight(position, color, direction);
 	directionalLights.push_back(result);
@@ -14,7 +15,7 @@ DirectionalLight LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4
 	return result;
 }
 
-SpotLight LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
+SpotLight& LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
 {
 	SpotLight result = SpotLight(position, color, direction, innecCone, outerCone);
 	spotLights.push_back(result);
@@ -22,7 +23,7 @@ SpotLight LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::v
 	return result;
 }
 
-PointLight LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
+PointLight& LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
 {
 	PointLight result = PointLight(position, color, constant, linear, quadratic);
 	pointLights.push_back(result);
@@ -139,6 +140,8 @@ void LightFactory::update(Shader shader)
 		path2 = path1 + "outerCone";
 		eOuterCone = spotLights[i].getOuterCone();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), eOuterCone);
+
+		std::cout << "LF " << glm::to_string(ePosition) << std::endl;
 	}
 
 	// Update point lights
