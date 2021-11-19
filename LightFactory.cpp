@@ -10,7 +10,7 @@ LightFactory::LightFactory(){}
 DirectionalLight& LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
 {
 	DirectionalLight result = DirectionalLight(position, color, direction);
-	directionalLights.push_back(result);
+	directionalLights.push_back(&result);
 
 	return result;
 }
@@ -18,7 +18,7 @@ DirectionalLight& LightFactory::getDirectionalLight(glm::vec3 position, glm::vec
 SpotLight& LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
 {
 	SpotLight result = SpotLight(position, color, direction, innecCone, outerCone);
-	spotLights.push_back(result);
+	spotLights.push_back(&result);
 
 	return result;
 }
@@ -26,7 +26,7 @@ SpotLight& LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::
 PointLight& LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
 {
 	PointLight result = PointLight(position, color, constant, linear, quadratic);
-	pointLights.push_back(result);
+	pointLights.push_back(&result);
 
 	return result;
 }
@@ -66,6 +66,9 @@ void LightFactory::update(Shader shader)
 	float linear;
 	float quadratic;
 
+	// Transform references into
+
+
 	// Update point lights
 	glUniform1i(glGetUniformLocation(shader.getID(), "pointLightNum"), getPointLightSize());
 	for (int i = 0; i < getPointLightSize(); i++) {
@@ -73,6 +76,7 @@ void LightFactory::update(Shader shader)
 
 		path2 = path1 + "position";
 		ePosition = pointLights[i].getPosition();
+		// ePosition = pointLights.at(i)->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		path2 = path1 + "color";

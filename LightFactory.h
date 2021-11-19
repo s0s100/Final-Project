@@ -11,9 +11,9 @@
 class LightFactory
 {
 private:
-	std::vector<DirectionalLight> directionalLights;
-	std::vector<PointLight> pointLights;
-	std::vector<SpotLight> spotLights;
+	std::vector<DirectionalLight*> directionalLights;
+	std::vector<PointLight*> pointLights;
+	std::vector<SpotLight*> spotLights;
 
 public:
 	LightFactory();
