@@ -147,7 +147,7 @@ int main()
 	glm::vec3 lightDirection2 = glm::vec3(0.0f, 1.0f, 0.0f);
 	float innerCone2 = 0.4f;
 	float outerCone2 = 0.1f;
-	SpotLight light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
+	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
 
 	/*
 	* Main loop
@@ -173,10 +173,10 @@ int main()
 		camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
 		// Update light values
-		light.addPosition(glm::vec3(0.01f, 0.01f, 0.01f));
+		light->addPosition(glm::vec3(0.01f, 0.01f, 0.01f));
 		
 		// Checking
-		std::cout << "Main " << glm::to_string(light.getPosition()) << std::endl;
+		std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
 
 		lightFactory.update(shader);
 

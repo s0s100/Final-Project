@@ -7,7 +7,7 @@
 
 LightFactory::LightFactory(){}
 
-DirectionalLight& LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
+DirectionalLight LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
 {
 	DirectionalLight result = DirectionalLight(position, color, direction);
 	directionalLights.push_back(&result);
@@ -15,15 +15,15 @@ DirectionalLight& LightFactory::getDirectionalLight(glm::vec3 position, glm::vec
 	return result;
 }
 
-SpotLight& LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
+SpotLight* LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
 {
-	SpotLight result = SpotLight(position, color, direction, innecCone, outerCone);
-	spotLights.push_back(&result);
+	SpotLight* result = new SpotLight(position, color, direction, innecCone, outerCone);
+	spotLights.push_back(result);
 
 	return result;
 }
 
-PointLight& LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
+PointLight LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
 {
 	PointLight result = PointLight(position, color, constant, linear, quadratic);
 	pointLights.push_back(&result);
@@ -75,24 +75,24 @@ void LightFactory::update(Shader shader)
 		path1 = "pointLights[" + std::to_string(i) + "].";
 
 		path2 = path1 + "position";
-		ePosition = pointLights[i].getPosition();
-		// ePosition = pointLights.at(i)->getPosition();
+		//ePosition = pointLights[i].getPosition();
+		ePosition = pointLights.at(i)->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		path2 = path1 + "color";
-		eColor = pointLights[i].getColor();
+		eColor = pointLights.at(i)->getColor();
 		glUniform4f(glGetUniformLocation(shader.getID(), path2.c_str()), eColor.r, eColor.g, eColor.b, eColor.a);
 
 		path2 = path1 + "constant";
-		constant = pointLights[i].getC();
+		constant = pointLights.at(i)->getC();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), constant);
 
 		path2 = path1 + "linear";
-		linear = pointLights[i].getL();
+		linear = pointLights.at(i)->getL();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), linear);
 
 		path2 = path1 + "quadratic";
-		quadratic = pointLights[i].getQ();
+		quadratic = pointLights.at(i)->getQ();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), quadratic);
 	}
 
@@ -102,21 +102,21 @@ void LightFactory::update(Shader shader)
 		path1 = "directionalLights[" + std::to_string(i) + "].";
 
 		path2 = path1 + "position";
-		ePosition = directionalLights[i].getPosition();
+		ePosition = directionalLights.at(i)->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		// Testing
 		// std::cout << ePosition.x << " " << ePosition.y << " " << ePosition.z << std::endl;
 
 		path2 = path1 + "color";
-		eColor = directionalLights[i].getColor();
+		eColor = directionalLights.at(i)->getColor();
 		glUniform4f(glGetUniformLocation(shader.getID(), path2.c_str()), eColor.r, eColor.g, eColor.b, eColor.a);
 
 		// Debug
 		//std::cout << path2 << " " << eColor.r << " " << eColor.g << " " << eColor.b << " " << eColor.a << std::endl;
 
 		path2 = path1 + "direction";
-		eDirection = directionalLights[i].getDirection();
+		eDirection = directionalLights.at(i)->getDirection();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), eDirection.x, eDirection.y, eDirection.z);
 	}
 
@@ -126,27 +126,25 @@ void LightFactory::update(Shader shader)
 		path1 = "spotLights[" + std::to_string(i) + "].";
 
 		path2 = path1 + "position";
-		ePosition = spotLights[i].getPosition();
+		ePosition = spotLights.at(i)->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		path2 = path1 + "color";
-		eColor = spotLights[i].getColor();
+		eColor = spotLights.at(i)->getColor();
 		glUniform4f(glGetUniformLocation(shader.getID(), path2.c_str()), eColor.r, eColor.g, eColor.b, eColor.a);
 		
 		path2 = path1 + "direction";
-		eDirection = spotLights[i].getDirection();
+		eDirection = spotLights.at(i)->getDirection();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), eDirection.x, eDirection.y, eDirection.z);
 
 		path2 = path1 + "innerCone";
-		eInnerCone = spotLights[i].getInnerCone();
+		eInnerCone = spotLights.at(i)->getInnerCone();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), eInnerCone);
 
 		path2 = path1 + "outerCone";
-		eOuterCone = spotLights[i].getOuterCone();
+		eOuterCone = spotLights.at(i)->getOuterCone();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), eOuterCone);
 
 		std::cout << "LF " << glm::to_string(ePosition) << std::endl;
 	}
-
-	// Update point lights
 }
