@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{c86dffc6-87b9-4362-bb41-f5a5d004812f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameClasses">
+      <UniqueIdentifier>{35729727-ba6c-4857-abca-fcf752e419f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsClasses">
+      <UniqueIdentifier>{f29d10a3-e01a-47b7-a301-73396d95ecce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{773cc45b-524d-47f0-948b-fb0b9f8eacb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Other">
+      <UniqueIdentifier>{10dc36a3-4699-4e23-8f3e-a3d83001efcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other">
+      <UniqueIdentifier>{4ddfa20f-ba90-4c42-a223-0e1bfe183f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameClasses">
+      <UniqueIdentifier>{6a7ebf02-cc44-47be-83d6-5ba83f312b44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsClasses">
+      <UniqueIdentifier>{e401e7e4-75d0-4ae1-ab78-1ac8f7da500f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Other\LibFiles">
+      <UniqueIdentifier>{6a5cd13d-8ad5-45c0-8c34-b95b695b35e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsClasses\Light">
+      <UniqueIdentifier>{05f78dbf-a66a-4fbe-83e8-bda99a39709c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsClasses\Light">
+      <UniqueIdentifier>{5abd9879-0859-4a36-a3c9-597c9ded46c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsClasses\Mesh">
+      <UniqueIdentifier>{4c1c9683-340d-4e80-b3e1-ec85c3839fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsClasses\Mesh">
+      <UniqueIdentifier>{fcff2485-af7b-4908-bda3-46712b708ad9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Other">
+      <UniqueIdentifier>{ea1895cc-dcdf-4c5b-9756-05c59c877a8e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ShaderClass.h">
+      <Filter>Header Files\GraphicsClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\GraphicsClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\GraphicsClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Header Files\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameClasses</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\GraphicsClasses\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>Header Files\GraphicsClasses\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="EBO.h">
+      <Filter>Header Files\GraphicsClasses\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\GraphicsClasses\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="VAO.h">
+      <Filter>Header Files\GraphicsClasses\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="VBO.h">
+      <Filter>Header Files\GraphicsClasses\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\GraphicsClasses\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>Header Files\GraphicsClasses\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightFactory.h">
+      <Filter>Header Files\GraphicsClasses\Light</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderClass.cpp">
+      <Filter>Source Files\GraphicsClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\GraphicsClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\GraphicsClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files\Other\LibFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="stb.cpp">
+      <Filter>Source Files\Other\LibFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Source Files\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\GameClasses</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="EBO.cpp">
+      <Filter>Source Files\GraphicsClasses\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\GraphicsClasses\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="VAO.cpp">
+      <Filter>Source Files\GraphicsClasses\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="VBO.cpp">
+      <Filter>Source Files\GraphicsClasses\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="LightFactory.cpp">
+      <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\default.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\default.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Textures\planks.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Textures\planksSpec.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Textures\brick.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="Resources\Other\Fox_icon.png">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
