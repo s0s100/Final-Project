@@ -177,8 +177,10 @@ int main()
 		
 		// Checking
 		// std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
-
 		lightFactory.update(shader);
+
+		// Shadow implementation
+		
 
 		// Rotation and movement
 		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
