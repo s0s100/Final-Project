@@ -21,6 +21,10 @@ public:
 	// Depth map rendering
 	void renderDepthMap();
 
+	// Get shadow width/height
+	int getShadowWidth();
+	int getShadowHeight();
+
 	// Bind, unbind and delete operation for the depth map and framebuffer
 	void bindFBO();
 	void bindDepthMap();

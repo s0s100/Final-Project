@@ -188,6 +188,8 @@
   <ItemGroup>
     <None Include="Shaders\default.frag" />
     <None Include="Shaders\default.vert" />
+    <None Include="Shaders\depthShader.frag" />
+    <None Include="Shaders\depthShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Other\Fox_icon.png" />

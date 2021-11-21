@@ -70,8 +70,9 @@ int main()
 	* All the magic
 	**/
 
-	// Main shader
+	// Shader creation
 	Shader shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
+	Shader depthShader((shaderPath + "depthShader.vert").c_str(), (shaderPath + "depthShader.frag").c_str());
 
 	// Main camera
 	glm::vec3 camPosition(0.0f, 2.0f, 3.0f);
@@ -113,11 +114,11 @@ int main()
 	LightFactory lightFactory;
 
 	// Directinal light
-	glm::vec3 lightPos0 = glm::vec3(1.0f, 1.0f, 1.0f);
-	//glm::vec4 lightColor0 = glm::vec4(0.3f, 0.1f, 0.5f, 1.0f);
-	glm::vec4 lightColor0 = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
-	glm::vec3 lightDirection0 = glm::vec3(1.0f, 1.0f, 1.0f);
-	lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	//glm::vec3 lightPos0 = glm::vec3(1.0f, 1.0f, 1.0f);
+	////glm::vec4 lightColor0 = glm::vec4(0.3f, 0.1f, 0.5f, 1.0f);
+	//glm::vec4 lightColor0 = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+	//glm::vec3 lightDirection0 = glm::vec3(1.0f, 1.0f, 1.0f);
+	//lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
 
 	// Point light
 	glm::vec3 lightPosP1 = glm::vec3(0.1f, 0.5f, 0.0f);
@@ -127,15 +128,15 @@ int main()
 	float quadratic1 = 1.0f;
 	lightFactory.getPointLight(lightPosP1, lightColorP1, constant1, linear1, quadratic1);
 
-	glm::vec3 lightPosP2 = glm::vec3(1.0f, 1.0f, 0.0f);
+	/*glm::vec3 lightPosP2 = glm::vec3(1.0f, 1.0f, 0.0f);
 	glm::vec4 lightColorP2 = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
 	float constant2 = 3.0f;
 	float linear2 = 0.7f;
 	float quadratic2 = 1.0f;
-	lightFactory.getPointLight(lightPosP2, lightColorP2, constant2, linear2, quadratic2);
+	lightFactory.getPointLight(lightPosP2, lightColorP2, constant2, linear2, quadratic2);*/
 
 	// Spot lights
-	glm::vec3 lightPos = glm::vec3(0.0f, 1.0f, 0.0f);
+	/*glm::vec3 lightPos = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec4 lightColor = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
 	glm::vec3 lightDirection = glm::vec3(0.0f, 1.0f, 0.0f);
 	float innerCone = 0.95f;
@@ -147,7 +148,7 @@ int main()
 	glm::vec3 lightDirection2 = glm::vec3(0.0f, 1.0f, 0.0f);
 	float innerCone2 = 0.4f;
 	float outerCone2 = 0.1f;
-	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
+	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);*/
 
 	/*
 	* Main loop
@@ -170,17 +171,15 @@ int main()
 
 		// Set up camera inputs and update it after it was changed by the input
 		camera.inputs2(window);
-		camera.updateMatrix(45.0f, 0.1f, 100.0f);
+		// camera.updateMatrix(45.0f, 0.1f, 100.0f);
+		camera.updateMatrix();
 
 		// Update light values
-		light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
+		// light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
 		
 		// Checking
 		// std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
 		lightFactory.update(shader);
-
-		// Shadow implementation
-		
 
 		// Rotation and movement
 		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
@@ -188,8 +187,13 @@ int main()
 		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		// Call the drawing functions
+		// planks.matrixSetup(shader);
+		// planks2.matrixSetup(shader);
 		planks.draw(shader, camera);
 		planks2.draw(shader, camera);
+
+		// Implementing drawing function with a shadowing
+
 		
 		// Swap the back buffer with the front buffer (refresh the image)
 		glfwSwapBuffers(window);

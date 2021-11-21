@@ -2,6 +2,7 @@
 #define GAME_OBJECT_CLASS_HEADER
 
 #include "Mesh.h"
+#include "ShadowClass.h"
 
 class GameObject
 {
@@ -22,7 +23,14 @@ private:
 public:
 	// Constructor with default values
 	GameObject(Mesh mesh);
-	// Put all the parameters into shader
+
+	// Setting up the matrix model view
+	// void matrixSetup(Shader shader);
+
+	// Run matrix setup to generate depth map
+	void generateDepthMap(Shader shader, ShadowClass shadow, Camera camera);
+
+	// Put all the parameters into shader and call a shader
 	void draw(Shader shader, Camera camera);
 
 	/**

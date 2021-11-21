@@ -24,7 +24,7 @@ Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation)
 }
 
 // Update model matrix to use in the shader
-void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
+void Camera::updateMatrix()
 {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 proj = glm::mat4(1.0f);
@@ -32,7 +32,7 @@ void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 	// View matrix
 	view = glm::lookAt(position, position + orientation, Y_VECTOR);
 	// Projection matrix
-	proj = glm::perspective(glm::radians(FOVdeg), float(width / height), nearPlane, farPlane);
+	proj = glm::perspective(glm::radians(FOV), float(width / height), NEAR_PLANE, FAR_PLANE);
 	// Multiplication of those matrices is camera matrix
 	cameraMatrix = proj * view;
 

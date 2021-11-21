@@ -29,7 +29,22 @@ ShadowClass::ShadowClass()
 
 void ShadowClass::renderDepthMap()
 {
-	//
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	bindFBO();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	// Shader and matrix configuration
+
+	unbindFBO();
+}
+
+int ShadowClass::getShadowHeight()
+{
+	return SHADOW_HEIGHT;
+}
+
+int ShadowClass::getShadowWidth()
+{
+	return SHADOW_WIDTH;
 }
 
 /*

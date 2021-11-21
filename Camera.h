@@ -19,6 +19,10 @@
 #define X_VECTOR glm::vec3(1.0f, 0.0f, 0.0f)
 #define Y_VECTOR glm::vec3(0.0f, 1.0f, 0.0f)
 #define Z_VECTOR glm::vec3(0.0f, 0.0f, 1.0f)
+// Near/far planes
+constexpr float NEAR_PLANE = 0.1;;
+constexpr float FAR_PLANE = 100.0;;
+constexpr float FOV = 45.0;;
 
 class Camera 
 {
@@ -54,7 +58,7 @@ public:
 	// Basic constructor for the camera
 	Camera(int width, int height, glm::vec3 position, glm::vec3 orientation);
 	// Updates camera matrix
-	void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+	void updateMatrix();
 	// Creates camera matrix in the selected shader so its location could be changed
 	void matrix(Shader& shader, const char* uniform);
 	// Function to control camera using input mouse and keyboard
