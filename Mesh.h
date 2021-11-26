@@ -27,6 +27,9 @@ public:
 
 	// Put values into the shader so it could calculate the image
 	void draw(Shader& shader, Camera& camera);
+
+	// Shadow shader
+	void shadowDraw(Shader& shadowShader);
 };
 #endif
 

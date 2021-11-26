@@ -2,18 +2,17 @@
 
 DirectionalLight::DirectionalLight(){}
 
-DirectionalLight::DirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) : Light(position, color)
+DirectionalLight::DirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) : Light(position, color, direction)
 {
-	Light(position, color);
-	DirectionalLight::direction = direction;
+	// DirectionalLight::direction = direction;
 }
 
-glm::vec3 DirectionalLight::getDirection()
-{
-	return direction;
-}
+//glm::vec3 DirectionalLight::getDirection()
+//{
+//	return direction;
+//}
 
-void DirectionalLight::setDirection(glm::vec3 dir)
-{
-	this->direction = dir;
-}
+//void DirectionalLight::setDirection(glm::vec3 dir)
+//{
+//	this->direction = dir;
+//}

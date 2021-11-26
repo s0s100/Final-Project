@@ -1,6 +1,11 @@
 #ifndef SHADOW_CLASS_HEADER
 #define SHADOW_CLASS_HEADER
 
+#include <glm/glm.hpp>
+
+#include "GameObject.h"
+#include "ShaderClass.h"
+
 class ShadowClass
 {
 private:
@@ -18,8 +23,12 @@ public:
 	// Basic constructor
 	ShadowClass();
 
-	// Depth map rendering
-	void renderDepthMap();
+	// Depth map rendering for the object
+	void renderDepthMap(GameObject object, Shader depthShader, glm::mat4 lightSpaceMatrix);
+
+	// Calculate light matrix to generate depth map
+	//void generateLightMatrix(DirectionalLight light);
+	// void generateLightMatrix(SpotLight light);
 
 	// Get shadow width/height
 	int getShadowWidth();

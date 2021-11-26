@@ -1,7 +1,9 @@
-#include "ShadowClass.h"
-
 #include <glad/glad.h>
 #include <cstddef>
+#include <glm/glm.hpp>
+
+#include "ShadowClass.h"
+#include "GameObject.h"
 
 ShadowClass::ShadowClass()
 {
@@ -21,19 +23,22 @@ ShadowClass::ShadowClass()
 	// Now framebuffer and texture should be connected
 	bindFBO();
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE, this->depthMap, 0);
-	// Hope I won't use it in the main/scene class
+	// To prevent usage of it in the main/scene class
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	unbindFBO();
 }
 
-void ShadowClass::renderDepthMap()
+void ShadowClass::renderDepthMap(GameObject object, Shader depthShader,
+	glm::mat4 lightSpaceMatrix)
 {
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	// glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	bindFBO();
+	// Pushing parameters into the shader (object vertices, indices, textures, etc)
+	glUniformMatrix4fv(glGetUniformLocation(depthShader.getID(), "lightSpaceMatrix"),
+		1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
 	glClear(GL_DEPTH_BUFFER_BIT);
-	// Shader and matrix configuration
-
+	object.shadowDraw(depthShader);// Rendering using depth shader
 	unbindFBO();
 }
 

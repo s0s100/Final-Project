@@ -59,3 +59,10 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	// Call a draw function
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
+
+void Mesh::shadowDraw(Shader& shadowShader)
+{
+	shadowShader.activateShader();
+	Mesh::VAO.bind();
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+}

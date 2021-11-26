@@ -7,7 +7,7 @@ class DirectionalLight: public Light
 {
 private:
 	// Direction in which light shines
-	glm::vec3 direction = glm::vec3(1.0f);
+	// glm::vec3 direction = glm::vec3(1.0f);
 
 public:
 	DirectionalLight();
@@ -16,9 +16,9 @@ public:
 	/*
 	* Getters/setters
 	*/
-	glm::vec3 getDirection();
+	// glm::vec3 getDirection();
 
-	void setDirection(glm::vec3 dir);
+	// void setDirection(glm::vec3 dir);
 };
 
 #endif
