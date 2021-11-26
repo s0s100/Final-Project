@@ -17,12 +17,12 @@ ShadowClass::ShadowClass()
 		SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Now framebuffer and texture should be connected
 	bindFBO();
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE, this->depthMap, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->depthMap, 0);
 	// To prevent usage of it in the main/scene class
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
@@ -32,12 +32,15 @@ ShadowClass::ShadowClass()
 void ShadowClass::renderDepthMap(GameObject object, Shader depthShader,
 	glm::mat4 lightSpaceMatrix)
 {
-	// glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	bindFBO();
+	depthShader.activateShader();
+
 	// Pushing parameters into the shader (object vertices, indices, textures, etc)
 	glUniformMatrix4fv(glGetUniformLocation(depthShader.getID(), "lightSpaceMatrix"),
 		1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-	glClear(GL_DEPTH_BUFFER_BIT);
+
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	bindFBO();
+	glClear(GL_DEPTH_BUFFER_BIT);	
 	object.shadowDraw(depthShader);// Rendering using depth shader
 	unbindFBO();
 }
@@ -71,9 +74,14 @@ void ShadowClass::deleteFBO()
 	glDeleteFramebuffers(1, &this->fboID);
 }
 
-void ShadowClass::bindDepthMap()
+void ShadowClass::bindDepthMap(Shader shader)
 {
+	// Shader needs to be activated before changing the value of a uniform
+	shader.activateShader();
+	// Sets the value of the uniform
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, this->depthMap);
+	glUniform1i(glGetUniformLocation(shader.getID(), "shadowMap"), fboID);
 }
 
 void ShadowClass::unbindDepthMap()

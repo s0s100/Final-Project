@@ -66,8 +66,11 @@ void LightFactory::update(Shader shader)
 	float linear;
 	float quadratic;
 
-	// Transform references into
-
+	// Testing 1 spot light shadow casting
+	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "lightSpaceMatrix"),
+		1, GL_FALSE, glm::value_ptr(spotLights[0]->getLightMatrix()));
+	// Also bind shadow depth map
+	spotLights[0]->getShadowClass().bindDepthMap(shader);
 
 	// Update point lights
 	glUniform1i(glGetUniformLocation(shader.getID(), "pointLightNum"), getPointLightSize());

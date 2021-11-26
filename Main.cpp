@@ -166,7 +166,7 @@ int main()
 		// std::cout <<  "FPS: " << static_cast<int>(fps) << std::endl;
 
 		// Specify the color of the background, clean the back buffer and depth buffer
-		glClearColor(0.15f, 0.09f, 0.12f, 1.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Set up camera inputs and update it after it was changed by the input
@@ -178,16 +178,20 @@ int main()
 		
 		// Checking
 		// std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
-		lightFactory.update(shader);
 		light->generateLightMatrix();
 		light->generateDepthMap(planks, depthShader);
 		light->generateDepthMap(planks2, depthShader); 
+		lightFactory.update(shader);
 		// It should be probably generated after
 
 		// Rotation and movement
-		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
-		planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
-		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
+		// planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
+		// planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
+		// planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
+
+		// Resetting viewpoints
+		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Call the drawing functions
 		// planks.matrixSetup(shader);

@@ -42,10 +42,10 @@ void Light::addPosition(glm::vec3 addedPos)
 	this->position += addedPos;
 }
 
-//ShadowClass Light::getShadowClass() 
-//{
-//	return shadow;
-//}
+ShadowClass Light::getShadowClass() 
+{
+	return shadow;
+}
 
 glm::vec3 Light::getDirection()
 {
@@ -57,13 +57,19 @@ void Light::setDirection(glm::vec3 direction)
 	this->direction = direction;
 }
 
+glm::mat4 Light::getLightMatrix()
+{
+	return lightSpaceMatrix;
+}
+
 void Light::generateLightMatrix()
 {
 	float near_plane = NEAR_PLANE;
 	float far_plane = FAR_PLANE;
 
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, NEAR_PLANE, FAR_PLANE);
-	glm::mat4 lightView = glm::lookAt(getPosition(), getPosition() + getDirection(), Y_VECTOR);
+	//glm::mat4 lightView = glm::lookAt(getPosition(), getPosition() + getDirection(), Y_VECTOR);
+	glm::mat4 lightView = glm::lookAt(getPosition(), glm::vec3(0.0f), Y_VECTOR);
 
 	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 	this->lightSpaceMatrix = lightSpaceMatrix;

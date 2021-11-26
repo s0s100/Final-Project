@@ -24,7 +24,8 @@ public:
 	ShadowClass();
 
 	// Depth map rendering for the object
-	void renderDepthMap(GameObject object, Shader depthShader, glm::mat4 lightSpaceMatrix);
+	void renderDepthMap(GameObject object, Shader depthShader, 
+		glm::mat4 lightSpaceMatrix);
 
 	// Calculate light matrix to generate depth map
 	//void generateLightMatrix(DirectionalLight light);
@@ -36,7 +37,7 @@ public:
 
 	// Bind, unbind and delete operation for the depth map and framebuffer
 	void bindFBO();
-	void bindDepthMap();
+	void bindDepthMap(Shader shader);
 	void unbindFBO();
 	void unbindDepthMap();
 	void deleteFBO();

@@ -64,5 +64,15 @@ void Mesh::shadowDraw(Shader& shadowShader)
 {
 	shadowShader.activateShader();
 	Mesh::VAO.bind();
+
+	// Bind every included texture
+	std::string type;
+	for (unsigned int i = 0; i < textures.size(); i++)
+	{
+		type = textures[i].getType();
+		textures[i].texUnit(shadowShader, type.c_str(), i);
+		textures[i].bind();
+	}
+
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }

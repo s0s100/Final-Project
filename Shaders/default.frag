@@ -3,7 +3,8 @@
 #define NR_DIR_LIGHT 10
 #define NR_POINT_LIGHT 10
 #define NR_SPOT_LIGHT 10
-#define AMBIENT 0.05f
+
+#define AMBIENT 0.2f
 #define DIFFUSE 0.4f
 #define SPECULAR 0.7f
 
@@ -44,11 +45,15 @@ in vec3 crntPos;
 in vec3 normal;
 // Inputs the texture coordinates from the Vertex Shader
 in vec2 texCoord;
+// Test frag pos light space
+in vec4 fragPosLightSpace;
 
 // Standart diffuse unit texture
 uniform sampler2D diffuse0;
 // Specular light map unit
 uniform sampler2D specular0;
+// Shadow map texture
+uniform sampler2D shadowMap;
 
 // Light color
 uniform vec4 lightColor;
@@ -119,6 +124,24 @@ vec4 calculatePointLight(PointLight pointLight)
 	return (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
 }
 
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+	// Prospective divide (useless for orthographic projection)
+	// [-1, 1]
+	vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+	// [ 0, 1]
+	projCoords = projCoords * 0.5f + 0.5f;
+	// Finding closest depth
+	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	float currentDepth = projCoords.z;
+	float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+
+	// return 0;
+	// return currentDepth; // Makes it black (even ambient value goes to 0)
+	// return closestDepth; // Value between 0 and 1
+	return shadow; // Always return zero
+}
+
 vec4 calculateSpotLight(SpotLight spotLight)
 {
 	// Define values
@@ -146,8 +169,12 @@ vec4 calculateSpotLight(SpotLight spotLight)
 	float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDirection);
 	float inten = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
+	float shadow = ShadowCalculation(fragPosLightSpace);
+
 	//vec4 result = vec4(0.0f);
-	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
+	// vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
+	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1.0 - shadow) + ambient) + 
+	texture(specular0, texCoord).r * specular * inten * (1.0 - shadow)) * lightClr;
 	return result;
 }
 
@@ -170,5 +197,6 @@ void main()
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
 
+	// Tr
 	FragColor = finalColor;
 }

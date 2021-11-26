@@ -33,6 +33,8 @@ public:
 	glm::vec3 getPosition();
 	glm::vec4 getColor();
 	glm::vec3 getDirection();
+	glm::mat4 getLightMatrix();
+	ShadowClass getShadowClass();
 	
 	void setPosition(glm::vec3 pos);
 	void setColor(glm::vec4 col);
