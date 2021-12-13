@@ -99,11 +99,11 @@ int main()
 	
 	// Game objects
 	GameObject planks = GameObject(planksMesh);
-	planks.setPosition(glm::vec3(0.0f, -0.5f, 0.0f));
+	planks.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	planks.setRotation(glm::vec3(30.0f, 0.0f, 0.0f));
 
 	GameObject planks2 = GameObject(planksMesh);
-	planks2.setPosition(glm::vec3(1.0f, 0.2f, 0.2f));
+	planks2.setPosition(glm::vec3(0.0f, 0.5f, 0.0f));
 	planks2.setScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	planks2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -136,16 +136,16 @@ int main()
 	lightFactory.getPointLight(lightPosP2, lightColorP2, constant2, linear2, quadratic2);*/
 
 	// Spot lights
-	/*glm::vec3 lightPos = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec4 lightColor = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
-	glm::vec3 lightDirection = glm::vec3(0.0f, 1.0f, 0.0f);
-	float innerCone = 0.95f;
-	float outerCone = 0.80f;
-	lightFactory.getSpotLight(lightPos, lightColor, lightDirection, innerCone, outerCone);*/
+	/*glm::vec3 lightpos = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec4 lightcolor = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
+	glm::vec3 lightdirection = glm::vec3(0.0f, 1.0f, 0.0f);
+	float innercone = 0.95f;
+	float outercone = 0.80f;
+	lightFactory.getSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);*/
 
-	glm::vec3 lightPos2 = glm::vec3(1.0f, 0.5f, 0.0f);
+	glm::vec3 lightPos2 = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec4 lightColor2 = glm::vec4(0.8f, 1.0f, 0.5f, 1.0f);
-	glm::vec3 lightDirection2 = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 lightDirection2 = glm::vec3(0.0f, -1.0f, 0.0f);
 	float innerCone2 = 0.4f;
 	float outerCone2 = 0.1f;
 	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
@@ -153,6 +153,13 @@ int main()
 	/*
 	* Main loop
 	*/
+
+	// Testing
+	// lightFactory.update(shader);
+	std::vector<GameObject> objectVector;
+
+	objectVector.push_back(planks);
+	objectVector.push_back(planks2);
 
 	float prevTime = 0;
 	float timeDiff = 0;
@@ -179,15 +186,23 @@ int main()
 		// Checking
 		// std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
 		light->generateLightMatrix();
-		light->generateDepthMap(planks, depthShader);
-		light->generateDepthMap(planks2, depthShader); 
+
+		// Test
+		std::cout << "LightMatrix main: " << glm::to_string(light->getLightMatrix()) << std::endl;
+
+		/*light->generateDepthMap(planks, depthShader);
+		light->generateDepthMap(planks2, depthShader);*/
+
+		light->generateDepthMap2(objectVector, depthShader);
+
 		lightFactory.update(shader);
+
 		// It should be probably generated after
 
 		// Rotation and movement
-		// planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
-		// planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
-		// planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
+		//planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
+		//planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
+		//planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		// Resetting viewpoints
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);

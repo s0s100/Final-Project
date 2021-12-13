@@ -4,14 +4,22 @@
 
 #include "ShadowClass.h"
 #include "GameObject.h"
+#include <iostream>
+#include "Light.h"
+#include <glm/gtx/string_cast.hpp>
 
 ShadowClass::ShadowClass()
 {
 	// Initialize framebuffer
 	glGenFramebuffers(1, &this->fboID);
 
+	std::cout << "FBO ID: " << fboID << std::endl;
+
 	// Create and bind depth map texture
 	glGenTextures(1, &this->depthMap);
+
+	std::cout << "Depth map: " << depthMap << std::endl;
+
 	glBindTexture(GL_TEXTURE_2D, this->depthMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
 		SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -29,7 +37,7 @@ ShadowClass::ShadowClass()
 	unbindFBO();
 }
 
-void ShadowClass::renderDepthMap(GameObject object, Shader depthShader,
+void ShadowClass::renderDepthMap(GameObject object, Shader &depthShader,
 	glm::mat4 lightSpaceMatrix)
 {
 	depthShader.activateShader();
@@ -42,6 +50,27 @@ void ShadowClass::renderDepthMap(GameObject object, Shader depthShader,
 	bindFBO();
 	glClear(GL_DEPTH_BUFFER_BIT);	
 	object.shadowDraw(depthShader);// Rendering using depth shader
+	unbindFBO();
+}
+
+void ShadowClass::renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader,
+	glm::mat4 lightSpaceMatrix)
+{
+	depthShader.activateShader();
+
+	// Pushing parameters into the shader (object vertices, indices, textures, etc)
+	glUniformMatrix4fv(glGetUniformLocation(depthShader.getID(), "lightSpaceMatrix"),
+		1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	bindFBO();
+	glClear(GL_DEPTH_BUFFER_BIT);
+	
+	// After the set up render each of the objects
+	for (GameObject object : objects) {
+		object.shadowDraw(depthShader);// Rendering using depth shader
+	}
+
 	unbindFBO();
 }
 
@@ -61,6 +90,7 @@ int ShadowClass::getShadowWidth()
 
 void ShadowClass::bindFBO()
 {
+	// std::cout << "Binding fbo: " << fboID << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, this->fboID);
 }
 
@@ -76,6 +106,7 @@ void ShadowClass::deleteFBO()
 
 void ShadowClass::bindDepthMap(Shader shader)
 {
+	// std::cout << "Binding depth map: " << depthMap << std::endl;
 	// Shader needs to be activated before changing the value of a uniform
 	shader.activateShader();
 	// Sets the value of the uniform

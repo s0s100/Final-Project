@@ -24,7 +24,10 @@ public:
 	ShadowClass();
 
 	// Depth map rendering for the object
-	void renderDepthMap(GameObject object, Shader depthShader, 
+	void renderDepthMap(GameObject object, Shader &depthShader, 
+		glm::mat4 lightSpaceMatrix);
+
+	void renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader, 
 		glm::mat4 lightSpaceMatrix);
 
 	// Calculate light matrix to generate depth map

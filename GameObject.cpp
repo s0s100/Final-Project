@@ -24,7 +24,7 @@ void GameObject::draw(Shader& shader, Camera camera)
 // Upload matrix 
 void GameObject::shadowDraw(Shader& shadowShader)
 {
-	shadowShader.activateShader();
+	// shadowShader.activateShader();
 	glUniformMatrix4fv(glGetUniformLocation(shadowShader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	GameObject::mesh.shadowDraw(shadowShader);
 }

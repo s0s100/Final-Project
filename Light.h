@@ -25,7 +25,8 @@ public:
 
 	void generateLightMatrix();
 
-	void generateDepthMap(GameObject object, Shader depthShader);
+	void generateDepthMap(GameObject object, Shader &depthShader);
+	void generateDepthMap2(std::vector<GameObject> objects, Shader& depthShader);
 	/*
 		Getters/setters
 	*/

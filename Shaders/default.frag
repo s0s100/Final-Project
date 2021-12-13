@@ -138,8 +138,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 	// return 0;
 	// return currentDepth; // Makes it black (even ambient value goes to 0)
-	// return closestDepth; // Value between 0 and 1
-	return shadow; // Always return zero
+	return closestDepth; // Value between 0 and 1
+	// return shadow; // Always return zero
 }
 
 vec4 calculateSpotLight(SpotLight spotLight)
@@ -197,6 +197,7 @@ void main()
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
 
-	// Tr
+	// Checking texture
+	// FragColor = texture(shadowMap, texCoord);
 	FragColor = finalColor;
 }
