@@ -59,14 +59,14 @@ public:
 	Camera(int width, int height, glm::vec3 position, glm::vec3 orientation);
 	// Updates camera matrix
 	void updateMatrix();
-	// Creates camera matrix in the selected shader so its location could be changed
-	void matrix(Shader& shader, const char* uniform);
+	// Set camera matrix for the shader
+	void setCameraMatrix(Shader& shader, const char* uniform);
+	// Set camera position for the shader
+	void setCameraPosition(Shader& shader, const char* uniform);
 	// Function to control camera using input mouse and keyboard
 	void inputs(GLFWwindow* window);
 	// Other way to change values 
 	void inputs2(GLFWwindow* window);
-
-	glm::vec3 getPosition();
 };
 #endif 
 

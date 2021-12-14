@@ -53,8 +53,9 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	}
 
 	// Put the camera position and matrix to the shader
-	glUniform3f(glGetUniformLocation(shader.getID(), "camPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-	camera.matrix(shader, "camMatrix");
+	//glUniform3f(glGetUniformLocation(shader.getID(), "camPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+	camera.setCameraPosition(shader, "camPos");
+	camera.setCameraMatrix(shader, "camMatrix");
 
 	// Call a draw function
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

@@ -41,9 +41,16 @@ void Camera::updateMatrix()
 }
 
 // Creates camera matrix in the selected shader so its location could be changed
-void Camera::matrix(Shader& shader, const char* uniform)
+void Camera::setCameraMatrix(Shader& shader, const char* location)
 {
-	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+	//glUniformMatrix4fv(glGetUniformLocation(shader.getID(), location), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+	shader.setMat4(location, cameraMatrix);
+}
+
+
+void Camera::setCameraPosition(Shader& shader, const char* location)
+{
+	shader.setVec3(location, this->position);
 }
 
 // Inputs I've taken from tutorial
@@ -193,11 +200,6 @@ void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		zoom += zoomValue;
 	}
-}
-
-glm::vec3 Camera::getPosition()
-{
-	return position;
 }
 
 /*void Camera::window_size_callback(GLFWwindow* window, int width, int height)
