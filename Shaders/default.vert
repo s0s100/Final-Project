@@ -14,7 +14,7 @@ out vec4 fragPosLightSpace;
 // Camera and object mmatrices + Test light matrix
 uniform mat4 camMatrix; 
 uniform mat4 modelMatrix;
-uniform mat4 lightSpaceMatrix; // Testing
+uniform mat4 lightSpaceMatrix; // For now one element
 
 void main()
 {
@@ -24,10 +24,8 @@ void main()
 	normal = normalize(aNormal);
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = aTex;
-
 	// Testing shadow mapping
-	fragPosLightSpace = lightSpaceMatrix * vec4(crntPos, 1.0);
-
+	fragPosLightSpace = lightSpaceMatrix * vec4(crntPos, 1.0f);
 	// Outputs the positions/coordinates of all vertices
 	gl_Position = camMatrix * vec4(crntPos, 1.0f);
 }

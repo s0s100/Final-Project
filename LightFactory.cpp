@@ -70,6 +70,10 @@ void LightFactory::update(Shader shader)
 	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "lightSpaceMatrix"),
 		1, GL_FALSE, glm::value_ptr(spotLights[0]->getLightMatrix()));
 	// Also bind shadow depth map
+	// Check shadow class
+	// spotLights[0]->getShadowClass();
+	std::cout << "Shadow class data: " << "" << std::endl;
+
 	spotLights[0]->getShadowClass().bindDepthMap(shader);
 
 	// Update point lights

@@ -54,11 +54,6 @@ uniform sampler2D diffuse0;
 uniform sampler2D specular0;
 // Shadow map texture
 uniform sampler2D shadowMap;
-
-// Light color
-uniform vec4 lightColor;
-// Light position
-uniform vec3 lightPos;
 // Camera position
 uniform vec3 camPos;
 
@@ -133,8 +128,10 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 	projCoords = projCoords * 0.5f + 0.5f;
 	// Finding closest depth
 	float closestDepth = texture(shadowMap, projCoords.xy).r;
-	float currentDepth = projCoords.z;
-	float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
+	float currentDepth = projCoords.z; // Problem with value
+	// float bias = 0.05f;
+	// float shadow = currentDepth - bias > closestDepth ? 1.0f : 0.0f;
+	// float shadow = currentDepth > closestDepth ? 1.0f : 0.0f;
 
 	// return 0;
 	// return currentDepth; // Makes it black (even ambient value goes to 0)
@@ -198,6 +195,9 @@ void main()
 	}
 
 	// Checking texture
-	// FragColor = texture(shadowMap, texCoord);
-	FragColor = finalColor;
+	FragColor = texture(shadowMap, texCoord);
+	// FragColor = finalColor;
+	// FragColor = texture(shadowMap, crntPos.xy);
+	// Create projection for the texture
+	
 }

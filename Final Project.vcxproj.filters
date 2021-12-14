@@ -175,6 +175,12 @@
     <None Include="Shaders\depthShader.vert">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="Shaders\depthDebug.frag">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="Shaders\depthDebug.vert">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Textures\planks.png">
