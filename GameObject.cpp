@@ -16,8 +16,9 @@ GameObject::GameObject(Mesh mesh)
 
 void GameObject::draw(Shader& shader, Camera camera)
 {
-	shader.activateShader();
-	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	// shader.activateShader();
+	//glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	shader.setMat4("modelMatrix", model);
 	GameObject::mesh.draw(shader, camera);
 }
 
@@ -25,7 +26,8 @@ void GameObject::draw(Shader& shader, Camera camera)
 void GameObject::shadowDraw(Shader& shadowShader)
 {
 	// shadowShader.activateShader();
-	glUniformMatrix4fv(glGetUniformLocation(shadowShader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	//glUniformMatrix4fv(glGetUniformLocation(shadowShader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+	shadowShader.setMat4("modelMatrix", model);
 	GameObject::mesh.shadowDraw(shadowShader);
 }
 

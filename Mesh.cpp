@@ -40,7 +40,7 @@ Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vec
 void Mesh::draw(Shader& shader, Camera& camera)
 {
 	// Active all the elements before drawing
-	shader.activateShader();
+	// shader.activateShader();
 	Mesh::VAO.bind();
 
 	// Bind every included texture

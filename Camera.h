@@ -65,7 +65,7 @@ public:
 	void setCameraPosition(Shader& shader, const char* uniform);
 	// Function to control camera using input mouse and keyboard
 	void inputs(GLFWwindow* window);
-	// Other way to change values 
+	// Stratery camera option 
 	void inputs2(GLFWwindow* window);
 };
 #endif 

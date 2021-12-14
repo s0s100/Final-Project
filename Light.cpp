@@ -104,6 +104,6 @@ void Light::generateDepthMap(GameObject object, Shader &depthShader)
 
 void Light::generateDepthMap2(std::vector<GameObject> objects, Shader& depthShader)
 {
-	depthShader.activateShader();
+	// depthShader.activateShader();
 	this->shadow.renderDepthMap2(objects, depthShader, this->lightSpaceMatrix);
 }

@@ -179,21 +179,14 @@ int main()
 
 		// Set up camera inputs and update it after it was changed by the input
 		camera.inputs2(window);
-		// camera.updateMatrix(45.0f, 0.1f, 100.0f);
 		camera.updateMatrix();
 		// Update light values
 		// light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
-		
-		// Checking
-		// std::cout << "Main " << glm::to_string(light->getPosition()) << std::endl;
 		light->generateLightMatrix();
-
-		// Test
-		// std::cout << "LightMatrix main: " << glm::to_string(light->getLightMatrix()) << std::endl;
 
 		/*light->generateDepthMap(planks, depthShader);
 		light->generateDepthMap(planks2, depthShader);*/
-
+		depthShader.activateShader();
 		light->generateDepthMap2(objectVector, depthShader);
 
 		// Upload every value for the light sources
@@ -213,20 +206,9 @@ int main()
 		// Call the drawing functions
 		// planks.matrixSetup(shader);
 		// planks2.matrixSetup(shader);
+		shader.activateShader();
 		planks.draw(shader, camera);
 		planks2.draw(shader, camera);
-
-		// Implementing drawing function with a shadowing
-		/*depthDebug.activateShader();
-		//debugDepthQuad.setFloat("near_plane", near_plane);
-		glUniform1f(glGetUniformLocation(depthDebug.getID(), "near_plane"), NEAR_PLANE);
-		//debugDepthQuad.setFloat("far_plane", far_plane);
-		glUniform1f(glGetUniformLocation(depthDebug.getID(), "far_plane"), FAR_PLANE);
-		glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, depthMap);
-		light->getShadowClass().bindDepthMap(depthDebug);
-		planks.draw(depthDebug, camera);
-		planks2.draw(depthDebug, camera);*/
 		
 		// Swap the back buffer with the front buffer (refresh the image)
 		glfwSwapBuffers(window);

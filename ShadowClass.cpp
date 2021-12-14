@@ -13,12 +13,12 @@ ShadowClass::ShadowClass()
 	// Initialize framebuffer
 	glGenFramebuffers(1, &this->fboID);
 
-	std::cout << "FBO ID: " << fboID << std::endl;
+	// std::cout << "FBO ID: " << fboID << std::endl;
 
 	// Create and bind depth map texture
 	glGenTextures(1, &this->depthMap);
 
-	std::cout << "Depth map: " << depthMap << std::endl;
+	// std::cout << "Depth map: " << depthMap << std::endl;
 
 	glBindTexture(GL_TEXTURE_2D, this->depthMap);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 
@@ -56,7 +56,7 @@ void ShadowClass::renderDepthMap(GameObject object, Shader &depthShader,
 void ShadowClass::renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader,
 	glm::mat4 lightSpaceMatrix)
 {
-	depthShader.activateShader();
+	//depthShader.activateShader();
 
 	// Pushing parameters into the shader (object vertices, indices, textures, etc)
 	glUniformMatrix4fv(glGetUniformLocation(depthShader.getID(), "lightSpaceMatrix"),
