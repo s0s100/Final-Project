@@ -172,45 +172,52 @@ int main()
 		prevTime = (float)glfwGetTime();
 		fps = 1 / timeDiff;
 		// std::cout <<  "FPS: " << static_cast<int>(fps) << std::endl;
+		
+		// Set up camera inputs and update it after it was changed by the input
+		camera.inputs2(window);
+		camera.updateMatrix();
 
 		// Specify the color of the background, clean the back buffer and depth buffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Set up camera inputs and update it after it was changed by the input
-		camera.inputs2(window);
-		camera.updateMatrix();
-		// Update light values
+		// Change object locations
 		// light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
-		light->generateLightMatrix();
-
-		/*light->generateDepthMap(planks, depthShader);
-		light->generateDepthMap(planks2, depthShader);*/
-		depthShader.activateShader();
-		light->generateDepthMap2(objectVector, depthShader);
-
-		// Upload every value for the light sources
-		lightFactory.update(shader);
-
-		// It should be probably generated after
-
-		// Rotation and movement
 		//planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
 		//planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
 		//planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
+		
+		/*
+			Generate shadow
+		*/
+		
+		// Create light matrix
+		light->generateLightMatrix();
+
+		// Using matrix generate  depth map
+		depthShader.activateShader();
+		light->generateDepthMap2(objectVector, depthShader);
+
+		/*
+			Generate image
+		*/
 
 		// Resetting viewpoints
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Call the drawing functions
-		// planks.matrixSetup(shader);
-		// planks2.matrixSetup(shader);
 		shader.activateShader();
+
+		// Upload every value for the light sources
+		lightFactory.update(shader);
+
+		// Draw every element
 		planks.draw(shader, camera);
 		planks2.draw(shader, camera);
 		
-		// Swap the back buffer with the front buffer (refresh the image)
+		/*
+			Final image buffer swap
+		*/
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

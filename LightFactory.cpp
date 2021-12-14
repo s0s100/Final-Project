@@ -49,8 +49,6 @@ int LightFactory::getPointLightSize()
 // Weird option to create this one, optimize
 void LightFactory::update(Shader shader)
 {
-	shader.activateShader();
-
 	// After activating shader
 	// First path with ref. to the lightPos array element
 	// Second for the variable inside of it

@@ -53,19 +53,11 @@ void ShadowClass::renderDepthMap(GameObject object, Shader &depthShader,
 	unbindFBO();
 }
 
-void ShadowClass::renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader,
-	glm::mat4 lightSpaceMatrix)
+void ShadowClass::renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader)
 {
-	//depthShader.activateShader();
-
-	// Pushing parameters into the shader (object vertices, indices, textures, etc)
-	glUniformMatrix4fv(glGetUniformLocation(depthShader.getID(), "lightSpaceMatrix"),
-		1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	bindFBO();
 	glClear(GL_DEPTH_BUFFER_BIT);
-	
 	// After the set up render each of the objects
 	for (GameObject object : objects) {
 		object.shadowDraw(depthShader);// Rendering using depth shader

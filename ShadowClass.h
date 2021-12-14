@@ -27,8 +27,7 @@ public:
 	void renderDepthMap(GameObject object, Shader &depthShader, 
 		glm::mat4 lightSpaceMatrix);
 
-	void renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader, 
-		glm::mat4 lightSpaceMatrix);
+	void renderDepthMap2(std::vector<GameObject> objects, Shader& depthShader);
 
 	// Calculate light matrix to generate depth map
 	//void generateLightMatrix(DirectionalLight light);

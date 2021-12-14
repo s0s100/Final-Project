@@ -66,9 +66,6 @@ glm::mat4 Light::getLightMatrix()
 
 void Light::generateLightMatrix()
 {
-	float near_plane = NEAR_PLANE;
-	float far_plane = FAR_PLANE;
-
 	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, NEAR_PLANE, FAR_PLANE);
 
 	//std::cout << "LightProj light: " << glm::to_string(lightProjection) << std::endl;
@@ -102,8 +99,8 @@ void Light::generateDepthMap(GameObject object, Shader &depthShader)
 	this->shadow.renderDepthMap(object, depthShader, this->lightSpaceMatrix);
 }
 
-void Light::generateDepthMap2(std::vector<GameObject> objects, Shader& depthShader)
+void Light::generateDepthMap2(std::vector<GameObject> objects, Shader& shader)
 {
-	// depthShader.activateShader();
-	this->shadow.renderDepthMap2(objects, depthShader, this->lightSpaceMatrix);
+	shader.setMat4("lightSpaceMatrix", this->lightSpaceMatrix);
+	this->shadow.renderDepthMap2(objects, shader);
 }
