@@ -213,8 +213,8 @@ int main()
 		// Call the drawing functions
 		// planks.matrixSetup(shader);
 		// planks2.matrixSetup(shader);
-		/*planks.draw(shader, camera);
-		planks2.draw(shader, camera);*/
+		planks.draw(shader, camera);
+		planks2.draw(shader, camera);
 
 		// Implementing drawing function with a shadowing
 		/*depthDebug.activateShader();

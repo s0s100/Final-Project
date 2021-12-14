@@ -195,8 +195,8 @@ void main()
 	}
 
 	// Checking texture
-	FragColor = texture(shadowMap, texCoord);
-	// FragColor = finalColor;
+	// FragColor = texture(shadowMap, texCoord);
+	FragColor = finalColor;
 	// FragColor = texture(shadowMap, crntPos.xy);
 	// Create projection for the texture
 	
