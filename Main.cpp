@@ -6,6 +6,9 @@
 #include "FileManager.h"
 #include "GameObject.h"
 
+// Adding functions
+void renderQuad();
+
 // Default paths
 const std::string texturePath = "Resources\\Textures\\";
 const std::string shaderPath = "Shaders\\";
@@ -179,7 +182,7 @@ int main()
 
 		// Specify the color of the background, clean the back buffer and depth buffer
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
 		// Change object locations
 		// light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
@@ -214,6 +217,18 @@ int main()
 		// Draw every element
 		planks.draw(shader, camera);
 		planks2.draw(shader, camera);
+
+		/*
+		* Show depth map
+		*/
+		depthDebug.activateShader();
+		depthDebug.setFloat("near_plane", NEAR_PLANE);
+		depthDebug.setFloat("far_plane", FAR_PLANE);
+
+		light->getShadowClass().bindDepthMap(depthDebug);
+		renderQuad();
+		/*planks.draw(depthDebug, camera);
+		planks2.draw(depthDebug, camera);*/
 		
 		/*
 			Final image buffer swap
@@ -227,4 +242,35 @@ int main()
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
+}
+
+// renderQuad() renders a 1x1 XY quad in NDC
+// -----------------------------------------
+unsigned int quadVAO = 0;
+unsigned int quadVBO;
+void renderQuad()
+{
+	if (quadVAO == 0)
+	{
+		float quadVertices[] = {
+			// positions        // texture Coords
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }

@@ -47,6 +47,7 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	std::string type;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
+		std::cout << "Binding mesh textures: " << type.c_str() << " order num: " << i << std::endl;
 		type = textures[i].getType();
 		textures[i].texUnit(shader, type.c_str(), i);
 		textures[i].bind();

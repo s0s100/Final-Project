@@ -4,12 +4,15 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
-Light::Light(){}
+Light::Light(){
+	shadow = ShadowClass();
+}
 
 Light::Light(glm::vec3 position, glm::vec4 color)
 {
 	Light::position = position;
 	Light::color = color;
+	shadow = ShadowClass();
 }
 
 Light::Light(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
@@ -17,6 +20,7 @@ Light::Light(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
 	Light::position = position;
 	Light::color = color;
 	Light::direction = direction;
+	shadow = ShadowClass();
 }
 
 glm::vec3 Light::getPosition()

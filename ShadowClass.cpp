@@ -98,13 +98,13 @@ void ShadowClass::deleteFBO()
 
 void ShadowClass::bindDepthMap(Shader shader)
 {
-	// std::cout << "Binding depth map: " << depthMap << std::endl;
+	std::cout << "Binding depth map: " << depthMap << std::endl;
 	// Shader needs to be activated before changing the value of a uniform
 	shader.activateShader();
 	// Sets the value of the uniform
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, this->depthMap);
-	glUniform1i(glGetUniformLocation(shader.getID(), "shadowMap"), fboID);
+	// glUniform1i(glGetUniformLocation(shader.getID(), "shadowMap"), fboID);
 }
 
 void ShadowClass::unbindDepthMap()
