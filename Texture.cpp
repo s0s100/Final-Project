@@ -34,6 +34,9 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 	// Generates MipMaps
 	glGenerateMipmap(GL_TEXTURE_2D);
 
+	// Testing
+	std::cout << "Texture.cpp, constructor, created texture, id = " << ID << ", assigned to " << unit << std::endl;
+
 	// Deletes the image data as it is already in the OpenGL Texture object
 	stbi_image_free(pixels);
 
@@ -43,17 +46,16 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 {
-	// Gets the location of the uniform
-	GLuint texUni = glGetUniformLocation(shader.getID(), uniform);
-	// Shader needs to be activated before changing the value of a uniform
-	shader.activateShader();
+	std::cout << "Texture.cpp, texUnit, set shader value " << uniform << ", value " << unit << std::endl;
 	// Sets the value of the uniform
-	glUniform1i(texUni, unit);
+	shader.setInt(uniform, unit);
 }
 
 void Texture::bind()
 {
+	std::cout << "Texture.cpp, bind, activate texture" << unit << std::endl;
 	glActiveTexture(GL_TEXTURE0 + unit);
+	std::cout << "Texture.cpp, bind, bind texture_2D " << ID << std::endl;
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 

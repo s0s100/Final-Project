@@ -14,10 +14,10 @@ GameObject::GameObject(Mesh mesh)
 //	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "model"), 1, GL_FALSE, glm::value_ptr(model));
 //}
 
-void GameObject::draw(Shader& shader, Camera camera)
+void GameObject::draw(Shader& shader)
 {
 	shader.setMat4("modelMatrix", model);
-	GameObject::mesh.draw(shader, camera);
+	GameObject::mesh.draw(shader);
 }
 
 /**

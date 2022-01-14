@@ -9,7 +9,7 @@ layout (location = 2) in vec2 aTex;
 out vec3 crntPos;
 out vec3 normal;
 out vec2 texCoord;
-out vec4 fragPosLightSpace;
+out vec4 fragPosLightSpace; // Shadow mapping
 
 // Camera and object mmatrices + Test light matrix
 uniform mat4 camMatrix; 

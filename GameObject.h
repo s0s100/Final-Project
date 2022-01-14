@@ -25,7 +25,7 @@ public:
 	// void matrixSetup(Shader shader);
 
 	// Put all the parameters into shader and call a shader
-	void draw(Shader& shader, Camera camera);
+	void draw(Shader& shader);
 
 	/**
 	* Getters/setter (includes model change methods)

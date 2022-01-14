@@ -33,7 +33,7 @@ Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vec
 }
 
 // Drawing function
-void Mesh::draw(Shader& shader, Camera& camera)
+void Mesh::draw(Shader& shader)
 {
 	Mesh::VAO.bind();
 
@@ -41,16 +41,10 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	std::string type;
 	for (unsigned int i = 0; i < textures.size(); i++)
 	{
-		std::cout << "Binding mesh textures: " << type.c_str() << " order num: " << i << std::endl;
 		type = textures[i].getType();
 		textures[i].texUnit(shader, type.c_str(), i);
 		textures[i].bind();
 	}
-
-	// Put the camera position and matrix to the shader
-	//glUniform3f(glGetUniformLocation(shader.getID(), "camPos"), camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-	camera.setCameraPosition(shader, "camPos");
-	camera.setCameraMatrix(shader, "camMatrix");
 
 	// Call a draw function
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
