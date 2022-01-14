@@ -31,17 +31,17 @@ PointLight* LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, flo
 	return result;
 }
 
-int LightFactory::getDirectionalLightSize()
+size_t LightFactory::getDirectionalLightSize()
 {
 	return directionalLights.size();
 }
 
-int LightFactory::getSpotLightSize()
+size_t LightFactory::getSpotLightSize()
 {
 	return spotLights.size();
 }
 
-int LightFactory::getPointLightSize()
+size_t LightFactory::getPointLightSize()
 {
 	return pointLights.size();
 }
@@ -64,18 +64,8 @@ void LightFactory::update(Shader shader)
 	float linear;
 	float quadratic;
 
-	// Testing 1 spot light shadow casting
-	glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "lightSpaceMatrix"),
-		1, GL_FALSE, glm::value_ptr(spotLights[0]->getLightMatrix()));
-	// Also bind shadow depth map
-	// Check shadow class
-	// spotLights[0]->getShadowClass();
-	std::cout << "Shadow class data: " << "" << std::endl;
-
-	spotLights[0]->getShadowClass().bindDepthMap(shader);
-
 	// Update point lights
-	glUniform1i(glGetUniformLocation(shader.getID(), "pointLightNum"), getPointLightSize());
+	glUniform1i(glGetUniformLocation(shader.getID(), "pointLightNum"), (GLint)getPointLightSize());
 	for (int i = 0; i < getPointLightSize(); i++) {
 		path1 = "pointLights[" + std::to_string(i) + "].";
 
@@ -102,7 +92,7 @@ void LightFactory::update(Shader shader)
 	}
 
 	// Update direction lights
-	glUniform1i(glGetUniformLocation(shader.getID(), "directionalLightNum"), getDirectionalLightSize());
+	glUniform1i(glGetUniformLocation(shader.getID(), "directionalLightNum"), (GLint)getDirectionalLightSize());
 	for (int i = 0; i < getDirectionalLightSize(); i++) {
 		path1 = "directionalLights[" + std::to_string(i) + "].";
 
@@ -126,7 +116,7 @@ void LightFactory::update(Shader shader)
 	}
 
 	// Update spot lights
-	glUniform1i(glGetUniformLocation(shader.getID(), "spotLightNum"), getSpotLightSize());
+	glUniform1i(glGetUniformLocation(shader.getID(), "spotLightNum"), (GLint)getSpotLightSize());
 	for (int i = 0; i < getSpotLightSize(); i++) {
 		path1 = "spotLights[" + std::to_string(i) + "].";
 

@@ -20,9 +20,9 @@
 #define Y_VECTOR glm::vec3(0.0f, 1.0f, 0.0f)
 #define Z_VECTOR glm::vec3(0.0f, 0.0f, 1.0f)
 // Near/far planes
-constexpr float NEAR_PLANE = 0.1;;
-constexpr float FAR_PLANE = 100.0;;
-constexpr float FOV = 45.0;;
+constexpr float NEAR_PLANE = 0.1f;
+constexpr float FAR_PLANE = 100.0f;
+constexpr float FOV = 45.0f;
 
 class Camera 
 {

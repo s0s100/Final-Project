@@ -29,9 +29,9 @@ public:
 	PointLight* getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic);
 
 	// Simply return number of elements in the vector
-	int getDirectionalLightSize();
-	int getSpotLightSize();
-	int getPointLightSize();
+	size_t getDirectionalLightSize();
+	size_t getSpotLightSize();
+	size_t getPointLightSize();
 
 	// Update funtion for the shader
 	void update(Shader shader);

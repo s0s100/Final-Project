@@ -35,6 +35,7 @@ int main()
 {
 	/**
 	* Basic initialization 
+	* --------------------------------------------------
 	**/
 
 	// Initialize GLFW with glfw know the version of OpenGL and that we are using Core profile
@@ -48,8 +49,8 @@ int main()
 	// Create full screen window with the game scene
 	// GLFWwindow* window = glfwCreateWindow(width, height, "Test window", glfwGetPrimaryMonitor(), NULL);
 
-	// Window image
-	 GLFWimage windowIcon[1]{FileManager::get_image_content((iconPath + "Fox_icon.png").c_str())};
+	// Adding icon
+	GLFWimage windowIcon[1]{FileManager::get_image_content((iconPath + "Fox_icon.png").c_str())};
 	glfwSetWindowIcon(window, 1, windowIcon);
 
 	// Error checker
@@ -62,15 +63,16 @@ int main()
 	// Introduce the window into the current context
 	glfwMakeContextCurrent(window);
 
-	// Load GLAD so it configures OpenGL
+	// Initialize glad
 	gladLoadGL();
-	// Map the NDC coordinates to the framebuffer coordinates
-	// glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
-	// Enable shader testing before updating
+
+	// Map the NDC coordinates to the framebuffer coordinates and enable depth testing
+	glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 	glEnable(GL_DEPTH_TEST);
 
 	/**
-	* All the magic
+	* Main body
+	* --------------------------------------------------
 	**/
 
 	// Shader creation
@@ -102,6 +104,8 @@ int main()
 	Mesh planksMesh(verts, ind, tex);
 	
 	// Game objects
+	std::vector<GameObject> objectVector;
+
 	GameObject planks = GameObject(planksMesh);
 	planks.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 	planks.setRotation(glm::vec3(30.0f, 0.0f, 0.0f));
@@ -111,18 +115,17 @@ int main()
 	planks2.setScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	planks2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	/*
-	* Light factory
-	*/
+	objectVector.push_back(planks);
+	objectVector.push_back(planks2);
 
+	// Light factory
 	LightFactory lightFactory;
 
 	// Directinal light
-	//glm::vec3 lightPos0 = glm::vec3(1.0f, 1.0f, 1.0f);
-	////glm::vec4 lightColor0 = glm::vec4(0.3f, 0.1f, 0.5f, 1.0f);
-	//glm::vec4 lightColor0 = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
-	//glm::vec3 lightDirection0 = glm::vec3(1.0f, 1.0f, 1.0f);
-	//lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	/*glm::vec3 lightPos0 = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec4 lightColor0 = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
+	glm::vec3 lightDirection0 = glm::vec3(1.0f, 1.0f, 1.0f);
+	lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);*/
 
 	// Point light
 	/*glm::vec3 lightPosP1 = glm::vec3(0.1f, 0.5f, 0.0f);
@@ -152,18 +155,12 @@ int main()
 	glm::vec3 lightDirection2 = glm::vec3(0.0f, -1.0f, 0.0f);
 	float innerCone2 = 0.4f;
 	float outerCone2 = 0.1f;
-	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
+	lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
 
-	/*
+	/**
 	* Main loop
-	*/
-
-	// Testing
-	// lightFactory.update(shader);
-	std::vector<GameObject> objectVector;
-
-	objectVector.push_back(planks);
-	objectVector.push_back(planks2);
+	* --------------------------------------------------
+	**/
 
 	float prevTime = 0;
 	float timeDiff = 0;
@@ -185,60 +182,29 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 
 		// Change object locations
-		// light->addPosition(glm::vec3(-0.01f, 0.01f, -0.01f));
-		//planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
-		//planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
-		//planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
-		
-		/*
-			Generate shadow
-		*/
-		
-		// Create light matrix
-		light->generateLightMatrix();
-
-		// Using matrix generate  depth map
-		depthShader.activateShader();
-		light->generateDepthMap2(objectVector, depthShader);
+		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
+		planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
+		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		/*
 			Generate image
 		*/
 
-		// Resetting viewpoints
+		// Main rendering
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		shader.activateShader();
 
-		// Upload every value for the light sources
 		lightFactory.update(shader);
 
-		// Draw every element
 		planks.draw(shader, camera);
 		planks2.draw(shader, camera);
 
-		/*
-		* Show depth map
-		*/
-		depthDebug.activateShader();
-		depthDebug.setFloat("near_plane", NEAR_PLANE);
-		depthDebug.setFloat("far_plane", FAR_PLANE);
-
-		light->getShadowClass().bindDepthMap(depthDebug);
-		renderQuad();
-		/*planks.draw(depthDebug, camera);
-		planks2.draw(depthDebug, camera);*/
-		
-		/*
-			Final image buffer swap
-		*/
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	// Delete everything and terminate the program
-	shader.deleteShader();
+	// Program termination
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;

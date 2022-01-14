@@ -102,9 +102,6 @@
     <ClInclude Include="LightFactory.h">
       <Filter>Header Files\GraphicsClasses\Light</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowClass.h">
-      <Filter>Header Files\GraphicsClasses\Light</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -156,9 +153,6 @@
       <Filter>Source Files\GraphicsClasses\Light</Filter>
     </ClCompile>
     <ClCompile Include="LightFactory.cpp">
-      <Filter>Source Files\GraphicsClasses\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="ShadowClass.cpp">
       <Filter>Source Files\GraphicsClasses\Light</Filter>
     </ClCompile>
   </ItemGroup>

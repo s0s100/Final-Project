@@ -6,8 +6,6 @@
 class SpotLight: public Light
 {
 private:
-	// glm::vec3 direction = glm::vec3(1.0f);
-
 	// Light cone parameters to make the light more realistic (light range) 
 	float innerCone = 1.0f;
 	float outerCone = 0.0f;
@@ -18,11 +16,8 @@ public:
 	/*
 	* Getters/setters
 	*/
-	// glm::vec3 getDirection();
 	float getInnerCone();
 	float getOuterCone();
-
-	// void setDirection(glm::vec3 dir);
 };
 
 #endif
