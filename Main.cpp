@@ -104,7 +104,7 @@ int main()
 	Mesh planksMesh(verts, ind, tex);
 	
 	// Game objects
-	std::vector<GameObject> objectVector;
+	std::vector<GameObject*> gameObjects;
 
 	GameObject planks = GameObject(planksMesh);
 	planks.setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -115,8 +115,8 @@ int main()
 	planks2.setScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	planks2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	objectVector.push_back(planks);
-	objectVector.push_back(planks2);
+	gameObjects.push_back(&planks);
+	gameObjects.push_back(&planks2);
 
 	// Light factory
 	LightFactory lightFactory;
@@ -177,28 +177,27 @@ int main()
 		camera.inputs2(window);
 		camera.updateMatrix();
 
-		// Specify the color of the background, clean the back buffer and depth buffer
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
-
 		// Change object locations
 		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
 		planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
 		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
-		/*
-			Generate image
-		*/
+		/**
+		* Rendering
+		* --------------------------------------------------
+		**/
 
 		// Main rendering
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		shader.activateShader();
-
 		lightFactory.update(shader);
-
-		planks.draw(shader, camera);
-		planks2.draw(shader, camera);
+		for (const auto& object : gameObjects) 
+		{
+			object->draw(shader, camera);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

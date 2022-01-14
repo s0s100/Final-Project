@@ -24,12 +24,8 @@ public:
 	Mesh();
 	// Basic constructor to generate usable Mesh object
 	Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vector <Texture> textures);
-
 	// Put values into the shader so it could calculate the image
 	void draw(Shader& shader, Camera& camera);
-
-	// Shadow shader
-	void shadowDraw(Shader& shadowShader);
 };
 #endif
 

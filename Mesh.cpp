@@ -3,9 +3,7 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh() {
-	
-}
+Mesh::Mesh() {}
 
 Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vector <Texture> textures)
 {
@@ -26,8 +24,6 @@ Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vec
 	// Links VBO attributes such as coordinates and colors to VAO
 	Mesh::VAO.linkAttribute(VBO, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
 	Mesh::VAO.linkAttribute(VBO, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-	// Used before for the vertex colors
-	//Mesh::VAO.linkAttribute(VBO, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
 	Mesh::VAO.linkAttribute(VBO, 2, 2, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
 
 	// Unbind all the elements
@@ -39,8 +35,6 @@ Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vec
 // Drawing function
 void Mesh::draw(Shader& shader, Camera& camera)
 {
-	// Active all the elements before drawing
-	// shader.activateShader();
 	Mesh::VAO.bind();
 
 	// Bind every included texture
@@ -59,22 +53,5 @@ void Mesh::draw(Shader& shader, Camera& camera)
 	camera.setCameraMatrix(shader, "camMatrix");
 
 	// Call a draw function
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-}
-
-void Mesh::shadowDraw(Shader& shadowShader)
-{
-	// shadowShader.activateShader();
-	Mesh::VAO.bind();
-
-	// Bind every included texture
-	/*std::string type;
-	for (unsigned int i = 0; i < textures.size(); i++)
-	{
-		type = textures[i].getType();
-		textures[i].texUnit(shadowShader, type.c_str(), i);
-		textures[i].bind();
-	}*/
-
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }

@@ -16,44 +16,9 @@ GameObject::GameObject(Mesh mesh)
 
 void GameObject::draw(Shader& shader, Camera camera)
 {
-	// shader.activateShader();
-	//glUniformMatrix4fv(glGetUniformLocation(shader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
 	shader.setMat4("modelMatrix", model);
 	GameObject::mesh.draw(shader, camera);
 }
-
-// Upload matrix 
-void GameObject::shadowDraw(Shader& shadowShader)
-{
-	// shadowShader.activateShader();
-	//glUniformMatrix4fv(glGetUniformLocation(shadowShader.getID(), "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
-	shadowShader.setMat4("modelMatrix", model);
-	GameObject::mesh.shadowDraw(shadowShader);
-}
-
-
-/*void GameObject::generateDepthMap(Shader depthMapShader, ShadowClass shadow, Camera camera)
-{
-	// Before generating depth map create light space matrix
-	glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, NEAR_PLANE, FAR_PLANE);
-	glm::mat4 lightView = glm::lookAt(glm::vec3(0.1f, 0.5f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, -1.0f, 0.0f));
-
-	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
-
-	depthMapShader.activateShader();
-	// Testing shadow with a point light
-	glUniformMatrix4fv(glGetUniformLocation(depthMapShader.getID(), "lightSpaceMatrix"), 1, GL_FALSE,
-		glm::value_ptr(lightSpaceMatrix));
-
-
-	glViewport(0, 0, shadow.getShadowWidth(), shadow.getShadowHeight());
-	shadow.bindFBO();
-	glClear(GL_DEPTH_BUFFER_BIT);
-	draw(depthMapShader, camera);// Render scene, maybe the other option, time consuming
-	shadow.unbindFBO();
-}*/
 
 /**
 * Getter/changer time
