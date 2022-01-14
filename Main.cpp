@@ -208,17 +208,17 @@ int main()
 	shader.activateShader();
 	shader.setInt("shadowMap", depthNumber);
 	depthDebug.activateShader();
-	depthDebug.setInt("depthMap", 0);
+	depthDebug.setInt("depthMap", depthNumber);
 
-	/*float prevTime = 0;
+	float prevTime = 0;
 	float timeDiff = 0;
-	float fps = 0;*/
+	float fps = 0;
 	while (!glfwWindowShouldClose(window))
 	{
 		// FPS calculator
-		/*timeDiff = (float)glfwGetTime() - prevTime;
+		timeDiff = (float)glfwGetTime() - prevTime;
 		prevTime = (float)glfwGetTime();
-		fps = 1 / timeDiff;*/
+		fps = 1 / timeDiff;
 		// std::cout <<  "FPS: " << static_cast<int>(fps) << std::endl;
 		
 		// Set up camera inputs and update it after it was changed by the input
@@ -226,29 +226,32 @@ int main()
 		camera.updateMatrix();
 
 		// Change object locations
-		/*planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
+		planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
 		planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
-		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);*/
+		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		/**
 		* Rendering
 		* --------------------------------------------------
 		**/
 
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		/*glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 
 		/**
 		 * Update depth map
 		**/
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		depthShader.activateShader();
 		
 		// Calculate light matrix
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
-		// float near_plane = 1.0f, far_plane = 7.5f;
-		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, NEAR_PLANE, FAR_PLANE);
+		float near_plane = 1.0f, far_plane = 7.5f;
+		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
 		lightView = glm::lookAt(lightPos2, lightPos2 + lightDirection2, Y_VECTOR);
 		lightSpaceMatrix = lightProjection * lightView;
 
@@ -256,6 +259,7 @@ int main()
 		depthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
 		// Rendering
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		for (const auto& object : gameObjects)
@@ -285,11 +289,11 @@ int main()
 		 * Depth testing
 		**/
 		depthDebug.activateShader();
-		/*depthDebug.setFloat("near_plane", NEAR_PLANE);
-		depthDebug.setFloat("far_plane", FAR_PLANE);*/
-		glActiveTexture(GL_TEXTURE0);
+		depthDebug.setFloat("near_plane", near_plane);
+		depthDebug.setFloat("far_plane", near_plane);
+		glActiveTexture(GL_TEXTURE0 + depthNumber);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		//renderQuad();
+		renderQuad();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
