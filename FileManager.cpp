@@ -7,12 +7,10 @@
 
 #include "FileManager.h"
 
-std::string FileManager::get_file_contents(const char* fileName)
-{
+std::string FileManager::getFileContent(const char* fileName) {
 	// Create stream and read all of the information from there
 	std::ifstream in(fileName, std::ios::binary);
-	if (in)
-	{
+	if (in) {
 		std::string contents;
 		in.seekg(0, std::ios::end);
 		contents.resize(in.tellg());
@@ -24,7 +22,7 @@ std::string FileManager::get_file_contents(const char* fileName)
 	throw(errno);
 }
 
-GLFWimage FileManager::get_image_content(const char* imageName) {
+GLFWimage FileManager::getImageContent(const char* imageName) {
 	int imageWidth, imageHeight;
 	unsigned char* bytes = stbi_load(imageName, &imageWidth, &imageHeight, NULL, 0);
 

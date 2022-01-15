@@ -11,7 +11,6 @@
 
 #include "ShaderClass.h"
 
-
 // Screen size
 #define DEFAULT_MONITOR_WIDTH 720
 #define DEFAULT_MONITOR_HEIGHT 480
@@ -24,8 +23,7 @@ constexpr float NEAR_PLANE = 0.1f;
 constexpr float FAR_PLANE = 100.0f;
 constexpr float FOV = 45.0f;
 
-class Camera 
-{
+class Camera  {
 private:
 	// Camera position, orientation and it's result  cameraMatrix
 	glm::vec3 position;
@@ -68,6 +66,7 @@ public:
 	// Stratery camera option 
 	void inputs2(GLFWwindow* window);
 };
+
 #endif 
 
 

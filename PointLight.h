@@ -3,21 +3,18 @@
 
 #include "Light.h"
 
-class PointLight: public Light
-{
+class PointLight: public Light {
 private:
 	// Defines distance of the light
-	float constant = 0.0f;
-	float linear = 0.0f;
-	float quadratic = 0.0f;
+	float constant = 0.5f;
+	float linear = 0.5f;
+	float quadratic = 1.0f;
 
 public:
 	PointLight();
+	PointLight(glm::vec3 position, glm::vec4 color);
 	PointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic);
 
-	/*
-	* Getters/setters
-	*/
 	float getC();
 	float getL();
 	float getQ();

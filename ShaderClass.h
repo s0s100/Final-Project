@@ -5,8 +5,7 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-class Shader 
-{
+class Shader {
 private:
 	// Reference ID of the Shader Program
 	GLuint ID;
@@ -37,4 +36,5 @@ public:
 	void setMat3(const std::string& name, const glm::mat3& mat) const;
 	void setMat4(const std::string& name, const glm::mat4& mat) const;
 };
+
 #endif

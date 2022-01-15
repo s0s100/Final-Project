@@ -4,8 +4,7 @@
 #include <glad/glad.h>
 #include <vector>
 
-class EBO
-{
+class EBO {
 private:
 	// Reference of Elements Buffer Object
 	GLuint ID;
@@ -19,4 +18,5 @@ public:
 	void unbind();
 	void deleteEBO();
 };
+
 #endif

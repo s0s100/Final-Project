@@ -1,8 +1,7 @@
 #include "Texture.h"
 #include "FileManager.h"
 
-Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum format, GLenum pixelType)
-{
+Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum format, GLenum pixelType) {
 	// Type of the texture
 	type = texType;
 	// Image data
@@ -26,14 +25,8 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Configures the way the texture repeats (if it does at all)
-	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
-
-	// To prevent shadows outside of the depth map, cames values outside of the border to be white
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Assigns the image to the OpenGL Texture object
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, pixels);
@@ -50,32 +43,30 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
-{
+void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit) {
+	// Testing
 	// std::cout << "Texture.cpp, texUnit, set shader value " << uniform << ", value " << unit << std::endl;
-	// Sets the value of the uniform
 	shader.setInt(uniform, unit);
 }
 
-void Texture::bind()
-{
+void Texture::bind() {
+	// Testing
 	// std::cout << "Texture.cpp, bind, activate texture" << unit << std::endl;
 	glActiveTexture(GL_TEXTURE0 + unit);
+
+	// Testing
 	// std::cout << "Texture.cpp, bind, bind texture_2D " << ID << std::endl;
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
-void Texture::unbind()
-{
+void Texture::unbind() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::deleteTexture()
-{
+void Texture::deleteTexture() {
 	glDeleteTextures(1, &ID);
 }
 
-const char* Texture::getType()
-{
+const char* Texture::getType() {
 	return Texture::type;
 }

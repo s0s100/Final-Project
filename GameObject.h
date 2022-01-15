@@ -3,8 +3,7 @@
 
 #include "Mesh.h"
 
-class GameObject
-{
+class GameObject {
 private:
 	// Contains model with vertices, indices and textures
 	Mesh mesh;

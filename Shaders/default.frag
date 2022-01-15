@@ -4,20 +4,18 @@
 #define NR_POINT_LIGHT 10
 #define NR_SPOT_LIGHT 10
 
-#define AMBIENT 0.2f
+#define AMBIENT 0.1f
 #define DIFFUSE 0.4f
 #define SPECULAR 0.7f
 
-struct DirectionalLight
-{
+struct DirectionalLight {
 	vec3 position;
 	vec4 color;
 
 	vec3 direction;
 };
 
-struct PointLight
-{
+struct PointLight {
 	vec3 position;
 	vec4 color;
 
@@ -26,8 +24,7 @@ struct PointLight
 	float quadratic;
 };
 
-struct SpotLight
-{
+struct SpotLight {
 	vec3 position;
 	vec4 color;
 
@@ -39,7 +36,7 @@ struct SpotLight
 // Outputs colors in RGBA
 out vec4 FragColor;
 
-// Input fragment position
+// Input fragment current position
 in vec3 crntPos;
 // Input fragment normal
 in vec3 normal;
@@ -67,8 +64,7 @@ uniform int directionalLightNum;
 uniform int pointLightNum;
 uniform int spotLightNum;
 
-vec4 calculateDirectionalLight(DirectionalLight directionalLight)
-{
+vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
 	// Define variables
 	vec4 lightClr = directionalLight.color;
 	vec3 lightDirection = normalize(directionalLight.direction);
@@ -85,13 +81,12 @@ vec4 calculateDirectionalLight(DirectionalLight directionalLight)
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 32);
 	float specular = specAmount * SPECULAR;
 
-	vec4 result = (texture(diffuse0, texCoord) * (diffuse + ambient) + texture(specular0, texCoord).r * specular) * lightClr;
-	// return directionalLight.color;
+	vec4 result = (texture(diffuse0, texCoord) * (diffuse + ambient)
+	+ texture(specular0, texCoord).r * specular) * lightClr;
 	return result;
 }
 
-vec4 calculatePointLight(PointLight pointLight)
-{
+vec4 calculatePointLight(PointLight pointLight) {
 	vec4 lightClr = pointLight.color;
 	vec3 lightPos = pointLight.position;
 	float constant = pointLight.constant; // c
@@ -116,12 +111,13 @@ vec4 calculatePointLight(PointLight pointLight)
 	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 32);
 	float specular = specAmount * SPECULAR; 
 
-	return (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
+	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten + ambient)
+	+ texture(specular0, texCoord).r * specular * inten) * lightClr;
+	return result;
 }
 
 // This works fine for spot light
-float shadowCalculation(vec4 fragPosLightSpace, vec3 lightDir)
-{
+float shadowCalculation(vec4 fragPosLightSpace, vec3 lightDir) {
     // perform perspective divide
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     // transform to [0,1] range
@@ -136,8 +132,8 @@ float shadowCalculation(vec4 fragPosLightSpace, vec3 lightDir)
     float shadow = 0.0f;
 	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
 	// Parse the texture and for each of the points calculate the value
-    for(int x = -1; x <= 1; ++x){
-        for(int y = -1; y <= 1; ++y){
+    for(int x = -1; x <= 1; ++x) {
+        for(int y = -1; y <= 1; ++y) {
             float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
             shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
         }    
@@ -146,15 +142,14 @@ float shadowCalculation(vec4 fragPosLightSpace, vec3 lightDir)
     shadow /= 9.0; 
     
     // If outside of the bounds, set to 0
-    if(projCoords.z > 1.0){
+    if(projCoords.z > 1.0) {
 		shadow = 0.0;
 	}
 
     return shadow;
 }
 
-vec4 calculateSpotLight(SpotLight spotLight)
-{
+vec4 calculateSpotLight(SpotLight spotLight) {
 	// Define values
 	float innerCone = 0.95f;
 	float outerCone = 0.80f;
@@ -180,31 +175,29 @@ vec4 calculateSpotLight(SpotLight spotLight)
 	float angle = dot(vec3(0.0f, -1.0f, 0.0f), -lightDirection);
 	float inten = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
-	//vec4 result = vec4(0.0f);
 	// vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
 	float shadow = shadowCalculation(fragPosLightSpace, spotLight.direction); 
 	
-	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1 - shadow)  + ambient) 
+	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1 - shadow)  + ambient)
 	+ texture(specular0, texCoord).r * specular * inten * (1 - shadow)) * lightClr;
 	return result;
 }
 
-void main()
-{	
+void main() {	
 	vec4 finalColor = vec4(0.0f);
 
 	// Directional lights
-	for (int i = 0; i < directionalLightNum; i++){
+	for (int i = 0; i < directionalLightNum; i++) {
 		finalColor += calculateDirectionalLight(directionalLights[i]);
 	}
 
 	// Point lights
-	for (int i = 0; i < pointLightNum; i++){
+	for (int i = 0; i < pointLightNum; i++) {
 		finalColor += calculatePointLight(pointLights[i]);
 	}
 
 	// Spot lights
-	for (int i = 0; i < spotLightNum; i++){
+	for (int i = 0; i < spotLightNum; i++) {
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
 

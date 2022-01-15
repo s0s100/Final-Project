@@ -6,8 +6,7 @@
 
 #include "ShaderClass.h"
 
-class Texture
-{
+class Texture {
 private:
 	// ID reference for the Texture and its type
 	GLuint ID;
@@ -28,4 +27,5 @@ public:
 	void deleteTexture();
 	const char* getType();
 };
+
 #endif

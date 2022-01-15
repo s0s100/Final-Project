@@ -5,34 +5,31 @@
 #include "LightFactory.h"
 #include "FileManager.h"
 #include "GameObject.h"
-
-// Adding functions
-void renderQuad();
+#include "Camera.h"
 
 // Default paths
 const std::string texturePath = "Resources\\Textures\\";
 const std::string shaderPath = "Shaders\\";
 const std::string iconPath = "Resources\\Other\\";
 
-// Planks
+// Defined functions
+void renderQuad();
+
+
 // Mesh vertices: coordinates/normals/texturePos
-Vertex vertices[] =
-{
+Vertex vertices[] = {
 	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
 	Vertex{glm::vec3(-1.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f)},
 	Vertex{glm::vec3(1.0f, 0.0f, -1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 0.0f)},
 	Vertex{glm::vec3(1.0f, 0.0f,  1.0f),  glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(1.0f, 1.0f)}
 };
-
 // Mesh indices
-GLuint indices[] =
-{
+GLuint indices[] = {
 	0, 1, 2,
 	0, 2, 3
 };
 
-int main()
-{
+int main() {
 	/**
 	* Basic initialization 
 	* --------------------------------------------------
@@ -50,7 +47,7 @@ int main()
 	// GLFWwindow* window = glfwCreateWindow(width, height, "Test window", glfwGetPrimaryMonitor(), NULL);
 
 	// Adding icon
-	GLFWimage windowIcon[1]{FileManager::get_image_content((iconPath + "Fox_icon.png").c_str())};
+	GLFWimage windowIcon[1]{FileManager::getImageContent((iconPath + "Fox_icon.png").c_str())};
 	glfwSetWindowIcon(window, 1, windowIcon);
 
 	// Error checker
@@ -67,7 +64,6 @@ int main()
 	gladLoadGL();
 
 	// Map the NDC coordinates to the framebuffer coordinates and enable depth testing
-	// glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 	glEnable(GL_DEPTH_TEST);
 
 	/**
@@ -81,21 +77,17 @@ int main()
 	Shader depthDebug((shaderPath + "depthDebug.vert").c_str(), (shaderPath + "depthDebug.frag").c_str());
 
 	// Main camera
-	/*glm::vec3 camPosition(0.0f, 2.0f, 3.0f);
-	glm::vec3 camOrientation = glm::vec3(0.0f, -0.75f, -1.0f);*/
-	glm::vec3 camPosition(1.0f, 5.0f, 0.0f);
-	glm::vec3 camOrientation = glm::vec3(0.1f, -1.0f, 0.0f);
+	glm::vec3 camPosition(0.0f, 2.0f, 3.0f);
+	glm::vec3 camOrientation = glm::vec3(0.0f, -0.75f, -1.0f);
 	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPosition, camOrientation);
 
 	// Plank textures
-	Texture plankTextures[]
-	{
+	Texture plankTextures[] {
 		Texture((texturePath + "planks.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "planksSpec.png").c_str(), "specular", 1, GL_RED, GL_UNSIGNED_BYTE)
 	};
 
-	Texture brickTextures[]
-	{
+	Texture brickTextures[] {
 		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
@@ -121,7 +113,6 @@ int main()
 	planks2.setScale(glm::vec3(0.5f, 0.5f, 0.5f));
 	planks2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	// Add 2 more planks for the testing
 	GameObject planks3 = GameObject(brickMesh);
 	planks3.setPosition(glm::vec3(0.0f, -1.0f, -1.0f));
 	planks3.setScale(glm::vec3(5.0f, 5.0f, 5.0f));
@@ -192,8 +183,15 @@ int main()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
+
+	// To prevent shadows outside of the depth map, cames values outside of the border to be white
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
 	// attach depth texture as FBO's depth buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
@@ -213,8 +211,7 @@ int main()
 	float prevTime = 0;
 	float timeDiff = 0;
 	float fps = 0;
-	while (!glfwWindowShouldClose(window))
-	{
+	while (!glfwWindowShouldClose(window)) {
 		// FPS calculator
 		timeDiff = (float)glfwGetTime() - prevTime;
 		prevTime = (float)glfwGetTime();
@@ -264,8 +261,7 @@ int main()
 		glClear(GL_DEPTH_BUFFER_BIT);
 		// To generate more proper shadows, works for solid objects
 		glCullFace(GL_FRONT);
-		for (const auto& object : gameObjects)
-		{
+		for (const auto& object : gameObjects) {
 			object->draw(depthShader);
 		}
 		// Return culling to normal
@@ -289,8 +285,7 @@ int main()
 		camera.setCameraMatrix(shader, "camMatrix");
 
 		lightFactory.update(shader);
-		for (const auto& object : gameObjects) 
-		{
+		for (const auto& object : gameObjects) {
 			object->draw(shader);
 		}
 
@@ -316,10 +311,8 @@ int main()
 // -----------------------------------------
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
-void renderQuad()
-{
-	if (quadVAO == 0)
-	{
+void renderQuad() {
+	if (quadVAO == 0) {
 		float quadVertices[] = {
 			// positions        // texture Coords
 			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,

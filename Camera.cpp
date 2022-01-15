@@ -5,8 +5,7 @@
 #include "Camera.h"
 
 // Empty constructor
-Camera::Camera()
-{
+Camera::Camera() {
 	Camera::width = DEFAULT_MONITOR_WIDTH;
 	Camera::height = DEFAULT_MONITOR_HEIGHT;
 	Camera::orientation = glm::vec3(0.0f);
@@ -14,8 +13,7 @@ Camera::Camera()
 }
 
 // Basic constructor for the camera
-Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation)
-{
+Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation) {
 	// Get input values and set camera values to it
 	Camera::width = width;
 	Camera::height = height;
@@ -24,8 +22,7 @@ Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation)
 }
 
 // Update model matrix to use in the shader
-void Camera::updateMatrix()
-{
+void Camera::updateMatrix() {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 proj = glm::mat4(1.0f);
 
@@ -41,51 +38,40 @@ void Camera::updateMatrix()
 }
 
 // Creates camera matrix in the selected shader so its location could be changed
-void Camera::setCameraMatrix(Shader& shader, const char* location)
-{
-	//glUniformMatrix4fv(glGetUniformLocation(shader.getID(), location), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+void Camera::setCameraMatrix(Shader& shader, const char* location) {
 	shader.setMat4(location, cameraMatrix);
 }
 
 
-void Camera::setCameraPosition(Shader& shader, const char* location)
-{
+void Camera::setCameraPosition(Shader& shader, const char* location) {
 	shader.setVec3(location, this->position);
 }
 
 // Inputs I've taken from tutorial
-void Camera::inputs2(GLFWwindow* window)
-{
+void Camera::inputs2(GLFWwindow* window) {
 	// Handles key inputs
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		position += screenSpeed * orientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		position += screenSpeed * -glm::normalize(glm::cross(orientation, Y_VECTOR));
 	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 		position += screenSpeed * -orientation;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		position += screenSpeed * glm::normalize(glm::cross(orientation, Y_VECTOR));
 	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 		position += screenSpeed * Y_VECTOR;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
 		position += screenSpeed * -Y_VECTOR;
 	}
 
 	float sensitivity = 45.0f;
 	// Handles mouse inputs
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	{
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		// Hides mouse cursor
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
@@ -104,8 +90,7 @@ void Camera::inputs2(GLFWwindow* window)
 		glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, Y_VECTOR)));
 
 		// Decides whether or not the next vertical Orientation is legal or not
-		if (abs(glm::angle(newOrientation, Y_VECTOR) - glm::radians(90.0f)) <= glm::radians(85.0f))
-		{
+		if (abs(glm::angle(newOrientation, Y_VECTOR) - glm::radians(90.0f)) <= glm::radians(85.0f)) {
 			orientation = newOrientation;
 		}
 
@@ -115,35 +100,29 @@ void Camera::inputs2(GLFWwindow* window)
 		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
 		glfwSetCursorPos(window, (width / 2), (height / 2));
 	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-	{
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
 		// Unhides cursor since camera is not looking around anymore
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		// Makes sure the next time the camera looks around it doesn't jump
 	}
 }
 
+// Strategy control version
 // Function to control camera using input mouse and keyboard
-void Camera::inputs(GLFWwindow* window)
-{
+void Camera::inputs(GLFWwindow* window) {
 	// Keys to change location of the window in X, Z axises
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) 
-	{
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		position -= screenSpeed * Z_VECTOR;
 	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) 
-	{
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		position += screenSpeed * Z_VECTOR;
 	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) 
-	{
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 		position += screenSpeed * X_VECTOR;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) 
-	{
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		position -= screenSpeed * X_VECTOR;
 	}
-
 
 	// Debug
 	// std::cout << zoom << " " << position[1] << std::endl;
@@ -155,55 +134,44 @@ void Camera::inputs(GLFWwindow* window)
 	//glfwSetWindowSizeCallback(window, window_size_callback);
 
 	// Change position values after scroll callback (also check height bounds)
-	if (zoom > 0 && position[1] <= maxHeight)
-	{
+	if (zoom > 0 && position[1] <= maxHeight) {
 		//Change position
 		position -= zoomSpeed * orientation;
 		// Change zoom value
-		if (zoom > zoomSpeed)
-		{
+		if (zoom > zoomSpeed) {
 			zoom -= zoomSpeed;
 		}
-		else
-		{
+		else {
 			zoom = 0;
 		}
 	}
-	else if (zoom < 0 && position[1] >= minHeight)
-	{
+	else if (zoom < 0 && position[1] >= minHeight) {
 		//Change position
 		position += zoomSpeed * orientation;
 		// Change zoom value
-		if (zoom < zoomSpeed)
-		{
+		if (zoom < zoomSpeed) {
 			zoom += zoomSpeed;
 		}
-		else
-		{
+		else {
 			zoom = 0;
 		}
 	}
-	else
-	{
+	else {
 		zoom = 0;
 	}
 }
 
 // Function for the mouse wheel to zoom in/out camera
-void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	if (yoffset > 0) 
-	{
+void Camera::scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	if (yoffset > 0) {
 		zoom -= zoomValue;
 	}
-	else if (yoffset < 0)
-	{
+	else if (yoffset < 0) {
 		zoom += zoomValue;
 	}
 }
 
-/*void Camera::window_size_callback(GLFWwindow* window, int width, int height)
-{
+/*void Camera::window_size_callback(GLFWwindow* window, int width, int height) {
 	// Debug
 	std::cout << "Size of the screen has changed: " << width << "," << height << std::endl;
 	newWidth = width;

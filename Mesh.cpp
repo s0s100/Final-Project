@@ -5,20 +5,17 @@
 
 Mesh::Mesh() {}
 
-Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vector <Texture> textures)
-{
+Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vector <Texture> textures) {
 	Mesh::vertices = vertices;
 	Mesh::indices = indices;
 	Mesh::textures = textures;
 
 	// Generates Vertex Array Object and binds it
 	Mesh::VAO.bind();
-
 	// Generates Vertex Buffer Object and links it to vertices
 	VBO VBO(vertices);
 	// Generates Element Buffer Object and links it to indices
 	EBO EBO(indices);
-
 	EBO.bind();
 
 	// Links VBO attributes such as coordinates and colors to VAO
@@ -32,15 +29,12 @@ Mesh::Mesh(std::vector <Vertex> vertices, std::vector <GLuint> indices, std::vec
 	VBO.unbind();
 }
 
-// Drawing function
-void Mesh::draw(Shader& shader)
-{
+void Mesh::draw(Shader& shader) {
 	Mesh::VAO.bind();
 
 	// Bind every included texture
 	std::string type;
-	for (unsigned int i = 0; i < textures.size(); i++)
-	{
+	for (unsigned int i = 0; i < textures.size(); i++) {
 		type = textures[i].getType();
 		textures[i].texUnit(shader, type.c_str(), i);
 		textures[i].bind();

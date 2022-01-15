@@ -16,8 +16,7 @@ uniform mat4 camMatrix;
 uniform mat4 modelMatrix;
 uniform mat4 lightSpaceMatrix; // For now one element
 
-void main()
-{
+void main() {
 	// Calculate shader positon using models matrix and input position
 	crntPos = vec3(modelMatrix * vec4(aPos, 1.0f));
 	// Also normal calculations

@@ -4,14 +4,13 @@
 #include <string>
 #include <glfw3.h>
 
-namespace FileManager 
-{
+namespace FileManager {
 	// Reads a text file and outputs a string with everything in the text file
 	// Used to read textures from the images
-	std::string get_file_contents(const char* fileName);
+	std::string getFileContent(const char* fileName);
 
 	// Gets a path to the image and returns an Image data object
-	GLFWimage get_image_content(const char* imageName);
+	GLFWimage getImageContent(const char* imageName);
 };
 
 #endif

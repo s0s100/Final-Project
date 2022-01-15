@@ -2,30 +2,16 @@
 
 SpotLight::SpotLight(){}
 
-SpotLight::SpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone): Light(position, color, direction)
-{
-	// SpotLight::direction = direction;
+SpotLight::SpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone): DirectionalLight(position, color, direction) {
 	SpotLight::innerCone = innecCone;
 	SpotLight::outerCone = outerCone;
 }
 
-//glm::vec3 SpotLight::getDirection()
-//{
-//	return direction;
-//}
-
-float SpotLight::getInnerCone()
-{
+float SpotLight::getInnerCone() {
 	return innerCone;
 }
 
-float SpotLight::getOuterCone()
-{
+float SpotLight::getOuterCone() {
 	return outerCone;
 }
-
-//void SpotLight::setDirection(glm::vec3 dir)
-//{
-//	this->direction = dir;
-//}
 

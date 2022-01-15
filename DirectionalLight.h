@@ -3,11 +3,16 @@
 
 #include "Light.h"
 
-class DirectionalLight: public Light
-{
+class DirectionalLight: public Light {
+private:
+	glm::vec3 direction = glm::vec3(0.0f);
+
 public:
 	DirectionalLight();
 	DirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction);
+
+	glm::vec3 getDirection();
+	void setDirection(glm::vec3 dir);
 };
 
 #endif

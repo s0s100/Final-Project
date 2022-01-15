@@ -1,19 +1,17 @@
 #ifndef VBO_CLASS_HEADER
 #define VBO_CLASS_HEADER
 
-#include <glm/glm.hpp>
 #include <vector>
+#include <glm/glm.hpp>
 #include <glad/glad.h>
 
-struct Vertex
-{
+struct Vertex {
 	glm::vec3 position;
 	glm::vec3 normal;
 	glm::vec2 texUV;
 };
 
-class VBO
-{
+class VBO {
 private:
 	// Reference of buffered object vertices
 	GLuint ID;
@@ -27,4 +25,5 @@ public:
 	void unbind();
 	void deleteVBO();
 };
+
 #endif

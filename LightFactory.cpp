@@ -7,48 +7,41 @@
 
 LightFactory::LightFactory(){}
 
-DirectionalLight* LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction)
-{
+DirectionalLight* LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) {
 	DirectionalLight* result = new DirectionalLight(position, color, direction);
 	directionalLights.push_back(result);
 
 	return result;
 }
 
-SpotLight* LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone)
-{
+SpotLight* LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone) {
 	SpotLight* result = new SpotLight(position, color, direction, innecCone, outerCone);
 	spotLights.push_back(result);
 
 	return result;
 }
 
-PointLight* LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic)
-{
+PointLight* LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic) {
 	PointLight* result = new PointLight(position, color, constant, linear, quadratic);
 	pointLights.push_back(result);
 
 	return result;
 }
 
-size_t LightFactory::getDirectionalLightSize()
-{
+size_t LightFactory::getDirectionalLightSize() {
 	return directionalLights.size();
 }
 
-size_t LightFactory::getSpotLightSize()
-{
+size_t LightFactory::getSpotLightSize() {
 	return spotLights.size();
 }
 
-size_t LightFactory::getPointLightSize()
-{
+size_t LightFactory::getPointLightSize() {
 	return pointLights.size();
 }
 
 // Weird option to create this one, optimize
-void LightFactory::update(Shader shader)
-{
+void LightFactory::update(Shader shader) {
 	// After activating shader
 	// First path with ref. to the lightPos array element
 	// Second for the variable inside of it

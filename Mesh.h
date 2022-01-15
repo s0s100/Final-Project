@@ -7,11 +7,9 @@
 #include "VAO.h"
 #include "EBO.h"
 #include "VBO.h"
-#include "Camera.h"
 #include "Texture.h"
 
-class Mesh
-{
+class Mesh {
 private:
 	std::vector <Vertex> vertices;
 	std::vector <GLuint> indices;
@@ -27,6 +25,7 @@ public:
 	// Put values into the shader so it could calculate the image
 	void draw(Shader& shader);
 };
+
 #endif
 
 
