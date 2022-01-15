@@ -26,8 +26,14 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Configures the way the texture repeats (if it does at all)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
+
+	// To prevent shadows outside of the depth map, cames values outside of the border to be white
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
 
 	// Assigns the image to the OpenGL Texture object
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, pixels);
@@ -35,7 +41,7 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// Testing
-	std::cout << "Texture.cpp, constructor, created texture, id = " << ID << ", assigned to " << unit << std::endl;
+	// std::cout << "Texture.cpp, constructor, created texture, id = " << ID << ", assigned to " << unit << std::endl;
 
 	// Deletes the image data as it is already in the OpenGL Texture object
 	stbi_image_free(pixels);
@@ -46,16 +52,16 @@ Texture::Texture(const char* image, const char* texType, GLuint slot, GLenum for
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 {
-	std::cout << "Texture.cpp, texUnit, set shader value " << uniform << ", value " << unit << std::endl;
+	// std::cout << "Texture.cpp, texUnit, set shader value " << uniform << ", value " << unit << std::endl;
 	// Sets the value of the uniform
 	shader.setInt(uniform, unit);
 }
 
 void Texture::bind()
 {
-	std::cout << "Texture.cpp, bind, activate texture" << unit << std::endl;
+	// std::cout << "Texture.cpp, bind, activate texture" << unit << std::endl;
 	glActiveTexture(GL_TEXTURE0 + unit);
-	std::cout << "Texture.cpp, bind, bind texture_2D " << ID << std::endl;
+	// std::cout << "Texture.cpp, bind, bind texture_2D " << ID << std::endl;
 	glBindTexture(GL_TEXTURE_2D, ID);
 }
 

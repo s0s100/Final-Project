@@ -201,8 +201,8 @@ int main()
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	std::cout << "Main.cpp, created frameBuffer " << depthMapFBO << std::endl;
-	std::cout << "Main.cpp, created depthTexture " << depthMap << std::endl;
+	// std::cout << "Main.cpp, created frameBuffer " << depthMapFBO << std::endl;
+	// std::cout << "Main.cpp, created depthTexture " << depthMap << std::endl;
 	// Also Configure depth buffer (16-31 are the depth map buffer locations)
 	int depthNumber = 3;
 	shader.activateShader();
@@ -262,10 +262,14 @@ int main()
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 		glClear(GL_DEPTH_BUFFER_BIT);
+		// To generate more proper shadows, works for solid objects
+		glCullFace(GL_FRONT);
 		for (const auto& object : gameObjects)
 		{
 			object->draw(depthShader);
 		}
+		// Return culling to normal
+		glCullFace(GL_BACK);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		/**
@@ -275,6 +279,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.activateShader();
+
+		// Set shadow data for the shader
+		shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+		glActiveTexture(GL_TEXTURE0 + depthNumber);
+		glBindTexture(GL_TEXTURE_2D, depthMap);
 
 		camera.setCameraPosition(shader, "camPos");
 		camera.setCameraMatrix(shader, "camMatrix");
@@ -289,11 +298,9 @@ int main()
 		 * Depth testing
 		**/
 		depthDebug.activateShader();
-		depthDebug.setFloat("near_plane", near_plane);
-		depthDebug.setFloat("far_plane", near_plane);
 		glActiveTexture(GL_TEXTURE0 + depthNumber);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderQuad();
+		// renderQuad();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
