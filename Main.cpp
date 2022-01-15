@@ -6,6 +6,7 @@
 #include "FileManager.h"
 #include "GameObject.h"
 #include "Camera.h"
+#include "Shadow.h"
 
 // Default paths
 const std::string texturePath = "Resources\\Textures\\";
@@ -172,41 +173,8 @@ int main() {
 	* --------------------------------------------------
 	**/
 
-	// Shadow implementation using example
-	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	unsigned int depthMapFBO; // Reference to the framebuffer
-	glGenFramebuffers(1, &depthMapFBO);
-	// create depth texture
-	unsigned int depthMap; // Reference to the texture
-	glGenTextures(1, &depthMap);
-	glBindTexture(GL_TEXTURE_2D, depthMap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
-
-	// To prevent shadows outside of the depth map, cames values outside of the border to be white
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-
-	// attach depth texture as FBO's depth buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	// std::cout << "Main.cpp, created frameBuffer " << depthMapFBO << std::endl;
-	// std::cout << "Main.cpp, created depthTexture " << depthMap << std::endl;
-	// Also Configure depth buffer (16-31 are the depth map buffer locations)
-	int depthNumber = 3;
-	shader.activateShader();
-	shader.setInt("shadowMap", depthNumber);
-	depthDebug.activateShader();
-	depthDebug.setInt("depthMap", depthNumber);
+	Shadow shadow = Shadow();
+	int depthNumber = 16;
 
 	float prevTime = 0;
 	float timeDiff = 0;
@@ -232,54 +200,25 @@ int main() {
 		* --------------------------------------------------
 		**/
 
-		/*glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
-
 		/**
 		 * Update depth map
 		**/
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		depthShader.activateShader();
-		
-		// Calculate light matrix
-		glm::mat4 lightProjection, lightView;
-		glm::mat4 lightSpaceMatrix;
-		float near_plane = 1.0f, far_plane = 7.5f;
-		lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-		lightView = glm::lookAt(lightPos2, lightPos2 + lightDirection2, Y_VECTOR);
-		lightSpaceMatrix = lightProjection * lightView;
-
-		// Bind matrix
-		depthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-
-		// Rendering
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		// To generate more proper shadows, works for solid objects
-		glCullFace(GL_FRONT);
-		for (const auto& object : gameObjects) {
-			object->draw(depthShader);
-		}
-		// Return culling to normal
-		glCullFace(GL_BACK);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		shadow.calculateMatrix(lightPos2, lightDirection2);
+		shadow.setLightMatrix(depthShader);
+		shadow.generateDepthMap(depthShader, gameObjects);
 
 		/**
 		 * Main rendering
 		**/
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.activateShader();
 
-		// Set shadow data for the shader
-		shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
-		glActiveTexture(GL_TEXTURE0 + depthNumber);
-		glBindTexture(GL_TEXTURE_2D, depthMap);
+		shadow.setLightMatrix(shader);
+		shadow.assignTexture(shader, depthNumber);
 
 		camera.setCameraPosition(shader, "camPos");
 		camera.setCameraMatrix(shader, "camMatrix");
@@ -293,9 +232,8 @@ int main() {
 		 * Depth testing
 		**/
 		depthDebug.activateShader();
-		glActiveTexture(GL_TEXTURE0 + depthNumber);
-		glBindTexture(GL_TEXTURE_2D, depthMap);
-		// renderQuad();
+		shadow.assignTexture(depthDebug, depthNumber);
+		renderQuad();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
