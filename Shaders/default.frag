@@ -11,8 +11,11 @@
 struct DirectionalLight {
 	vec3 position;
 	vec4 color;
-
 	vec3 direction;
+
+	bool isShadowing;
+	mat4 lightMatrix;
+	int mapPosition;
 };
 
 struct PointLight {
@@ -27,10 +30,14 @@ struct PointLight {
 struct SpotLight {
 	vec3 position;
 	vec4 color;
-
 	vec3 direction;
+
 	float innerCone;
 	float outerCone;
+
+	bool isShadowing;
+	mat4 lightMatrix;
+	int mapPosition;
 };
 
 // Outputs colors in RGBA
@@ -42,8 +49,7 @@ in vec3 crntPos;
 in vec3 normal;
 // Inputs the texture coordinates from the Vertex Shader
 in vec2 texCoord;
-// Test frag pos light space
-in vec4 fragPosLightSpace;
+
 
 // Camera position
 uniform vec3 camPos;
@@ -51,8 +57,8 @@ uniform vec3 camPos;
 uniform sampler2D diffuse0;
 // Specular light map unit
 uniform sampler2D specular0;
-// Shadow map texture
-uniform sampler2D shadowMap;
+// Shadow depth maps, up to 16 fragment textures
+uniform sampler2D shadowMap[16];
 
 // Light arrays
 uniform DirectionalLight directionalLights[NR_DIR_LIGHT];
@@ -64,26 +70,37 @@ uniform int directionalLightNum;
 uniform int pointLightNum;
 uniform int spotLightNum;
 
-vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
-	// Define variables
-	vec4 lightClr = directionalLight.color;
-	vec3 lightDirection = normalize(directionalLight.direction);
-	vec3 viewDirection = normalize(camPos - crntPos);
-	vec3 reflectionDirection = reflect(-lightDirection, normal);
+// This works fine for spot light
+float shadowCalculation(vec4 fragPosLight, int mapPos, vec3 lightDir) {
+    // perform perspective divide
+    vec3 projCoords = fragPosLight.xyz / fragPosLight.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap[mapPos], projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // Removes shadow acne
+	float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.001);
+	// check whether current frag pos is in shadow
+    float shadow = 0.0f;
+	vec2 texelSize = 1.0 / textureSize(shadowMap[mapPos], 0);
+	// Parse the texture and for each of the points calculate the value
+    for(int x = -1; x <= 1; ++x) {
+        for(int y = -1; y <= 1; ++y) {
+            float pcfDepth = texture(shadowMap[mapPos], projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
+        }    
+    }
+	// Shadow now is [0,9], normalize it
+    shadow /= 9.0; 
+    
+    // If outside of the bounds, set to 0
+    if(projCoords.z > 1.0) {
+		shadow = 0.0;
+	}
 
-	// Ambient
-	float ambient = AMBIENT;
-
-	// Diffuse
-	float diffuse = max(dot(normal, lightDirection), 0.0f);
-
-	// Specular
-	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 32);
-	float specular = specAmount * SPECULAR;
-
-	vec4 result = (texture(diffuse0, texCoord) * (diffuse + ambient)
-	+ texture(specular0, texCoord).r * specular) * lightClr;
-	return result;
+    return shadow;
 }
 
 vec4 calculatePointLight(PointLight pointLight) {
@@ -116,37 +133,26 @@ vec4 calculatePointLight(PointLight pointLight) {
 	return result;
 }
 
-// This works fine for spot light
-float shadowCalculation(vec4 fragPosLightSpace, vec3 lightDir) {
-    // perform perspective divide
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    // transform to [0,1] range
-    projCoords = projCoords * 0.5 + 0.5;
-    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
-    // get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
-    // Removes shadow acne
-	float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.001);
-	// check whether current frag pos is in shadow
-    float shadow = 0.0f;
-	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-	// Parse the texture and for each of the points calculate the value
-    for(int x = -1; x <= 1; ++x) {
-        for(int y = -1; y <= 1; ++y) {
-            float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-            shadow += currentDepth - bias > pcfDepth  ? 1.0 : 0.0;        
-        }    
-    }
-	// Shadow now is [0,9], normalize it
-    shadow /= 9.0; 
-    
-    // If outside of the bounds, set to 0
-    if(projCoords.z > 1.0) {
-		shadow = 0.0;
-	}
+vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
+	// Define variables
+	vec4 lightClr = directionalLight.color;
+	vec3 lightDirection = normalize(directionalLight.direction);
+	vec3 viewDirection = normalize(camPos - crntPos);
+	vec3 reflectionDirection = reflect(-lightDirection, normal);
 
-    return shadow;
+	// Ambient
+	float ambient = AMBIENT;
+
+	// Diffuse
+	float diffuse = max(dot(normal, lightDirection), 0.0f);
+
+	// Specular
+	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 32);
+	float specular = specAmount * SPECULAR;
+
+	vec4 result = (texture(diffuse0, texCoord) * (diffuse + ambient)
+	+ texture(specular0, texCoord).r * specular) * lightClr;
+	return result;
 }
 
 vec4 calculateSpotLight(SpotLight spotLight) {
@@ -155,6 +161,7 @@ vec4 calculateSpotLight(SpotLight spotLight) {
 	float outerCone = 0.80f;
 	vec4 lightClr = spotLight.color;
 	vec3 lightPs = spotLight.position;
+	vec3 lightDir = spotLight.direction;
 
 	vec3 lightDirection = normalize(lightPs - crntPos);
 	// vec3 lightDirection = normalize(spotLight.direction);
@@ -176,7 +183,21 @@ vec4 calculateSpotLight(SpotLight spotLight) {
 	float inten = clamp((angle - outerCone) / (innerCone - outerCone), 0.0f, 1.0f);
 
 	// vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten + ambient) + texture(specular0, texCoord).r * specular * inten) * lightClr;
-	float shadow = shadowCalculation(fragPosLightSpace, spotLight.direction); 
+	// vec4 fragPosLightSpace1 = lightSpaceMatrix * vec4(crntPos, 1.0f);
+	// float shadow = shadowCalculation(fragPosLightSpace1, spotLight.direction); 
+
+	// Extract shadow data
+	bool isShadowing = spotLight.isShadowing;
+	mat4 lightMatrix = spotLight.lightMatrix;
+	int mapPos = spotLight.mapPosition;
+	float shadow = 0.0f;
+	
+	if (isShadowing) {
+		vec4 lightProj = lightMatrix * vec4(crntPos, 1.0f);
+		shadow = shadowCalculation(lightProj, mapPos, lightDir); 
+	} else {
+		return vec4(0.0f);
+	}
 	
 	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1 - shadow)  + ambient)
 	+ texture(specular0, texCoord).r * specular * inten * (1 - shadow)) * lightClr;

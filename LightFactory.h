@@ -2,8 +2,10 @@
 #define LIGHT_FACTORY_CLASS_HEADER
 
 #include <vector>
+#include <map>
 
 #include "ShaderClass.h"
+#include "Shadow.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
@@ -14,6 +16,8 @@ private:
 	std::vector<PointLight*> pointLights;
 	std::vector<SpotLight*> spotLights;
 
+	// Texture shift in the shader slot
+	inline static const int texFrom = 16;
 public:
 	LightFactory();
 
@@ -29,6 +33,8 @@ public:
 
 	// Update funtion for the shader
 	void update(Shader shader);
+	// Update depth maps and light matrices
+	void updateShadowMaps(Shader shader, std::vector<GameObject*> objects );
 };
 
 #endif

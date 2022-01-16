@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "Shadow.h"
 
@@ -40,7 +41,7 @@ void Shadow::calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
 
 void Shadow::generateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	// Assign the light matrix value
-	setLightMatrix(shader);
+	setLightMatrix(shader, "lightSpaceMatrix");
 
 	// To generate more proper shadows, works for solid objects
 	glCullFace(GL_FRONT);
@@ -61,13 +62,17 @@ void Shadow::generateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Shadow::assignTexture(Shader shader, unsigned int textureNumber) {
-	shader.setInt("shadowMap", textureNumber);
+void Shadow::assignTexture(Shader shader, unsigned int textureNumber, std::string name) {
+	shader.setInt(name, textureNumber);
 	glActiveTexture(GL_TEXTURE0 + textureNumber);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void Shadow::setLightMatrix(Shader shader) {
-	shader.setMat4("lightSpaceMatrix", this->lightMatrix);
+void Shadow::setLightMatrix(Shader shader, std::string name) {
+	std::cout << glm::to_string(this->lightMatrix) << std::endl;
+	shader.setMat4(name, this->lightMatrix);
 }
 
+glm::mat4 Shadow::getLightMatrix() {
+	return this->lightMatrix;
+}

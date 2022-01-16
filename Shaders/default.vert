@@ -9,12 +9,10 @@ layout (location = 2) in vec2 aTex;
 out vec3 crntPos;
 out vec3 normal;
 out vec2 texCoord;
-out vec4 fragPosLightSpace; // Shadow mapping
 
 // Camera and object mmatrices + Test light matrix
 uniform mat4 camMatrix; 
 uniform mat4 modelMatrix;
-uniform mat4 lightSpaceMatrix; // For now one element
 
 void main() {
 	// Calculate shader positon using models matrix and input position
@@ -23,8 +21,6 @@ void main() {
 	normal = normalize(aNormal);
 	// Assigns the texture coordinates from the Vertex Data to "texCoord"
 	texCoord = aTex;
-	// Testing shadow mapping
-	fragPosLightSpace = lightSpaceMatrix * vec4(crntPos, 1.0f);
 	// Outputs the positions/coordinates of all vertices
 	gl_Position = camMatrix * vec4(crntPos, 1.0f);
 }

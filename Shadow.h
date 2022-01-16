@@ -13,9 +13,7 @@
 #define Z_VECTOR glm::vec3(0.0f, 0.0f, 1.0f)
 
 class Shadow {
-private: 
-	// Shows if the shadow should be calculated
-	bool isActive = false;
+private:
 	// Id for the generated framebuffer and depth map texture
 	unsigned int bufferId;
 	unsigned int textureId;
@@ -38,8 +36,10 @@ public:
 
 	// Generate depth map texture using shader to use the buffer
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
-	void assignTexture(Shader shader, unsigned int textureNumber);
-	void setLightMatrix(Shader shader);
+	void assignTexture(Shader shader, unsigned int textureNumber, std::string name);
+	void setLightMatrix(Shader shader, std::string name);
+
+	glm::mat4 getLightMatrix();
 };
 
 #endif

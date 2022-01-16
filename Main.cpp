@@ -166,15 +166,13 @@ int main() {
 	glm::vec3 lightDirection2 = glm::vec3(0.1f, -1.0f, 0.0f);
 	float innerCone2 = 0.4f;
 	float outerCone2 = 0.1f;
-	lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
+	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
+	light->setShadovActive(true);
 
 	/**
 	* Main loop
 	* --------------------------------------------------
 	**/
-
-	Shadow shadow = Shadow();
-	int depthNumber = 16;
 
 	float prevTime = 0;
 	float timeDiff = 0;
@@ -184,7 +182,7 @@ int main() {
 		timeDiff = (float)glfwGetTime() - prevTime;
 		prevTime = (float)glfwGetTime();
 		fps = 1 / timeDiff;
-		// std::cout <<  "FPS: " << static_cast<int>(fps) << std::endl;
+		std::cout <<  "FPS: " << static_cast<int>(fps) << std::endl;
 		
 		// Set up camera inputs and update it after it was changed by the input
 		camera.inputs2(window);
@@ -196,17 +194,19 @@ int main() {
 		planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		/**
-		* Rendering
-		* --------------------------------------------------
+		 * Rendering
+		 * --------------------------------------------------
 		**/
 
 		/**
 		 * Update depth map
 		**/
 		depthShader.activateShader();
-		shadow.calculateMatrix(lightPos2, lightDirection2);
-		shadow.setLightMatrix(depthShader);
-		shadow.generateDepthMap(depthShader, gameObjects);
+		lightFactory.updateShadowMaps(depthShader, gameObjects);
+
+		// Check
+		std::cout << "After updating" << std::endl;
+		std::cout << glm::to_string(light->getShadow().getLightMatrix()) << std::endl;
 
 		/**
 		 * Main rendering
@@ -216,13 +216,8 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.activateShader();
-
-		shadow.setLightMatrix(shader);
-		shadow.assignTexture(shader, depthNumber);
-
 		camera.setCameraPosition(shader, "camPos");
 		camera.setCameraMatrix(shader, "camMatrix");
-
 		lightFactory.update(shader);
 		for (const auto& object : gameObjects) {
 			object->draw(shader);
@@ -232,8 +227,8 @@ int main() {
 		 * Depth testing
 		**/
 		depthDebug.activateShader();
-		shadow.assignTexture(depthDebug, depthNumber);
-		renderQuad();
+		light->getShadow().assignTexture(depthDebug, 0, "shadowMap");
+		// renderQuad();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

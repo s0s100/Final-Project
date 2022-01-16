@@ -10,6 +10,18 @@ glm::vec3 DirectionalLight::getDirection() {
 	return direction;
 }
 
+Shadow DirectionalLight::getShadow() {
+	return shadow;
+}
+
+bool DirectionalLight::isShadowActive() {
+	return shadowActive;
+}
+
 void DirectionalLight::setDirection(glm::vec3 dir) {
 	this->direction = dir;
+}
+
+void DirectionalLight::setShadovActive(bool isActive) {
+	this->shadowActive = isActive;
 }
