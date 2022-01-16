@@ -62,84 +62,90 @@ void LightFactory::update(Shader shader) {
 	int textureShift = 16;
 
 	// Update point lights
+	PointLight* pointLight;
 	glUniform1i(glGetUniformLocation(shader.getID(), "pointLightNum"), (GLint)getPointLightSize());
 	for (int i = 0; i < getPointLightSize(); i++) {
+		pointLight = pointLights.at(i);
 		path1 = "pointLights[" + std::to_string(i) + "].";
 
 		path2 = path1 + "position";
 		//ePosition = pointLights[i].getPosition();
-		ePosition = pointLights.at(i)->getPosition();
+		ePosition = pointLight->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		path2 = path1 + "color";
-		eColor = pointLights.at(i)->getColor();
+		eColor = pointLight->getColor();
 		glUniform4f(glGetUniformLocation(shader.getID(), path2.c_str()), eColor.r, eColor.g, eColor.b, eColor.a);
 
 		path2 = path1 + "constant";
-		constant = pointLights.at(i)->getC();
+		constant = pointLight->getC();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), constant);
 
 		path2 = path1 + "linear";
-		linear = pointLights.at(i)->getL();
+		linear = pointLight->getL();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), linear);
 
 		path2 = path1 + "quadratic";
-		quadratic = pointLights.at(i)->getQ();
+		quadratic = pointLight->getQ();
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), quadratic);
 	}
 
 	// Update direction lights
+	DirectionalLight* directionalLight;
 	glUniform1i(glGetUniformLocation(shader.getID(), "directionalLightNum"), (GLint)getDirectionalLightSize());
 	for (int i = 0; i < getDirectionalLightSize(); i++) {
+		directionalLight = directionalLights.at(i);
 		path1 = "directionalLights[" + std::to_string(i) + "].";
 
 		path2 = path1 + "position";
-		ePosition = directionalLights.at(i)->getPosition();
+		ePosition = directionalLight->getPosition();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), ePosition.x, ePosition.y, ePosition.z);
 
 		// Testing
-		// std::cout << ePosition.x << " " << ePosition.y << " " << ePosition.z << std::endl;
+		std::cout << path2 << ": " << glm::to_string(ePosition) << std::endl;
 
 		path2 = path1 + "color";
-		eColor = directionalLights.at(i)->getColor();
+		eColor = directionalLight->getColor();
 		glUniform4f(glGetUniformLocation(shader.getID(), path2.c_str()), eColor.r, eColor.g, eColor.b, eColor.a);
 
 		// Debug
-		//std::cout << path2 << " " << eColor.r << " " << eColor.g << " " << eColor.b << " " << eColor.a << std::endl;
+		std::cout << path2 << ": " << glm::to_string(eColor) << std::endl;
 
 		path2 = path1 + "direction";
-		eDirection = directionalLights.at(i)->getDirection();
+		eDirection = directionalLight->getDirection();
 		glUniform3f(glGetUniformLocation(shader.getID(), path2.c_str()), eDirection.x, eDirection.y, eDirection.z);
 
-		// Shadows
-		/*if (directionalLights.at(i)->isShadowActive()) {
-			path2 = path1 + "isShadowing";
-			shader.setBool(path2, true);
+		std::cout << path2 << ": " << glm::to_string(eDirection) << std::endl;
 
-			path2 = path1 + "lightMatrix";
-			directionalLights.at(i)->getShadow().setLightMatrix(shader, path2);
+		// Shadows
+		path2 = path1 + "isShadowing";
+		shader.setBool(path2, directionalLight->isShadowActive());
+
+		if (directionalLight->isShadowActive()) {
+			Shadow shadow = directionalLight->getShadow();
 
 			path2 = path1 + "mapPosition";
 			shader.setInt(path2, currentTexturePointer);
+
+			std::string location = "shadowMap[" + std::to_string(currentTexturePointer) + "]";
+			shadow.calculateMatrix(directionalLight->getPosition(), directionalLight->getDirection());
+			shadow.assignTexture(shader, currentTexturePointer + textureShift, location);
+
+			path2 = path1 + "lightMatrix";
+			shadow.assignLightMatrix(shader, path2);
+
 			currentTexturePointer++;
-
-			std::string location = "shadowMap[" + currentTexturePointer + ']';
-			directionalLights.at(i)->getShadow().assignTexture(shader, currentTexturePointer + textureShift, location);
-
 		}
-		else {
-			path2 = path1 + "isShadowing";
-			shader.setBool(path2, false);
-		}*/
 	}
 
 	// Update spot lights
+	// std::cout << "Number of the spot lights: " << (GLint)getSpotLightSize() << std::endl;
+
 	SpotLight* spotLight;
 	glUniform1i(glGetUniformLocation(shader.getID(), "spotLightNum"), (GLint)getSpotLightSize());
 	for (int i = 0; i < getSpotLightSize(); i++) {
 		spotLight = spotLights.at(i);
 		path1 = "spotLights[" + std::to_string(i) + "].";
-		i++;
 
 		path2 = path1 + "position";
 		ePosition = spotLight->getPosition();
@@ -162,31 +168,23 @@ void LightFactory::update(Shader shader) {
 		glUniform1f(glGetUniformLocation(shader.getID(), path2.c_str()), eOuterCone);
 
 		// Shadows
+		path2 = path1 + "isShadowing";
+		shader.setBool(path2, spotLight->isShadowActive());
+
 		if (spotLight->isShadowActive()) {
 			Shadow shadow = spotLight->getShadow();
 
-			path2 = path1 + "isShadowing";
-			std::cout << path2 << std::endl;
-			shader.setBool(path2, true);
-
 			path2 = path1 + "mapPosition";
-			std::cout << path2 << std::endl;
 			shader.setInt(path2, currentTexturePointer);
 
 			std::string location = "shadowMap[" + std::to_string(currentTexturePointer) + "]";
-			std::cout << location << std::endl;
 			shadow.calculateMatrix(spotLight->getPosition(), spotLight->getDirection());
 			shadow.assignTexture(shader, currentTexturePointer + textureShift, location);
 
 			path2 = path1 + "lightMatrix";
-			std::cout << path2 << std::endl;
-			shadow.setLightMatrix(shader, path2);
+			shadow.assignLightMatrix(shader, path2);
 
 			currentTexturePointer++;
-		}
-		else {
-			path2 = path1 + "isShadowing";
-			shader.setBool(path2, false);
 		}
 	}
 }
@@ -194,13 +192,13 @@ void LightFactory::update(Shader shader) {
 void LightFactory::updateShadowMaps(Shader shader, std::vector<GameObject*> objects) {
 	// Check directional and spot light vectors
 	Shadow shadow;
-	/*for (DirectionalLight* light : directionalLights) {
+	for (DirectionalLight* light : directionalLights) {
 		if (light->isShadowActive()) {
 			shadow = light->getShadow();
 			shadow.calculateMatrix(light->getPosition(), light->getDirection());
 			shadow.generateDepthMap(shader, objects);
 		}
-	}*/
+	}
 	for (SpotLight* light : spotLights) {
 		if (light->isShadowActive()) {
 			shadow = light->getShadow();

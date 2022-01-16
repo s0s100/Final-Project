@@ -18,15 +18,6 @@ struct DirectionalLight {
 	int mapPosition;
 };
 
-struct PointLight {
-	vec3 position;
-	vec4 color;
-
-	float constant;
-	float linear;
-	float quadratic;
-};
-
 struct SpotLight {
 	vec3 position;
 	vec4 color;
@@ -38,6 +29,15 @@ struct SpotLight {
 	bool isShadowing;
 	mat4 lightMatrix;
 	int mapPosition;
+};
+
+struct PointLight {
+	vec3 position;
+	vec4 color;
+
+	float constant;
+	float linear;
+	float quadratic;
 };
 
 // Outputs colors in RGBA
@@ -136,6 +136,8 @@ vec4 calculatePointLight(PointLight pointLight) {
 vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
 	// Define variables
 	vec4 lightClr = directionalLight.color;
+	vec3 lightDir = directionalLight.direction;
+
 	vec3 lightDirection = normalize(directionalLight.direction);
 	vec3 viewDirection = normalize(camPos - crntPos);
 	vec3 reflectionDirection = reflect(-lightDirection, normal);
@@ -152,6 +154,8 @@ vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
 
 	vec4 result = (texture(diffuse0, texCoord) * (diffuse + ambient)
 	+ texture(specular0, texCoord).r * specular) * lightClr;
+
+	//return vec4(1.0f);
 	return result;
 }
 
@@ -195,8 +199,6 @@ vec4 calculateSpotLight(SpotLight spotLight) {
 	if (isShadowing) {
 		vec4 lightProj = lightMatrix * vec4(crntPos, 1.0f);
 		shadow = shadowCalculation(lightProj, mapPos, lightDir); 
-	} else {
-		return vec4(0.0f);
 	}
 	
 	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1 - shadow)  + ambient)

@@ -133,9 +133,9 @@ int main() {
 	LightFactory lightFactory;
 
 	// Directinal light
-	/*glm::vec3 lightPos0 = glm::vec3(1.0f, 1.0f, 1.0f);
-	glm::vec4 lightColor0 = glm::vec4(0.1f, 0.1f, 0.1f, 1.0f);
-	glm::vec3 lightDirection0 = glm::vec3(1.0f, 1.0f, 1.0f);
+	/*glm::vec3 lightPos0 = glm::vec3(0.0f, 0.0f, 0.0f);
+	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 0.0f);
 	lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);*/
 
 	// Point light
@@ -154,12 +154,13 @@ int main() {
 	lightFactory.getPointLight(lightPosP2, lightColorP2, constant2, linear2, quadratic2);*/
 
 	// Spot lights
-	/*glm::vec3 lightpos = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 lightpos = glm::vec3(-1.0f, 1.0f, 0.0f);
 	glm::vec4 lightcolor = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
-	glm::vec3 lightdirection = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 lightdirection = glm::vec3(0.1f, -1.0f, 0.0f);
 	float innercone = 0.95f;
 	float outercone = 0.80f;
-	lightFactory.getSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);*/
+	SpotLight* light2 = lightFactory.getSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
+	light2->setShadovActive(true);
 
 	glm::vec3 lightPos2 = glm::vec3(1.0f, 5.0f, 0.0f);
 	glm::vec4 lightColor2 = glm::vec4(0.8f, 1.0f, 0.5f, 1.0f);
@@ -204,10 +205,6 @@ int main() {
 		depthShader.activateShader();
 		lightFactory.updateShadowMaps(depthShader, gameObjects);
 
-		// Check
-		std::cout << "After updating" << std::endl;
-		std::cout << glm::to_string(light->getShadow().getLightMatrix()) << std::endl;
-
 		/**
 		 * Main rendering
 		**/
@@ -226,8 +223,8 @@ int main() {
 		/**
 		 * Depth testing
 		**/
-		depthDebug.activateShader();
-		light->getShadow().assignTexture(depthDebug, 0, "shadowMap");
+		// depthDebug.activateShader();
+		// light2->getShadow().assignTexture(depthDebug, 0, "shadowMap");
 		// renderQuad();
 
 		glfwSwapBuffers(window);
@@ -240,7 +237,7 @@ int main() {
 	return 0;
 }
 
-// Renders flat block to display data
+// Renders flat block to display data (for depth map testing)
 // -----------------------------------------
 unsigned int quadVAO = 0;
 unsigned int quadVBO;

@@ -37,7 +37,7 @@ public:
 	// Generate depth map texture using shader to use the buffer
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
 	void assignTexture(Shader shader, unsigned int textureNumber, std::string name);
-	void setLightMatrix(Shader shader, std::string name);
+	void assignLightMatrix(Shader shader, std::string name);
 
 	glm::mat4 getLightMatrix();
 };

@@ -41,7 +41,7 @@ void Shadow::calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
 
 void Shadow::generateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	// Assign the light matrix value
-	setLightMatrix(shader, "lightSpaceMatrix");
+	assignLightMatrix(shader, "lightSpaceMatrix");
 
 	// To generate more proper shadows, works for solid objects
 	glCullFace(GL_FRONT);
@@ -68,7 +68,7 @@ void Shadow::assignTexture(Shader shader, unsigned int textureNumber, std::strin
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void Shadow::setLightMatrix(Shader shader, std::string name) {
+void Shadow::assignLightMatrix(Shader shader, std::string name) {
 	std::cout << glm::to_string(this->lightMatrix) << std::endl;
 	shader.setMat4(name, this->lightMatrix);
 }
