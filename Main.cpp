@@ -16,7 +16,6 @@ const std::string iconPath = "Resources\\Other\\";
 // Defined functions
 void renderQuad();
 
-
 // Mesh vertices: coordinates/normals/texturePos
 Vertex vertices[] = {
 	Vertex{glm::vec3(-1.0f, 0.0f,  1.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 1.0f)},
@@ -140,9 +139,9 @@ int main() {
 	dirLight->setShadowActive(true);*/
 
 	// Point light
-	glm::vec3 lightPosP1 = glm::vec3(1.0f, 1.0f, 0.0f);
+	glm::vec3 lightPosP1 = glm::vec3(1.0f, 0.3f, 0.0f);
 	glm::vec4 lightColorP1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	float constant1 = 0.1f;
+	float constant1 = 0.5f;
 	float linear1 = 0.5f;
 	float quadratic1 = 1.0f;
 	lightFactory.getPointLight(lightPosP1, lightColorP1, constant1, linear1, quadratic1);

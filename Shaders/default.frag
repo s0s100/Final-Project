@@ -125,18 +125,18 @@ vec4 calculatePointLight(PointLight pointLight) {
 
 	// Calculate distance between fragment and the light source
 	float dist = length(lightVec);
-	float intensity = 1.0f / (quadratic * dist * dist + linear * dist + constant);
+	float intensity = 1.0f / (quadratic * pow(dist, 2) + linear * dist + constant);
 
 	// Ambient
 	float ambient = AMBIENT;
 
 	// Diffuse
 	float diffuse = max(dot(normal, lightVector), 0.0f);
-	diffuse *= DIFFUSE;
+	diffuse = diffuse * intensity * DIFFUSE;
 
 	// Specular
 	float specular = pow(max(dot(viewVector, reflectionVector), 0.0f), SHININESS_COEFFICIENT);
-	specular *= SPECULAR; 
+	specular = specular * intensity * SPECULAR; 
 
 	// Calculating result
 	vec4 diffuseVector = diffuse * texture(diffuse0, texCoord);
