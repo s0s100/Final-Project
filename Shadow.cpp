@@ -69,7 +69,7 @@ void Shadow::assignTexture(Shader shader, unsigned int textureNumber, std::strin
 }
 
 void Shadow::assignLightMatrix(Shader shader, std::string name) {
-	std::cout << glm::to_string(this->lightMatrix) << std::endl;
+	// std::cout << glm::to_string(this->lightMatrix) << std::endl;
 	shader.setMat4(name, this->lightMatrix);
 }
 

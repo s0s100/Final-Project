@@ -14,6 +14,9 @@ public:
 
 	float getInnerCone();
 	float getOuterCone();
+
+	// Fills the following shader data
+	void setShaderData(Shader shader, std::string path);
 };
 
 #endif

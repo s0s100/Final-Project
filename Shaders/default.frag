@@ -161,8 +161,8 @@ vec4 calculateDirectionalLight(DirectionalLight directionalLight) {
 
 vec4 calculateSpotLight(SpotLight spotLight) {
 	// Define values
-	float innerCone = 0.95f;
-	float outerCone = 0.80f;
+	float innerCone = spotLight.innerCone;
+	float outerCone = spotLight.outerCone;
 	vec4 lightClr = spotLight.color;
 	vec3 lightPs = spotLight.position;
 	vec3 lightDir = spotLight.direction;
@@ -203,6 +203,12 @@ vec4 calculateSpotLight(SpotLight spotLight) {
 	
 	vec4 result = (texture(diffuse0, texCoord) * (diffuse * inten * (1 - shadow)  + ambient)
 	+ texture(specular0, texCoord).r * specular * inten * (1 - shadow)) * lightClr;
+
+	// Supa test
+	//if (lightDir[0] == 0) {
+	//	return vec4(1.0f);
+	//}
+
 	return result;
 }
 

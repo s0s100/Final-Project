@@ -21,3 +21,17 @@ float PointLight::getL() {
 float PointLight::getQ() {
 	return quadratic;
 }
+
+void PointLight::setShaderData(Shader shader, std::string path) {
+	Light::setShaderData(shader, path);
+
+	std::string resultPath;
+	resultPath = path + "constant";
+	shader.setFloat(resultPath, this->constant);
+
+	resultPath = path + "linear";
+	shader.setFloat(resultPath, this->linear);
+
+	resultPath = path + "quadratic";
+	shader.setFloat(resultPath, this->quadratic);
+}

@@ -18,6 +18,9 @@ public:
 	float getC();
 	float getL();
 	float getQ();
+
+	// Fills the following shader data
+	void setShaderData(Shader shader, std::string path);
 };
 
 #endif

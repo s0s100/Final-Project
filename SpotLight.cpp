@@ -15,3 +15,17 @@ float SpotLight::getOuterCone() {
 	return outerCone;
 }
 
+void SpotLight::setShaderData(Shader shader, std::string path) {
+	DirectionalLight::setShaderData(shader, path);
+	
+	std::string resultPath;
+	resultPath = path + "innerCone";
+	shader.setFloat(resultPath, this->innerCone);
+
+	std::cout << resultPath << ": " << this->innerCone << std::endl;
+
+	resultPath = path + "outerCone";
+	shader.setFloat(resultPath, this->outerCone);
+
+	std::cout << resultPath << ": " << this->outerCone << std::endl;
+}

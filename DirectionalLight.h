@@ -7,7 +7,8 @@
 class DirectionalLight: public Light {
 private:
 	glm::vec3 direction = glm::vec3(0.0f);
-	// Also shadow implementation
+
+	// Shadow implementation
 	bool shadowActive = false;
 	Shadow shadow = Shadow();
 
@@ -20,6 +21,11 @@ public:
 	bool isShadowActive();
 	void setDirection(glm::vec3 dir);
 	void setShadovActive(bool isActive);
+
+	// Fills the following shader data
+	void setShaderData(Shader shader, std::string path);
+	// Fills shader with shadow data
+	void setShadowShaderData(Shader shader, std::string path, int textureLocation);
 };
 
 #endif
