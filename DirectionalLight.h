@@ -24,7 +24,7 @@ public:
 
 	// Fills the following shader data
 	void setShaderData(Shader shader, std::string path);
-	// Fills shader with shadow data
+	// Fills shader with shadow data (applicable for the array lists in the shader)
 	void setShadowShaderData(Shader shader, std::string path, int textureLocation);
 
 	void updateLightMatrix();

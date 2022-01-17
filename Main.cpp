@@ -133,18 +133,19 @@ int main() {
 	LightFactory lightFactory;
 
 	// Directinal light
-	/*glm::vec3 lightPos0 = glm::vec3(0.0f, 0.0f, 0.0f);
+	/*glm::vec3 lightPos0 = glm::vec3(0.0f, 5.0f, 0.0f);
 	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 0.0f);
-	lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);*/
+	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 1.0f);
+	DirectionalLight*  dirLight = lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	dirLight->setShadowActive(true);*/
 
 	// Point light
-	/*glm::vec3 lightPosP1 = glm::vec3(0.1f, 0.5f, 0.0f);
+	glm::vec3 lightPosP1 = glm::vec3(1.0f, 1.0f, 0.0f);
 	glm::vec4 lightColorP1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	float constant1 = 0.5f;
+	float constant1 = 0.1f;
 	float linear1 = 0.5f;
 	float quadratic1 = 1.0f;
-	lightFactory.getPointLight(lightPosP1, lightColorP1, constant1, linear1, quadratic1);*/
+	lightFactory.getPointLight(lightPosP1, lightColorP1, constant1, linear1, quadratic1);
 
 	/*glm::vec3 lightPosP2 = glm::vec3(1.0f, 1.0f, 0.0f);
 	glm::vec4 lightColorP2 = glm::vec4(0.2f, 0.2f, 0.2f, 1.0f);
@@ -154,22 +155,22 @@ int main() {
 	lightFactory.getPointLight(lightPosP2, lightColorP2, constant2, linear2, quadratic2);*/
 
 	// Spot lights
-	glm::vec3 lightpos = glm::vec3(-1.0f, 1.0f, 0.0f);
-	glm::vec4 lightcolor = glm::vec4(0.5f, 0.5f, 1.0f, 1.0f);
+	/*glm::vec3 lightpos = glm::vec3(-1.0f, 1.0f, 0.0f);
+	glm::vec4 lightcolor = glm::vec4(0.4f, 0.4f, 1.0f, 1.0f);
 	glm::vec3 lightdirection = glm::vec3(0.0f, -1.0f, 0.0f);
 	float innercone = 0.95f;
 	float outercone = 0.80f;
 	SpotLight* light2 = lightFactory.getSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
-	light2->setShadowActive(true);
+	light2->setShadowActive(true);*/
 
 	// glm::vec3 lightPos2 = glm::vec3(1.0f, 5.0f, 0.0f);
-	glm::vec3 lightPos2 = glm::vec3(0.1f, 5.0f, 0.0f);
-	glm::vec4 lightColor2 = glm::vec4(0.8f, 1.0f, 0.5f, 1.0f);
-	glm::vec3 lightDirection2 = glm::vec3(0.0f, -1.0f, 0.0f);
+	/*glm::vec3 lightPos2 = glm::vec3(0.0f, 5.0f, 0.0f);
+	glm::vec4 lightColor2 = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
+	glm::vec3 lightDirection2 = glm::vec3(1.0f, -1.0f, 0.0f);
 	float innerCone2 = 0.99f;
 	float outerCone2 = 0.95f;
 	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
-	light->setShadowActive(true);
+	light->setShadowActive(true);*/
 
 	/**
 	* Main loop
@@ -200,15 +201,11 @@ int main() {
 		 * --------------------------------------------------
 		**/
 
-		/**
-		 * Update depth map
-		**/
+		// Calculate shadows
 		depthMapShader.activateShader();
 		lightFactory.updateShadowMaps(depthMapShader, gameObjects);
 
-		/**
-		 * Main rendering
-		**/
+		// Rendering
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -221,9 +218,7 @@ int main() {
 			object->draw(shader);
 		}
 
-		/**
-		 * Depth testing
-		**/
+		// Depth map testing
 		/*depthMapShaderDebug.activateShader();
 		light->getShadow().assignTexture(depthMapShaderDebug, 0, "shadowMap");
 		renderQuad();*/

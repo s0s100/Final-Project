@@ -21,8 +21,8 @@ private:
 	glm::mat4 lightMatrix = glm::mat4(0.0f);
 
 	// Shadow width/height for the texture
-	inline static const int shadowWidth = 1000;
-	inline static const int shadowHeight = 1000;
+	inline static const int shadowWidth = 2000;
+	inline static const int shadowHeight = 2000;
 
 	// Light matrix data
 	inline static const float nearPlane = 0.1f;
@@ -33,13 +33,12 @@ public:
 	Shadow();
 	// Light matrix calculation using light position and direction
 	void calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir);
-
 	// Generate depth map texture using shader to use the buffer
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
+	// Assign depth map texture from the buffer
 	void assignTexture(Shader shader, unsigned int textureNumber, std::string name);
+	// Assign matrix to the shader
 	void assignLightMatrix(Shader shader, std::string name);
-	
-	void setLightMatrix(glm::mat4 matrix);
 };
 
 #endif

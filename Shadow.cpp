@@ -82,7 +82,3 @@ void Shadow::assignLightMatrix(Shader shader, std::string name) {
 	// std::cout << glm::to_string(this->lightMatrix) << std::endl;
 	shader.setMat4(name, this->lightMatrix);
 }
-
-void Shadow::setLightMatrix(glm::mat4 matrix) {
-	this->lightMatrix = matrix;
-}
