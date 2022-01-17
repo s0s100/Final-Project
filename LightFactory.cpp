@@ -42,9 +42,7 @@ size_t LightFactory::getPointLightSize() {
 
 // Weird option to create this one, optimize
 void LightFactory::update(Shader shader) {
-	// After activating shader
-	// First path with ref. to the lightPos array element
-	// Second for the variable inside of it
+	// Path to the light array list in the shader
 	std::string path;
 
 	// Texture pointer in the GL texture buffer
@@ -65,7 +63,7 @@ void LightFactory::update(Shader shader) {
 		path = "directionalLights[" + std::to_string(i) + "].";
 		directionalLight->setShaderData(shader, path);
 
-		if (directionalLight->isShadowActive()) {
+		if (directionalLight->getShadowActive()) {
 			directionalLight->setShadowShaderData(shader, path, currentTexturePointer);
 			currentTexturePointer++;
 		}
@@ -78,7 +76,7 @@ void LightFactory::update(Shader shader) {
 		path = "spotLights[" + std::to_string(i) + "].";
 		spotLight->setShaderData(shader, path);
 
-		if (spotLight->isShadowActive()) {
+		if (spotLight->getShadowActive()) {
 			spotLight->setShadowShaderData(shader, path, currentTexturePointer);
 			currentTexturePointer++;
 		}
@@ -86,21 +84,19 @@ void LightFactory::update(Shader shader) {
 }
 
 void LightFactory::updateShadowMaps(Shader shader, std::vector<GameObject*> objects) {
-	// Check directional and spot light vectors
+	// Check directional and spot light
 	Shadow shadow;
 	for (DirectionalLight* light : directionalLights) {
-		if (light->isShadowActive()) {
-			shadow = light->getShadow();
-			shadow.calculateMatrix(light->getPosition(), light->getDirection());
-			shadow.generateDepthMap(shader, objects);
+		if (light->getShadowActive()) {
+			light->updateLightMatrix();
+			light->updateDepthMap(shader, objects);
 		}
 	}
 
 	for (SpotLight* light : spotLights) {
-		if (light->isShadowActive()) {
-			shadow = light->getShadow();
-			shadow.calculateMatrix(light->getPosition(), light->getDirection());
-			shadow.generateDepthMap(shader, objects);
+		if (light->getShadowActive()) {
+			light->updateLightMatrix();
+			light->updateDepthMap(shader, objects);
 		}
 	}
 }

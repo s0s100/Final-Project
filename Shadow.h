@@ -38,8 +38,8 @@ public:
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
 	void assignTexture(Shader shader, unsigned int textureNumber, std::string name);
 	void assignLightMatrix(Shader shader, std::string name);
-
-	glm::mat4 getLightMatrix();
+	
+	void setLightMatrix(glm::mat4 matrix);
 };
 
 #endif

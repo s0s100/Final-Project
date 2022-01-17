@@ -17,15 +17,18 @@ public:
 	DirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction);
 
 	glm::vec3 getDirection();
-	Shadow getShadow();
-	bool isShadowActive();
+	bool getShadowActive();
+
 	void setDirection(glm::vec3 dir);
-	void setShadovActive(bool isActive);
+	void setShadowActive(bool isActive);
 
 	// Fills the following shader data
 	void setShaderData(Shader shader, std::string path);
 	// Fills shader with shadow data
 	void setShadowShaderData(Shader shader, std::string path, int textureLocation);
+
+	void updateLightMatrix();
+	void updateDepthMap(Shader shader, std::vector<GameObject*> objects);
 };
 
 #endif

@@ -10,11 +10,7 @@ glm::vec3 DirectionalLight::getDirection() {
 	return direction;
 }
 
-Shadow DirectionalLight::getShadow() {
-	return shadow;
-}
-
-bool DirectionalLight::isShadowActive() {
+bool DirectionalLight::getShadowActive() {
 	return shadowActive;
 }
 
@@ -22,7 +18,7 @@ void DirectionalLight::setDirection(glm::vec3 dir) {
 	this->direction = dir;
 }
 
-void DirectionalLight::setShadovActive(bool isActive) {
+void DirectionalLight::setShadowActive(bool isActive) {
 	this->shadowActive = isActive;
 }
 
@@ -33,34 +29,40 @@ void DirectionalLight::setShaderData(Shader shader, std::string path) {
 	resultPath = path + "direction";
 	shader.setVec3(resultPath, this->direction);
 
-	std::cout << resultPath << ": " << glm::to_string(direction) << std::endl;
+	// std::cout << resultPath << ": " << glm::to_string(direction) << std::endl;
 
 	resultPath = path + "isShadowing";
 	shader.setBool(resultPath, this->shadowActive);
 
-	std::cout << resultPath << ": " << shadowActive << std::endl;
+	// std::cout << resultPath << ": " << shadowActive << std::endl;
 }
 
 void DirectionalLight::setShadowShaderData(Shader shader, std::string path, int textureLocation) {
-	Shadow shadow = this->shadow;
-
-	std::cout << "---Shadow shader data---" << std::endl;
+	// std::cout << "---Shadow shader data---" << std::endl;
 
 	std::string resultPath;
-	std::string mapLocation = "shadowMap[" + std::to_string(textureLocation) + "]";;
-	std::cout << "Map location: " << mapLocation << std::endl;
+	std::string mapLocation = "shadowMap[" + std::to_string(textureLocation) + "]";
 
-	shadow.calculateMatrix(this->getPosition(), this->getDirection());
-	shadow.assignTexture(shader, textureLocation + TEXTURE_SHIFT, mapLocation);
+	// std::cout << "Map location: " << mapLocation << std::endl;
+
+	this->shadow.assignTexture(shader, textureLocation + TEXTURE_SHIFT, mapLocation);
 
 	resultPath = path + "lightMatrix";
-	shadow.assignLightMatrix(shader, resultPath);
+	this->shadow.assignLightMatrix(shader, resultPath);
 
-	std::cout << resultPath << std::endl;
+	// std::cout << resultPath << std::endl;
 
 	// Connects depth map and light object
 	resultPath = path + "mapPosition";
 	shader.setInt(resultPath, textureLocation);
 
-	std::cout << resultPath << ": " << textureLocation << std::endl;
+	// std::cout << resultPath << ": " << textureLocation << std::endl;
+}
+
+void DirectionalLight::updateLightMatrix() {
+	this->shadow.calculateMatrix(this->getPosition(), this->getDirection());
+}
+
+void DirectionalLight::updateDepthMap(Shader shader, std::vector<GameObject*> objects) {
+	this->shadow.generateDepthMap(shader, objects);
 }

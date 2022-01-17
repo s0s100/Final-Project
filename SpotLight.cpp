@@ -22,10 +22,10 @@ void SpotLight::setShaderData(Shader shader, std::string path) {
 	resultPath = path + "innerCone";
 	shader.setFloat(resultPath, this->innerCone);
 
-	std::cout << resultPath << ": " << this->innerCone << std::endl;
+	// std::cout << resultPath << ": " << this->innerCone << std::endl;
 
 	resultPath = path + "outerCone";
 	shader.setFloat(resultPath, this->outerCone);
 
-	std::cout << resultPath << ": " << this->outerCone << std::endl;
+	// std::cout << resultPath << ": " << this->outerCone << std::endl;
 }

@@ -188,10 +188,10 @@
   <ItemGroup>
     <None Include="Shaders\default.frag" />
     <None Include="Shaders\default.vert" />
-    <None Include="Shaders\depthDebug.frag" />
-    <None Include="Shaders\depthDebug.vert" />
-    <None Include="Shaders\depthShader.frag" />
-    <None Include="Shaders\depthShader.vert" />
+    <None Include="Shaders\depthMapShader.frag" />
+    <None Include="Shaders\depthMapShader.vert" />
+    <None Include="Shaders\depthMapShaderDebug.frag" />
+    <None Include="Shaders\depthMapShaderDebug.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Other\Fox_icon.png" />
