@@ -7,12 +7,14 @@
 #include "Shadow.h"
 
 class DirectionalLight: public Light {
+protected:
+	Shadow shadow = Shadow();
+
 private:
 	glm::vec3 direction = glm::vec3(0.0f);
 
 	// Shadow implementation
 	bool shadowActive = false;
-	Shadow shadow = Shadow();
 
 public:
 	DirectionalLight();

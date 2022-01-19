@@ -29,3 +29,7 @@ void SpotLight::setShaderData(Shader shader, std::string path) {
 
 	// std::cout << resultPath << ": " << this->outerCone << std::endl;
 }
+
+void SpotLight::calculateLightMatrix() {
+	this->shadow.calculateSpotMatrix(this->getPosition(), this->getDirection());
+}

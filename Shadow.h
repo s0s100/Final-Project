@@ -33,6 +33,8 @@ public:
 	Shadow();
 	// Light matrix calculation using light position and direction
 	void calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir);
+	// Light matrix calculation for the spot lights
+	void calculateSpotMatrix(glm::vec3 lightPos, glm::vec3 lightDir);
 	// Generate depth map texture using shader to use the buffer
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
 	// Assign depth map texture from the buffer

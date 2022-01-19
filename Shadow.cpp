@@ -49,6 +49,23 @@ void Shadow::calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
 	this->lightMatrix = result;
 }
 
+void Shadow::calculateSpotMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
+	glm::mat4 lightProjection = glm::ortho(-planeSize, planeSize, -planeSize, planeSize, nearPlane, farPlane);
+	glm::mat4 lightView;
+
+	// Also check if th direction of the light is not the same as Y_Vector
+	glm::vec3 normDir = glm::normalize(lightDir);
+	if ((normDir == Y_VECTOR) || (normDir == -Y_VECTOR)) {
+		lightView = glm::lookAt(lightPos, lightPos + lightDir, X_VECTOR);
+	}
+	else {
+		lightView = glm::lookAt(lightPos, lightPos + lightDir, Y_VECTOR);
+	}
+
+	glm::mat4 result = lightProjection * lightView;
+	this->lightMatrix = result;
+}
+
 void Shadow::generateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	// Assign the light matrix value
 	assignLightMatrix(shader, "lightSpaceMatrix");
