@@ -5,12 +5,13 @@
 #define NR_SPOT_LIGHT 10
 
 #define AMBIENT 0.05f
-#define DIFFUSE 0.6f
-#define SPECULAR 0.8f
+#define DIFFUSE 0.4f
+#define SPECULAR 0.7f
 
 // Defines how strong is the shininess using specular lighting
 #define SHININESS_COEFFICIENT 32.0f
 #define ACNE_COEFFICIENT 0.03f
+#define GAMMA_COEFFICIENT 1.3f
 
 struct DirectionalLight {
 	vec3 position;
@@ -255,6 +256,8 @@ void main() {
 	for (int i = 0; i < spotLightNum; i++) {
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
+
+	finalColor.rgb = pow(finalColor.rgb, vec3(1.0f/GAMMA_COEFFICIENT));
 
 	FragColor = finalColor;	
 }

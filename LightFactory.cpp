@@ -85,7 +85,6 @@ void LightFactory::update(Shader shader) {
 
 void LightFactory::updateShadowMaps(Shader shader, std::vector<GameObject*> objects) {
 	// Check directional and spot light
-	Shadow shadow;
 	for (DirectionalLight* light : directionalLights) {
 		if (light->getShadowActive()) {
 			light->updateLightMatrix();

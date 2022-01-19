@@ -12,8 +12,12 @@
 #include "ShaderClass.h"
 
 // Screen size
-#define DEFAULT_MONITOR_WIDTH 720
-#define DEFAULT_MONITOR_HEIGHT 480
+ #define DEFAULT_MONITOR_WIDTH 720
+ #define DEFAULT_MONITOR_HEIGHT 480
+
+//#define DEFAULT_MONITOR_WIDTH 1920
+//#define DEFAULT_MONITOR_HEIGHT 1080
+
 // Basis vectors
 #define X_VECTOR glm::vec3(1.0f, 0.0f, 0.0f)
 #define Y_VECTOR glm::vec3(0.0f, 1.0f, 0.0f)
@@ -61,9 +65,9 @@ public:
 	void setCameraMatrix(Shader& shader, const char* uniform);
 	// Set camera position for the shader
 	void setCameraPosition(Shader& shader, const char* uniform);
-	// Function to control camera using input mouse and keyboard
+	// Strategy camera
 	void inputs(GLFWwindow* window);
-	// Stratery camera option 
+	// Function to control camera using input mouse and keyboard 
 	void inputs2(GLFWwindow* window);
 };
 
