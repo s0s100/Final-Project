@@ -75,7 +75,7 @@ uniform DirectionalLight directionalLights[NR_DIR_LIGHT];
 uniform PointLight pointLights[NR_POINT_LIGHT];
 uniform SpotLight spotLights[NR_SPOT_LIGHT];
 
-// Spot and directional light shadow calculation
+// Directional light shadow calculation
 float shadowCalculation(vec4 lightProj, vec3 lightDir, int mapPos) {
     // Get projection of the fragment in the light from the top
     vec3 projCoords = lightProj.xyz / lightProj.w;
@@ -110,6 +110,47 @@ float shadowCalculation(vec4 lightProj, vec3 lightDir, int mapPos) {
 
     return shadow;
 }
+
+// Spot light shadow calculation
+/*float shadowSpotCalculation(vec4 lightProj, vec3 lightDir, int mapPos) {
+    // Get projection of the fragment in the light from the top
+    vec3 projCoords = lightProj.xyz / lightProj.w;
+    // Make it to be in range [0,1]
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // Depth map depth and current depth
+    float closestDepth = texture(shadowMap[mapPos], projCoords.xy).r; 
+    float currentDepth = projCoords.z;
+
+    // Shadow acne remove using bias
+	float bias = max(ACNE_COEFFICIENT * (1.0 - dot(normal, lightDir)), ACNE_COEFFICIENT * 0.1f);
+
+	// Shadow distribution to improve quality of the shadow
+    float shadow = 0.0f;
+	// Texel - pixel in the texture
+	vec2 texelSize = 1.0 / textureSize(shadowMap[mapPos], 0);
+	// Parse the texture and for each of the points calculate the value
+	//if ( texture( shadowMap, (ShadowCoord.xy/ShadowCoord.w) ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
+	//if ( textureProj( shadowMap, ShadowCoord.xyw ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
+	//if ( texture( shadowMap, ShadowCoord.xy ).z  <  ShadowCoord.z){ // Before
+    for(int x = -1; x <= 1; ++x) {
+        for(int y = -1; y <= 1; ++y) {
+            float textureDepth = texture(shadowMap[mapPos], projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth - bias > textureDepth  ? 1.0 : 0.0;        
+			//float textureDepth = texture(shadowMap[mapPos], (projCoords.xy / projCoords.w) + vec2(x, y) * texelSize).r; 
+            
+        }    
+    }
+	// Shadow now is [0,9], normalize it
+    shadow /= 9.0; 
+    
+    // If outside of the bounds, set to 0
+    if(projCoords.z > 1.0) {
+		shadow = 0.0;
+	}
+
+    return shadow;
+}*/
 
 vec4 calculatePointLight(PointLight pointLight) {
 	// Define variables
@@ -228,6 +269,7 @@ vec4 calculateSpotLight(SpotLight spotLight) {
 		// Depth map location
 		int mapPos = spotLight.mapPosition;
 
+		//shadow = shadowSpotCalculation(lightProj, lightDir, mapPos); 
 		shadow = shadowCalculation(lightProj, lightDir, mapPos); 
 	}
 	

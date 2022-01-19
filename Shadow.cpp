@@ -50,7 +50,8 @@ void Shadow::calculateMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
 }
 
 void Shadow::calculateSpotMatrix(glm::vec3 lightPos, glm::vec3 lightDir) {
-	glm::mat4 lightProjection = glm::ortho(-planeSize, planeSize, -planeSize, planeSize, nearPlane, farPlane);
+	// glm::mat4 lightProjection = glm::ortho(-planeSize, planeSize, -planeSize, planeSize, nearPlane, farPlane);
+	glm::mat4 lightProjection = glm::ortho(-2.0f, 2.0f, -10.0f, 10.0f, nearPlane, farPlane);
 	glm::mat4 lightView;
 
 	// Also check if th direction of the light is not the same as Y_Vector

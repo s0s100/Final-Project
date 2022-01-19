@@ -12,11 +12,13 @@
 #include "ShaderClass.h"
 
 // Screen size
- #define DEFAULT_MONITOR_WIDTH 720
- #define DEFAULT_MONITOR_HEIGHT 480
+ /*#define DEFAULT_MONITOR_WIDTH 720
+ #define DEFAULT_MONITOR_HEIGHT 480*/
 
-//#define DEFAULT_MONITOR_WIDTH 1920
-//#define DEFAULT_MONITOR_HEIGHT 1080
+
+
+#define DEFAULT_MONITOR_WIDTH 1920
+#define DEFAULT_MONITOR_HEIGHT 1080
 
 // Basis vectors
 #define X_VECTOR glm::vec3(1.0f, 0.0f, 0.0f)

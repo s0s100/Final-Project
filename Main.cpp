@@ -153,10 +153,10 @@ int main() {
 
 	// Brick texture
 	// 1024 x 1024, 5.5 MB, 72 dpi, 64 bit
-	/*Texture brickTextures[] {
+	Texture brickTextures[] {
 		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
-	};*/
+	};
 
 	//Grey brick texture
 	// 72 dpi, 24 bit (96, 24)
@@ -165,12 +165,16 @@ int main() {
 	};*/
 	// std::vector <Texture> tex(newTextures, newTextures + sizeof(newTextures) / sizeof(Texture));
 
-	// Cube mesh
+	// Plank cube mesh
 	std::vector <Vertex> verts(verticeCube, verticeCube + sizeof(verticeCube) / sizeof(Vertex));
 	std::vector <GLuint> ind(indiceCube, indiceCube + sizeof(indiceCube) / sizeof(GLuint));
 	std::vector <Texture> tex(plankTextures, plankTextures + sizeof(plankTextures) / sizeof(Texture));
 	Mesh cubeMesh(verts, ind, tex);
-	
+
+	// Brick cube meshw 
+	std::vector <Texture> tex2(brickTextures, brickTextures + sizeof(brickTextures) / sizeof(Texture));
+	Mesh cubeBrickMesh(verts, ind, tex2);
+
 	// Game objects
 	std::vector<GameObject*> gameObjects;
 
@@ -204,25 +208,25 @@ int main() {
 	frontWall.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	gameObjects.push_back(&frontWall);
 
-	GameObject leftWall2 = GameObject(cubeMesh);
+	GameObject leftWall2 = GameObject(cubeBrickMesh);
 	leftWall2.setPosition(glm::vec3(-3.5f, 1.0f, 0.0f));
 	leftWall2.setScale(glm::vec3(0.5f, 2.0f, 1.5f));
 	leftWall2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	gameObjects.push_back(&leftWall2);
 
-	GameObject rightWall2 = GameObject(cubeMesh);
+	GameObject rightWall2 = GameObject(cubeBrickMesh);
 	rightWall2.setPosition(glm::vec3(3.5f, 1.0f, 0.0f));
 	rightWall2.setScale(glm::vec3(0.5f, 2.0f, 1.5f));
 	rightWall2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	gameObjects.push_back(&rightWall2);
 
-	GameObject backWall2 = GameObject(cubeMesh);
+	GameObject backWall2 = GameObject(cubeBrickMesh);
 	backWall2.setPosition(glm::vec3(0.0f, 1.0f, -3.5f));
 	backWall2.setScale(glm::vec3(1.5f, 2.0f, 0.5f));
 	backWall2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 	gameObjects.push_back(&backWall2);
 
-	GameObject frontWall2 = GameObject(cubeMesh);
+	GameObject frontWall2 = GameObject(cubeBrickMesh);
 	frontWall2.setPosition(glm::vec3(0.0f, 1.0f, 3.5f));
 	frontWall2.setScale(glm::vec3(1.5f, 2.0f, 0.5f));
 	frontWall2.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -257,16 +261,8 @@ int main() {
 	glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
 	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 0.5f);
-	DirectionalLight*  dirLight = lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	DirectionalLight* dirLight = lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
 	dirLight->setShadowActive(true);
-
-	// Point light
-	/*glm::vec3 lightPosP1 = glm::vec3(1.0f, 0.3f, 0.0f);
-	glm::vec4 lightColorP1 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	float constant1 = 0.5f;
-	float linear1 = 0.5f;
-	float quadratic1 = 1.0f;
-	lightFactory.getPointLight(lightPosP1, lightColorP1, constant1, linear1, quadratic1);*/
 
 	// Spot lights
 	glm::vec3 lightpos1 = glm::vec3(0.0f, 0.5f, 0.0f);
@@ -308,14 +304,14 @@ int main() {
 	SpotLight* spotLight5 = lightFactory.getSpotLight(lightpos5, lightcolor5, lightdirection5, innercone5, outercone5);
 	spotLight5->setShadowActive(true);
 
-	// glm::vec3 lightPos2 = glm::vec3(1.0f, 5.0f, 0.0f);
-	/*glm::vec3 lightPos2 = glm::vec3(0.0f, 5.0f, 0.0f);
-	glm::vec4 lightColor2 = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f);
-	glm::vec3 lightDirection2 = glm::vec3(1.0f, -1.0f, 0.0f);
-	float innerCone2 = 0.99f;
-	float outerCone2 = 0.95f;
-	SpotLight* light = lightFactory.getSpotLight(lightPos2, lightColor2, lightDirection2, innerCone2, outerCone2);
-	light->setShadowActive(true);*/
+	// Point light
+	/*glm::vec3 lightPos6 = glm::vec3(5.0f, 2.0f, 0.0f);
+	glm::vec4 lightColor6 = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	float constant6 = 0.5f;
+	float linear6 = 0.5f;
+	float quadratic6 = 1.0f;
+	PointLight* pointLight = lightFactory.getPointLight(lightPos6, lightColor6, constant6, linear6, quadratic6);*/
+
 
 	/**
 	* Main loop
@@ -335,11 +331,6 @@ int main() {
 		// Set up camera inputs and update it after it was changed by the input
 		camera.inputs2(window);
 		camera.updateMatrix();
-
-		// Change object locations
-		// planks2.changePosition(glm::vec3(-0.1f, 0.0f, 0.0f) * timeDiff);
-		// planks2.changeRotation(glm::vec3(12.0f, 0.0f, 0.0f) * timeDiff);
-		// planks.changeRotation(glm::vec3(0.0f, 2.5f, 0.0f) * timeDiff);
 
 		float rotationSp = 10.0f; // 10 degrees/sec
 		float upSp = 0.1f; // 0.1 m/sec
@@ -386,8 +377,8 @@ int main() {
 		}
 
 		// Depth map testing
-		depthMapShaderDebug.activateShader();
-		dirLight->getShadow().assignTexture(depthMapShaderDebug, 0, "shadowMap");
+		// depthMapShaderDebug.activateShader();
+		// light->getShadow().assignTexture(depthMapShaderDebug, 0, "shadowMap");
 		// renderQuad();
 
 		glfwSwapBuffers(window);

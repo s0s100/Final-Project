@@ -18,7 +18,7 @@ public:
 	// Fills the following shader data
 	void setShaderData(Shader shader, std::string path);
 
-	void calculateLightMatrix();
+	void updateLightMatrix();
 };
 
 #endif
