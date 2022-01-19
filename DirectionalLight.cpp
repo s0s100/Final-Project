@@ -66,3 +66,13 @@ void DirectionalLight::updateLightMatrix() {
 void DirectionalLight::updateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	this->shadow.generateDepthMap(shader, objects);
 }
+
+Shadow DirectionalLight::getShadow() {
+	return this->shadow;
+}
+
+void DirectionalLight::changeDirection(glm::vec3 dirChange) {
+	direction = glm::rotateX(direction, glm::radians(dirChange.x));
+	direction = glm::rotateY(direction, glm::radians(dirChange.y));
+	direction = glm::rotateZ(direction, glm::radians(dirChange.z));
+}

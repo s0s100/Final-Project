@@ -26,8 +26,8 @@ private:
 
 	// Light matrix data
 	inline static const float nearPlane = 0.1f;
-	inline static const float farPlane = 10.0f;
-	inline static const float planeSize = 10.0f;
+	inline static const float farPlane = 20.0f;
+	inline static const float planeSize = 20.0f;
 public:
 	// Constructor which initializes buffer and texture
 	Shadow();

@@ -29,6 +29,8 @@ public:
 	void setPosition(glm::vec3 pos);
 	void setColor(glm::vec4 col);
 
+	void changePosition(glm::vec3 pos);
+
 	// Fills the following shader data
 	void setShaderData(Shader shader, std::string path);
 };

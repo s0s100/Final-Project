@@ -48,3 +48,7 @@ void Light::setShaderData(Shader shader, std::string path) {
 
 	// std::cout << resultPath << ": " << glm::to_string(this->color) << std::endl;
 }
+
+void Light::changePosition(glm::vec3 posChange) {
+	setPosition(position + posChange);
+}

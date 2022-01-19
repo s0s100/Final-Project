@@ -10,7 +10,7 @@
 
 // Defines how strong is the shininess using specular lighting
 #define SHININESS_COEFFICIENT 32.0f
-#define ACNE_COEFFICIENT 0.03f
+#define ACNE_COEFFICIENT 0.01f
 #define GAMMA_COEFFICIENT 1.3f
 
 struct DirectionalLight {
@@ -20,7 +20,7 @@ struct DirectionalLight {
 
 	bool isShadowing;
 	mat4 lightMatrix;
-	int mapPosition;
+	int mapPosition; 
 };
 
 struct SpotLight {
@@ -257,7 +257,7 @@ void main() {
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
 
-	finalColor.rgb = pow(finalColor.rgb, vec3(1.0f/GAMMA_COEFFICIENT));
+	//finalColor.rgb = pow(finalColor.rgb, vec3(1.0f/GAMMA_COEFFICIENT));
 
 	FragColor = finalColor;	
 }

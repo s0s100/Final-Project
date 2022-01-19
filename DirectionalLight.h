@@ -1,6 +1,8 @@
 #ifndef DIRECTIONAL_LIGHT_CLASS_HEADER
 #define DIRECTIONAL_LIGHT_CLASS_HEADER
 
+#include <glm/gtx/rotate_vector.hpp>
+
 #include "Light.h"
 #include "Shadow.h"
 
@@ -22,6 +24,8 @@ public:
 	void setDirection(glm::vec3 dir);
 	void setShadowActive(bool isActive);
 
+	void changeDirection(glm::vec3 dirChange);
+
 	// Fills the following shader data
 	void setShaderData(Shader shader, std::string path);
 	// Fills shader with shadow data (applicable for the array lists in the shader)
@@ -29,6 +33,8 @@ public:
 
 	void updateLightMatrix();
 	void updateDepthMap(Shader shader, std::vector<GameObject*> objects);
+
+	Shadow getShadow();
 };
 
 #endif
