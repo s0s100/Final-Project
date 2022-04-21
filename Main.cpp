@@ -261,7 +261,7 @@ int main() {
 	glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
 	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 0.5f);
-	DirectionalLight* dirLight = lightFactory.getDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
 	dirLight->setShadowActive(true);
 
 	// Spot lights
@@ -270,14 +270,14 @@ int main() {
 	glm::vec3 lightdirection1 = glm::vec3(0.0f, -1.0f, 0.0f);
 	float innercone1 = 0.95f;
 	float outercone1 = 0.80f;
-	SpotLight* spotLight1 = lightFactory.getSpotLight(lightpos1, lightcolor1, lightdirection1, innercone1, outercone1);
+	SpotLight* spotLight1 = lightFactory.generateSpotLight(lightpos1, lightcolor1, lightdirection1, innercone1, outercone1);
 
 	glm::vec3 lightpos2 = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec4 lightcolor2 = glm::vec4(0.4f, 1.0f, 0.4f, 1.0f);
 	glm::vec3 lightdirection2 = glm::vec3(1.0f, 0.0f, 0.0f);
 	float innercone2 = 0.95f;
 	float outercone2 = 0.80f;
-	SpotLight* spotLight2 = lightFactory.getSpotLight(lightpos2, lightcolor2, lightdirection2, innercone2, outercone2);
+	SpotLight* spotLight2 = lightFactory.generateSpotLight(lightpos2, lightcolor2, lightdirection2, innercone2, outercone2);
 	spotLight2->setShadowActive(true);
 
 	glm::vec3 lightpos3 = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -285,7 +285,7 @@ int main() {
 	glm::vec3 lightdirection3 = glm::vec3(-1.0f, 0.0f, 0.0f);
 	float innercone3 = 0.95f;
 	float outercone3 = 0.80f;
-	SpotLight* spotLight3 = lightFactory.getSpotLight(lightpos3, lightcolor3, lightdirection3, innercone3, outercone3);
+	SpotLight* spotLight3 = lightFactory.generateSpotLight(lightpos3, lightcolor3, lightdirection3, innercone3, outercone3);
 	spotLight3->setShadowActive(true);
 
 	glm::vec3 lightpos4 = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -293,7 +293,7 @@ int main() {
 	glm::vec3 lightdirection4 = glm::vec3(0.0f, 0.0f, -1.0f);
 	float innercone4 = 0.95f;
 	float outercone4 = 0.80f;
-	SpotLight* spotLight4 = lightFactory.getSpotLight(lightpos4, lightcolor4, lightdirection4, innercone4, outercone4);
+	SpotLight* spotLight4 = lightFactory.generateSpotLight(lightpos4, lightcolor4, lightdirection4, innercone4, outercone4);
 	spotLight4->setShadowActive(true);
 
 	glm::vec3 lightpos5 = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -301,7 +301,7 @@ int main() {
 	glm::vec3 lightdirection5 = glm::vec3(0.0f, 0.0f, 1.0f);
 	float innercone5 = 0.95f;
 	float outercone5 = 0.80f;
-	SpotLight* spotLight5 = lightFactory.getSpotLight(lightpos5, lightcolor5, lightdirection5, innercone5, outercone5);
+	SpotLight* spotLight5 = lightFactory.generateSpotLight(lightpos5, lightcolor5, lightdirection5, innercone5, outercone5);
 	spotLight5->setShadowActive(true);
 
 	// Point light

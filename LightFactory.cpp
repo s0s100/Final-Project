@@ -7,25 +7,49 @@
 
 LightFactory::LightFactory(){}
 
-DirectionalLight* LightFactory::getDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) {
+DirectionalLight* LightFactory::generateDirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) {
 	DirectionalLight* result = new DirectionalLight(position, color, direction);
 	directionalLights.push_back(result);
 
 	return result;
 }
 
-SpotLight* LightFactory::getSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone) {
+SpotLight* LightFactory::generateSpotLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction, float innecCone, float outerCone) {
 	SpotLight* result = new SpotLight(position, color, direction, innecCone, outerCone);
 	spotLights.push_back(result);
 
 	return result;
 }
 
-PointLight* LightFactory::getPointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic) {
+PointLight* LightFactory::generatePointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic) {
 	PointLight* result = new PointLight(position, color, constant, linear, quadratic);
 	pointLights.push_back(result);
 
 	return result;
+}
+
+DirectionalLight* LightFactory::getDirectionalLight(int index) {
+	if (index < getDirectionalLightSize()) {
+		throw std::invalid_argument("No such index");
+	}
+
+	return directionalLights.at(index);
+}
+
+SpotLight* LightFactory::getSpotLight(int index) {
+	if (index < getSpotLightSize()) {
+		throw std::invalid_argument("No such index");
+	}
+
+	return spotLights.at(index);
+}
+
+PointLight* LightFactory::getPointLight(int index) {
+	if (index < getPointLightSize()) {
+		throw std::invalid_argument("No such index");
+	}
+
+	return pointLights.at(index);
 }
 
 size_t LightFactory::getDirectionalLightSize() {

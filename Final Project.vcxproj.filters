@@ -105,6 +105,9 @@
     <ClInclude Include="Shadow.h">
       <Filter>Header Files\GraphicsClasses\Light</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\GraphicsClasses</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -160,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="Shadow.cpp">
       <Filter>Source Files\GraphicsClasses\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\GraphicsClasses</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
