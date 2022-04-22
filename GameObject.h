@@ -19,6 +19,7 @@ private:
 public:
 	// Constructor with default values
 	GameObject(Mesh mesh);
+	GameObject(Mesh mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 
 	// Setting up the matrix model view
 	// void matrixSetup(Shader shader);

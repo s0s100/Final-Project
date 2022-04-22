@@ -386,9 +386,9 @@ int main() {
 	}
 
 	// Program termination
-	glfwDestroyWindow(window);
+	/*glfwDestroyWindow(window);
 	glfwTerminate();
-	return 0;
+	return 0;*/
 }
 
 // Renders flat block to display data (for depth map testing)

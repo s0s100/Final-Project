@@ -37,6 +37,7 @@ public:
 	void calculateSpotMatrix(glm::vec3 lightPos, glm::vec3 lightDir);
 	// Generate depth map texture using shader to use the buffer
 	void generateDepthMap(Shader shader, std::vector<GameObject*> objects);
+	void generateDepthMap(Shader shader, std::vector<GameObject>& objects);
 	// Assign depth map texture from the buffer
 	void assignTexture(Shader shader, unsigned int textureNumber, std::string name);
 	// Assign matrix to the shader

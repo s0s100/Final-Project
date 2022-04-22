@@ -40,7 +40,8 @@ public:
 	// Update funtion for the shader
 	void update(Shader shader);
 	// Update depth maps and light matrices
-	void updateShadowMaps(Shader shader, std::vector<GameObject*> objects );
+	void updateShadowMaps(Shader shader, std::vector<GameObject*> objects);
+	void updateShadowMaps(Shader shader, std::vector<GameObject>& objects);
 };
 
 #endif

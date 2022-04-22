@@ -90,6 +90,29 @@ void Shadow::generateDepthMap(Shader shader, std::vector<GameObject*> objects) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Shadow::generateDepthMap(Shader shader, std::vector<GameObject>& objects) {
+	// Assign the light matrix value
+	assignLightMatrix(shader, "lightSpaceMatrix");
+
+	// To generate more proper shadows, works for solid objects
+	glCullFace(GL_FRONT);
+	// Define buffer area
+	glViewport(0, 0, shadowWidth, shadowHeight);
+	// Bind framebuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, bufferId);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// Render the scene
+	for (auto &object : objects) {
+		object.draw(shader);
+	}
+
+	// Return culling to normal
+	glCullFace(GL_BACK);
+	// Unbind framebuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Shadow::assignTexture(Shader shader, unsigned int textureNumber, std::string name) {
 	shader.setInt(name, textureNumber);
 	glActiveTexture(GL_TEXTURE0 + textureNumber);

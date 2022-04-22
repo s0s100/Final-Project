@@ -67,6 +67,10 @@ void DirectionalLight::updateDepthMap(Shader shader, std::vector<GameObject*> ob
 	this->shadow.generateDepthMap(shader, objects);
 }
 
+void DirectionalLight::updateDepthMap(Shader shader, std::vector<GameObject>& objects) {
+	this->shadow.generateDepthMap(shader, objects);
+}
+
 Shadow DirectionalLight::getShadow() {
 	return this->shadow;
 }

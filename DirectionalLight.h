@@ -35,6 +35,7 @@ public:
 
 	void updateLightMatrix();
 	void updateDepthMap(Shader shader, std::vector<GameObject*> objects);
+	void updateDepthMap(Shader shader, std::vector<GameObject>& objects);
 
 	Shadow getShadow();
 };
