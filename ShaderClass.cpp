@@ -8,6 +8,7 @@ Shader::Shader() {
 
 // Constructor that build the Shader Program from 2 different shaders
 Shader::Shader(const char* vertexFile, const char* fragmentFile) {
+
 	// Read vertexFile and fragmentFile and store the strings
 	std::string vertexCode = FileManager::getFileContent(vertexFile);
 	std::string fragmentCode = FileManager::getFileContent(fragmentFile);

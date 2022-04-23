@@ -1,11 +1,9 @@
 #include "Scene.h"
 #include <glfw3.h>
 
-Scene::Scene() : name("Default scene"), isPlaying(true) {}
-
-Scene::Scene(const std::string& name) : name(name), isPlaying(true) {}
-
-void Scene::initialize(const glm::vec3& camPos, const glm::vec3& camOrient) {
+Scene::Scene(const glm::vec3& camPos, const glm::vec3& camOrient) : name("Default scene"), isPlaying(true), 
+	basicShader(Shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str())), 
+	depthMapShader(Shader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str())){
 
 	// Initialize GLFW with glfw know the version of OpenGL and that we are using Core profile
 	glfwInit();
@@ -14,7 +12,7 @@ void Scene::initialize(const glm::vec3& camPos, const glm::vec3& camOrient) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window with the game scene
-	window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
+	this->window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
 	// Create full screen window with the game scene
 	// GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Test window", glfwGetPrimaryMonitor(), NULL);
 
@@ -25,7 +23,7 @@ void Scene::initialize(const glm::vec3& camPos, const glm::vec3& camOrient) {
 	// Error checker
 	if (window == NULL)
 	{
-		glfwTerminate();
+		glfwTerminate();\
 	}
 
 	// Introduce the window into the current context
@@ -39,12 +37,12 @@ void Scene::initialize(const glm::vec3& camPos, const glm::vec3& camOrient) {
 	// Enable gamma correction
 	// glEnable(GL_FRAMEBUFFER_SRGB);
 
-	// Initialize scene camera
-	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
+	// Upload shaders
+	this->basicShader = Shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
+	this->depthMapShader = Shader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
 
-	// By default set shaders
-	basicShader = Shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
-	depthMapShader = Shader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
+	// Initialize scene camera
+	this->camera = Camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
 }
 
 void Scene::stop() {
@@ -53,9 +51,9 @@ void Scene::stop() {
 }
 
 bool Scene::nextIteration() {
-	if (glfwWindowShouldClose(window) || !isPlaying){
+	/*if (glfwWindowShouldClose(window) || !isPlaying){
 		return false;
-	}
+	}*/
 
 	return true;
 }
@@ -126,14 +124,15 @@ Mesh& Scene::getMesh(const int& index) {
 GameObject& Scene::createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
 	Mesh mesh = getMesh(index);
 	GameObject newObject(mesh, position, scale, rotation);
+	gameObjects.push_back(newObject);
 
 	return newObject;
 }
 
+GameObject& Scene::createObject(const int& index) {
+	Mesh mesh = getMesh(index);
+	GameObject newObject(mesh);
+	gameObjects.push_back(newObject);
 
-
-
-
-
-
-
+	return newObject;
+}

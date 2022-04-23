@@ -16,10 +16,6 @@
 
 class Scene {
 private:
-	// Default paths
-	const std::string texturePath = "Resources\\Textures\\";
-	const std::string shaderPath = "Shaders\\";
-	const std::string iconPath = "Resources\\Other\\";
 
 	// Window where everything renders
 	GLFWwindow* window;
@@ -44,12 +40,15 @@ private:
 	LightFactory lightFactory;
 
 public:
-	// Create default Scene object
-	Scene(const std::string& name);
-	Scene();
+	// Default paths
+	const std::string texturePath = "Resources\\Textures\\";
+	const std::string shaderPath = "Shaders\\";
+	const std::string iconPath = "Resources\\Other\\";
 
-	// Initialize basic opengl window
-	void initialize(const glm::vec3& camPos, const glm::vec3& camOrient);
+	// Create default Scene object
+	Scene(const glm::vec3& camPos, const glm::vec3& camOrient);
+
+	// Terminates the programs
 	void stop();
 
 	// Shows if the next iteration is ready to be run
@@ -67,6 +66,7 @@ public:
 
 	// Creating object using mesh index and basic inputs
 	GameObject& createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
+	GameObject& createObject(const int& index);
 	
 };
 
