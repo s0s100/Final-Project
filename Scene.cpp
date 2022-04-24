@@ -1,54 +1,8 @@
 #include "Scene.h"
 #include <glfw3.h>
 
-Scene::Scene(const glm::vec3& camPos, const glm::vec3& camOrient) : name("Default scene"), isPlaying(true), 
-	basicShader(Shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str())), 
-	depthMapShader(Shader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str())){
-
-	// Initialize GLFW with glfw know the version of OpenGL and that we are using Core profile
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	// Create window with the game scene
-	this->window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
-	// Create full screen window with the game scene
-	// GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Test window", glfwGetPrimaryMonitor(), NULL);
-
-	// Adding icon
-	GLFWimage windowIcon[1]{ FileManager::getImageContent((iconPath + "Fox_icon.png").c_str()) };
-	glfwSetWindowIcon(window, 1, windowIcon);
-
-	// Error checker
-	if (window == NULL)
-	{
-		glfwTerminate();\
-	}
-
-	// Introduce the window into the current context
-	glfwMakeContextCurrent(window);
-
-	// Initialize glad
-	gladLoadGL();
-
-	// Map the NDC coordinates to the framebuffer coordinates and enable depth testing
-	glEnable(GL_DEPTH_TEST);
-	// Enable gamma correction
-	// glEnable(GL_FRAMEBUFFER_SRGB);
-
-	// Upload shaders
-	this->basicShader = Shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
-	this->depthMapShader = Shader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
-
-	// Initialize scene camera
-	this->camera = Camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
-}
-
-void Scene::stop() {
-	glfwDestroyWindow(window);
-	glfwTerminate();
-}
+Scene::Scene(Camera camera, GLFWwindow* window, Shader basicShader, Shader depthMapShader) 
+	: name("Default scene"), isPlaying(true) {}
 
 bool Scene::nextIteration() {
 	/*if (glfwWindowShouldClose(window) || !isPlaying){
@@ -74,7 +28,7 @@ void Scene::iterate() {
 	basicShader.activateShader();
 	camera.setCameraPosition(basicShader, "camPos");
 	camera.setCameraMatrix(basicShader, "camMatrix");
-	lightFactory.update(basicShader);
+	lightFactory.update(basicShader); // No elements are added :(
 	for (auto &object : gameObjects) {
 		object.draw(basicShader);
 	}

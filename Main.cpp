@@ -4,14 +4,20 @@
 
 #include "Scene.h"
 
+// Default paths
+const std::string texturePath = "Resources\\Textures\\";
+const std::string shaderPath = "Shaders\\";
+const std::string iconPath = "Resources\\Other\\";
+
 // Defined functions
 //void renderQuad();
+GLFWwindow* glInitialize();
+int glStop(GLFWwindow* window);
+
 
 /**
 * Flat surface
 **/
-
-const std::string shaderPath = "Shaders\\";
 
 // Mesh vertices: coordinates/normals/texturePos
 Vertex verticeFlat[] = {
@@ -83,15 +89,23 @@ GLuint indiceCube[] = {
 };
 
 int main() {
+	// First initialize glFW and create scene
+	GLFWwindow* window = glInitialize();
+
 	const glm::vec3 camPos(-7.0f, 8.0f, -7.0f);
 	const glm::vec3 camOrient(0.75f, -0.75f, 0.75f);
-	Scene scene(camPos, camOrient);
+	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
+
+	Shader basicShader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
+	Shader depthMapShader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
+
+	Scene scene(camera, window, basicShader, depthMapShader);
 
 	// Brick texture
 	// 1024 x 1024, 5.5 MB, 72 dpi, 64 bit
 	Texture brickTextures[]{
-		Texture((scene.texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-		Texture((scene.texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
+		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
 
 	scene.addTexture(brickTextures);
@@ -101,10 +115,56 @@ int main() {
 	while (scene.nextIteration()) {
 		scene.iterate();
 	}
+	return glStop(window);
+}
 
-	scene.stop();
+GLFWwindow* glInitialize() {
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	// Create window with the game scene
+	GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
+	// Create full screen window with the game scene
+	// GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Test window", glfwGetPrimaryMonitor(), NULL);
+
+	// Adding icon
+	GLFWimage windowIcon[1]{ FileManager::getImageContent((iconPath + "Fox_icon.png").c_str()) };
+	glfwSetWindowIcon(window, 1, windowIcon);
+
+	// Error checker
+	if (window == NULL)
+	{
+		glfwTerminate(); \
+	}
+
+	// Introduce the window into the current context
+	glfwMakeContextCurrent(window);
+
+	// Initialize glad
+	gladLoadGL();
+
+	// Map the NDC coordinates to the framebuffer coordinates and enable depth testing
+	glEnable(GL_DEPTH_TEST);
+	// Enable gamma correction
+	// glEnable(GL_FRAMEBUFFER_SRGB);
+	
+	return window;
+}
+
+int glStop(GLFWwindow* window) {
+	glfwDestroyWindow(window);
+	glfwTerminate();
 	return 0;
 }
+
+	/*
+		Legacy code POG (not really)
+	*/
+
+
+
 
 	//Grey brick texture
 	// 72 dpi, 24 bit (96, 24)
