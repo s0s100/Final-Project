@@ -107,16 +107,97 @@ int main() {
 		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
-
 	scene.addTexture(brickTextures);
-	scene.addMesh(verticeCube, indiceCube, 0);
-	scene.createObject(0);
+	
+	std::vector <Vertex> verts(verticeCube, verticeCube + sizeof(verticeCube) / sizeof(Vertex));
+	std::vector <GLuint> ind(indiceCube, indiceCube + sizeof(indiceCube) / sizeof(GLuint));
+	std::vector <Texture> tex(brickTextures, brickTextures + sizeof(brickTextures) / sizeof(Texture));
+	Mesh cubeMesh(verts, ind, tex);
+	scene.addMesh(cubeMesh);
+	
+	/*glm::vec3 pos(0.0f, -0.5f, 0.0f);
+	glm::vec3 scale(10.0f, 0.5f, 10.0f);
+	glm::vec3 rot(0.0f, 0.0f, 0.0f);*/
+	GameObject floor = GameObject(cubeMesh);
+	floor.setPosition(glm::vec3(0.0f, -0.5f, 0.0f));
+	floor.setScale(glm::vec3(10.0f, 0.5f, 10.0f));
+	floor.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	scene.addObject(floor);
 
-	while (scene.nextIteration()) {
+	/*scene.createObject(0, pos, scale, rot);*/
+
+	while (!glfwWindowShouldClose(window)) {
 		scene.iterate();
 	}
 
 	return glStop(window);
+
+	/**
+		Hello?
+	**/
+
+	//GLFWwindow* window = glInitialize();
+
+	//const glm::vec3 camPos(-7.0f, 8.0f, -7.0f);
+	//const glm::vec3 camOrient(0.75f, -0.75f, 0.75f);
+	//Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
+
+	//Shader shader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
+	//Shader depthMapShader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
+
+	//Texture brickTextures[]{
+	//	Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+	//	Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
+	//};
+
+	//std::vector <Vertex> verts(verticeCube, verticeCube + sizeof(verticeCube) / sizeof(Vertex));
+	//std::vector <GLuint> ind(indiceCube, indiceCube + sizeof(indiceCube) / sizeof(GLuint));
+	//std::vector <Texture> tex(brickTextures, brickTextures + sizeof(brickTextures) / sizeof(Texture));
+	//Mesh cubeMesh(verts, ind, tex);
+	//LightFactory lightFactory;
+
+	//std::vector<GameObject> gameObjects;
+
+	//GameObject floor = GameObject(cubeMesh);
+	//floor.setPosition(glm::vec3(0.0f, -0.5f, 0.0f));
+	//floor.setScale(glm::vec3(10.0f, 0.5f, 10.0f));
+	//floor.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+	//gameObjects.push_back(floor);
+
+	//while (!glfwWindowShouldClose(window)) {
+	//	camera.inputs2(window);
+	//	camera.updateMatrix();
+
+	//	// Calculate shadows
+	//	depthMapShader.activateShader();
+	//	lightFactory.updateShadowMaps(depthMapShader, gameObjects);
+
+	//	// Rendering
+	//	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	//	glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//	shader.activateShader();
+	//	camera.setCameraPosition(shader, "camPos");
+	//	camera.setCameraMatrix(shader, "camMatrix");
+	//	lightFactory.update(shader);
+	//	for (auto& object : gameObjects) {
+	//		object.draw(shader);
+	//	}
+
+	//	// Depth map testing
+	//	// depthMapShaderDebug.activateShader();
+	//	// light->getShadow().assignTexture(depthMapShaderDebug, 0, "shadowMap");
+	//	// renderQuad();
+
+	//	glfwSwapBuffers(window);
+	//	glfwPollEvents();
+	//}
+
+	//// Program termination
+	//glfwDestroyWindow(window);
+	//glfwTerminate();
+	//return 0;
 }
 
 GLFWwindow* glInitialize() {

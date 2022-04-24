@@ -298,8 +298,6 @@ void main() {
 	for (int i = 0; i < spotLightNum; i++) {
 		finalColor += calculateSpotLight(spotLights[i]);
 	}
-
 	//finalColor.rgb = pow(finalColor.rgb, vec3(1.0f/GAMMA_COEFFICIENT));
-
-	FragColor = finalColor;	
+	FragColor = finalColor;
 }

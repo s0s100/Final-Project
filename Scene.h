@@ -52,12 +52,16 @@ public:
 	Texture* getTexture(const int& index);
 	bool removeTexture(const int& index);
 
-	bool addMesh(const Vertex* vertex, const GLuint* indice, const int& textureIndex);
+	// bool addMesh(const Vertex* vertex, const GLuint* indice, const int& textureIndex);
+	bool addMesh(const Vertex* vertex, unsigned long vertSize,
+		const GLuint* indice, unsigned long indSize, const int& textureIndex);
+	bool addMesh(Mesh mesh);
 	Mesh& getMesh(const int& index);
 	bool removeMeshes(const int& index);
 
 	// Creating object using mesh index and basic inputs
 	GameObject& createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 	GameObject& createObject(const int& index);
+	void addObject(const GameObject& gameObject);
 };
 
