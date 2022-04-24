@@ -115,6 +115,7 @@ int main() {
 	while (scene.nextIteration()) {
 		scene.iterate();
 	}
+
 	return glStop(window);
 }
 
@@ -136,7 +137,7 @@ GLFWwindow* glInitialize() {
 	// Error checker
 	if (window == NULL)
 	{
-		glfwTerminate(); \
+		glfwTerminate();
 	}
 
 	// Introduce the window into the current context
@@ -159,20 +160,20 @@ int glStop(GLFWwindow* window) {
 	return 0;
 }
 
+
+
+
+
+
 	/*
 		Legacy code POG (not really)
 	*/
-
-
-
 
 	//Grey brick texture
 	// 72 dpi, 24 bit (96, 24)
 	/*Texture newTextures[]{
 		Texture((texturePath + "Texture2.jpg").c_str(), "diffuse", 0, GL_RGB8, GL_UNSIGNED_BYTE)
 	};*/
-
-
 
 	
 	/**

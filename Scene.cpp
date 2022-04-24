@@ -2,12 +2,14 @@
 #include <glfw3.h>
 
 Scene::Scene(Camera camera, GLFWwindow* window, Shader basicShader, Shader depthMapShader) 
-	: name("Default scene"), isPlaying(true) {}
+	: name("Default scene"), isPlaying(true),
+	basicShader(basicShader), depthMapShader(depthMapShader), window(window){
+}
 
 bool Scene::nextIteration() {
-	/*if (glfwWindowShouldClose(window) || !isPlaying){
+	if (glfwWindowShouldClose(window) || !isPlaying){
 		return false;
-	}*/
+	}
 
 	return true;
 }
@@ -20,6 +22,7 @@ void Scene::iterate() {
 	// Depth map rendering
 	depthMapShader.activateShader();
 	lightFactory.updateShadowMaps(depthMapShader, gameObjects);
+
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glViewport(0, 0, DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -34,8 +37,8 @@ void Scene::iterate() {
 	}
 
 	// Refresh image with a new rendered data
-	glfwSwapBuffers(window);
-	glfwPollEvents();
+	/*glfwSwapBuffers(window);
+	glfwPollEvents();*/
 }
 
 // Adding textures, meshes, gameObjects, time/fps for improving calculation quality, add light, object speed/etc
