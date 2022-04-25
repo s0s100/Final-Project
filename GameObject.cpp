@@ -4,12 +4,13 @@
 #include "GameObject.h"
 #include "Camera.h"
 
-GameObject::GameObject(Mesh mesh): mesh(mesh) {}
+GameObject::GameObject(Mesh mesh) : mesh(mesh), position(glm::vec3(0.0f, 0.0f, 0.0f)),
+	rotation(glm::vec3(0.0f, 0.0f, 0.0f)), scale(glm::vec3(1.0f, 1.0f, 1.0f)) {}
 
 GameObject::GameObject(Mesh mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) : mesh(mesh){
-	this->position = position;
-	this->scale = scale;
-	this->rotation = rotation;
+	setPosition(position);
+	setScale(scale);
+	setRotation(rotation);
 }
 
 void GameObject::draw(Shader& shader) {

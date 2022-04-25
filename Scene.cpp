@@ -14,7 +14,7 @@ bool Scene::nextIteration() {
 	return true;
 }
 
-void Scene::iterate() {
+bool Scene::iterate() {
 	// Read camera inputs and update its matrix
 	camera.inputs2(window);
 	camera.updateMatrix();
@@ -39,6 +39,8 @@ void Scene::iterate() {
 	// Refresh image with a new rendered data
 	glfwSwapBuffers(window);
 	glfwPollEvents();
+
+	return true;
 }
 
 // Adding textures, meshes, gameObjects, time/fps for improving calculation quality, add light, object speed/etc
@@ -103,6 +105,12 @@ GameObject& Scene::createObject(const int& index) {
 	return newObject;
 }
 
-void Scene::addObject(const GameObject& gameObject) {
+bool Scene::addObject(const GameObject& gameObject) {
 	gameObjects.push_back(gameObject);
+	
+	return true;
+}
+
+LightFactory& Scene::getLightFactory() {
+	return lightFactory;
 }

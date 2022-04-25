@@ -1,8 +1,12 @@
 #include "DirectionalLight.h"
 
-DirectionalLight::DirectionalLight(){}
+DirectionalLight::DirectionalLight() :shadowActive(true),
+	direction(glm::vec3(0.0f)){}
 
-DirectionalLight::DirectionalLight(glm::vec3 position, glm::vec4 color, glm::vec3 direction) : Light(position, color) {
+DirectionalLight::DirectionalLight(glm::vec3 position, 
+	glm::vec4 color, glm::vec3 direction) 
+	: Light(position, color), shadowActive(true) {
+
 	this->direction = direction;
 }
 

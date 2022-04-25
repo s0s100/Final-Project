@@ -45,7 +45,7 @@ public:
 
 	// Shows if the next iteration is ready to be run
 	bool nextIteration();
-	void iterate();
+	bool iterate();
 	
 	// Adding elements to the scene
 	bool addTexture(Texture* texture);
@@ -62,6 +62,9 @@ public:
 	// Creating object using mesh index and basic inputs
 	GameObject& createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
 	GameObject& createObject(const int& index);
-	void addObject(const GameObject& gameObject);
+	bool addObject(const GameObject& gameObject);
+
+	// Adding light to the scene
+	LightFactory& getLightFactory();
 };
 
