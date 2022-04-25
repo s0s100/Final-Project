@@ -1,12 +1,12 @@
 #version 330 core
 
-#define NR_DIR_LIGHT 10
-#define NR_POINT_LIGHT 10
-#define NR_SPOT_LIGHT 10
+#define NR_DIR_LIGHT 1
+#define NR_POINT_LIGHT 1
+#define NR_SPOT_LIGHT 25
 
-#define AMBIENT 0.05f
-#define DIFFUSE 0.4f
-#define SPECULAR 0.7f
+#define AMBIENT 0.00f
+#define DIFFUSE 0.3f
+#define SPECULAR 0.8f
 
 // Defines how strong is the shininess using specular lighting
 #define SHININESS_COEFFICIENT 32.0f

@@ -2,12 +2,12 @@
 #include <glfw3.h>
 
 Scene::Scene(Camera camera, GLFWwindow* window, Shader basicShader, Shader depthMapShader) 
-	: name("Default scene"), isPlaying(true),
+	: name("Default scene"),
 	basicShader(basicShader), depthMapShader(depthMapShader), window(window), camera(camera){
 }
 
 bool Scene::nextIteration() {
-	if (glfwWindowShouldClose(window) || !isPlaying){
+	if (glfwWindowShouldClose(window)){
 		return false;
 	}
 

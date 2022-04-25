@@ -13,6 +13,7 @@ const std::string iconPath = "Resources\\Other\\";
 //void renderQuad();
 GLFWwindow* glInitialize();
 int glStop(GLFWwindow* window);
+void firstDemonstation(GLFWwindow* window, int width, int height); // Number of moving elements
 
 
 /**
@@ -88,71 +89,16 @@ GLuint indiceCube[] = {
 	20, 22, 23
 };
 
+/*
+	Functions
+*/
+
 int main() {
 	// First initialize glFW and create scene
 	GLFWwindow* window = glInitialize();
 
-	const glm::vec3 camPos(-7.0f, 8.0f, -7.0f);
-	const glm::vec3 camOrient(0.75f, -0.75f, 0.75f);
-	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
-
-	Shader basicShader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
-	Shader depthMapShader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
-
-	Scene scene(camera, window, basicShader, depthMapShader);
-
-	// Brick texture
-	// 1024 x 1024, 5.5 MB, 72 dpi, 64 bit
-	Texture brickTextures[]{
-		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
-		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
-	};
-	scene.addTexture(brickTextures);
-	
-	std::vector <Vertex> verts(verticeCube, verticeCube + sizeof(verticeCube) / sizeof(Vertex));
-	std::vector <GLuint> ind(indiceCube, indiceCube + sizeof(indiceCube) / sizeof(GLuint));
-	std::vector <Texture> tex(brickTextures, brickTextures + sizeof(brickTextures) / sizeof(Texture));
-	Mesh cubeMesh(verts, ind, tex);
-	scene.addMesh(cubeMesh);
-	
-	glm::vec3 pos(0.0f, 0.5f, 0.0f);
-	glm::vec3 scale(1.0f, 1.0f, 2.0f);
-	glm::vec3 rot(0.0f, 0.0f, 0.0f);
-	scene.createObject(0, pos, scale, rot);
-
-	GameObject floor = GameObject(cubeMesh);
-	floor.setPosition(glm::vec3(0.0f, -0.5f, 0.0f));
-	floor.setScale(glm::vec3(10.0f, 0.5f, 10.0f));
-	floor.setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-	scene.addObject(floor);
-
-	LightFactory& lightFactory = scene.getLightFactory();
-	
-	// Spot light
-	glm::vec3 lightpos5 = glm::vec3(0.0f, 10.0f, 0.0f);
-	glm::vec4 lightcolor5 = glm::vec4(0.3f, 0.8f, 0.9f, 1.0f);
-	glm::vec3 lightdirection5 = glm::vec3(0.0f, -1.0f, 0.0f);
-	float innercone5 = 0.95f;
-	float outercone5 = 0.80f;
-	SpotLight* spotLight5 = lightFactory.generateSpotLight(lightpos5, lightcolor5, lightdirection5, innercone5, outercone5);
-
-	// Directinal light
-	glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
-	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-	glm::vec3 lightDirection0 = glm::vec3(0.0f, -1.0f, 0.5f);
-	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
-
-	/*
-		Showcases and testing
-	*/
-
-	
-
-
-
-	while (!glfwWindowShouldClose(window)) {
-		scene.iterate();
-	}
+	// Demonstations
+	firstDemonstation(window, 5, 5);
 
 	return glStop(window);
 }
@@ -196,4 +142,81 @@ int glStop(GLFWwindow* window) {
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
+}
+
+void firstDemonstation(GLFWwindow* window, int xParam, int zParam) {
+
+	// Put pos according to the cubes
+	// (1.5 / 2) cubes per width/height
+	const glm::vec3 camPos(xParam * 0.5, 5.0f, -5.0f);
+	const glm::vec3 camOrient(0.0f, -0.5f, 1.0f);
+	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
+
+	Shader basicShader((shaderPath + "default.vert").c_str(), (shaderPath + "default.frag").c_str());
+	Shader depthMapShader((shaderPath + "depthMapShader.vert").c_str(), (shaderPath + "depthMapShader.frag").c_str());
+
+	Scene scene(camera, window, basicShader, depthMapShader);
+
+	// Brick texture
+	// 1024 x 1024, 5.5 MB, 72 dpi, 64 bit
+	Texture brickTextures[]{
+		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
+	};
+	scene.addTexture(brickTextures);
+
+	// Add cube mesh
+	std::vector <Vertex> verts(verticeCube, verticeCube + sizeof(verticeCube) / sizeof(Vertex));
+	std::vector <GLuint> ind(indiceCube, indiceCube + sizeof(indiceCube) / sizeof(GLuint));
+	std::vector <Texture> tex(brickTextures, brickTextures + sizeof(brickTextures) / sizeof(Texture));
+	Mesh cubeMesh(verts, ind, tex);
+	scene.addMesh(cubeMesh);
+
+	// Factory pointer
+	LightFactory& lightFactory = scene.getLightFactory();
+
+	/*
+	* Populating with objects and light
+	*/
+
+	// Directinal light for now
+	glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
+	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+	glm::vec3 lightDirection0 = glm::vec3(-0.3f, -1.0f, -0.1f);
+	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
+
+	// Populate scene with objects
+	glm::vec3 pos(0.0f, 0.0f, 0.0f);
+	glm::vec3 scale(0.45f, 0.45f, 0.45f);
+	glm::vec3 rotation(0.0f, 0.0f, 0.0f);
+
+	glm::vec3 lightpos = glm::vec3(0.0f, 2.0f, 0.0f);
+	glm::vec4 lightcolor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	glm::vec3 lightdirection = glm::vec3(0.0f, 1.0f, 0.0f);
+	float innercone = 0.95f;
+	float outercone = 0.90f;
+
+	for (int curH = 0; curH < zParam; curH++) {
+		for (int curW = 0; curW < xParam; curW++) {
+			// Create objects
+			scene.createObject(0, pos, scale, rotation);
+			pos.x += 1;
+
+			// Create light
+			lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
+			lightpos.x += 1;
+			
+		}
+		pos.x = 0;
+		pos.z += 1;
+
+		lightpos.x = 0;
+		lightpos.z += 1;
+	}
+
+
+	// Run the loop
+	while (!glfwWindowShouldClose(window)) {
+		scene.iterate();
+	}
 }

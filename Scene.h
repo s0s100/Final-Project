@@ -18,8 +18,6 @@ class Scene {
 private:
 	// Scene name
 	std::string name;
-	// Does the scene paused
-	bool isPlaying;
 
 	// Window where everything renders
 	GLFWwindow* window;

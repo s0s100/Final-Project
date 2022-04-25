@@ -14,7 +14,7 @@ private:
 	glm::vec3 rotation; // Radians
 
 	// Matrix to define location of the object
-	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 model;
 
 public:
 	// Constructor with default values
