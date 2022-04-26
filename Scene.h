@@ -31,7 +31,7 @@ private:
 	// Object data
 	std::vector<Texture*> textures;
 	std::vector<Mesh> meshes;
-	std::vector<GameObject> gameObjects;
+	std::vector<GameObject*> gameObjects;
 
 	// Light data arrays
 	LightFactory lightFactory;
@@ -58,9 +58,9 @@ public:
 	bool removeMeshes(const int& index);
 
 	// Creating object using mesh index and basic inputs
-	GameObject& createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
-	GameObject& createObject(const int& index);
-	bool addObject(const GameObject& gameObject);
+	GameObject* createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation);
+	GameObject* createObject(const int& index);
+	bool addObject(GameObject* gameObject);
 
 	// Adding light to the scene
 	LightFactory& getLightFactory();

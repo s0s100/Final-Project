@@ -32,13 +32,19 @@ bool Scene::iterate() {
 	camera.setCameraPosition(basicShader, "camPos");
 	camera.setCameraMatrix(basicShader, "camMatrix");
 	lightFactory.update(basicShader);
-	for (auto &object : gameObjects) {
-		object.draw(basicShader);
+	/*for (GameObject* object : gameObjects) {*/
+	for (int i = 0; i < gameObjects.size(); i++) {
+		gameObjects.at(i)->draw(basicShader);
 	}
 
 	// Refresh image with a new rendered data
 	glfwSwapBuffers(window);
 	glfwPollEvents();
+
+	// At the end update game object values
+	for (GameObject* object : gameObjects) {
+		object->updateValues();
+	}
 
 	return true;
 }
@@ -89,23 +95,23 @@ Mesh& Scene::getMesh(const int& index) {
 	return meshes.at(index);
 }
 
-GameObject& Scene::createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
+GameObject* Scene::createObject(const int& index, glm::vec3 position, glm::vec3 scale, glm::vec3 rotation) {
 	Mesh mesh = getMesh(index);
-	GameObject newObject(mesh, position, scale, rotation);
+	GameObject* newObject = new GameObject(mesh, position, scale, rotation);
 	gameObjects.push_back(newObject);
 
 	return newObject;
 }
 
-GameObject& Scene::createObject(const int& index) {
+GameObject* Scene::createObject(const int& index) {
 	Mesh mesh = getMesh(index);
-	GameObject newObject(mesh);
+	GameObject* newObject = new GameObject(mesh);
 	gameObjects.push_back(newObject);
 
 	return newObject;
 }
 
-bool Scene::addObject(const GameObject& gameObject) {
+bool Scene::addObject(GameObject* gameObject) {
 	gameObjects.push_back(gameObject);
 	
 	return true;

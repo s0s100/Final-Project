@@ -184,19 +184,23 @@ void firstDemonstation(GLFWwindow* window) {
 	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
 
 	// Populate scene with objects
-	int xParam = 5;
-	int zParam = 5;
+	const int xParam = 5;
+	const int zParam = 5;
 	float multiplier = 3;
 	float boxSize = 0.45;
+	GameObject* objects[15][15];
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
 	glm::vec3 scale(boxSize / multiplier);
 	glm::vec3 rotation(0.0f, 0.0f, 0.0f);
 	for (int curH = 0; curH < zParam * multiplier; curH++) {
 		for (int curW = 0; curW < xParam * multiplier; curW++) {
-			scene.createObject(0, pos, scale, rotation);
-			pos.x += (1.0f / multiplier);
+			/*GameObject& newObject = scene.createObject(0, pos, scale, rotation);
+			objects[curH][curW] = newObject;*/
 
+			objects[curH][curW] = scene.createObject(0, pos, scale, rotation);
+
+			pos.x += (1.0f / multiplier);
 		}
 		pos.x = 0.0f;
 		pos.z += (1.0f / multiplier);
@@ -229,6 +233,16 @@ void firstDemonstation(GLFWwindow* window) {
 	//	lightpos.x = 0.0f;
 	//	lightpos.z += 1.0f;
 	//}
+
+	// Before running update cur value
+	for (int i = 0; i < zParam * multiplier; i++) {
+		for (int j = 0; j < xParam * multiplier; j++) {
+			objects[i][j]->addAcceleration(glm::vec3(0, 0.00002f * (i + j), 0));
+		}
+	}
+
+	/*objects[0][0]->addVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
+	objects[0][0]->setScale(glm::vec3(100.0f, 100.0f, 100.0f));*/
 
 	// Run the loop
 	while (!glfwWindowShouldClose(window)) {
