@@ -13,7 +13,7 @@ const std::string iconPath = "Resources\\Other\\";
 //void renderQuad();
 GLFWwindow* glInitialize();
 int glStop(GLFWwindow* window);
-void firstDemonstation(GLFWwindow* window, int width, int height); // Number of moving elements
+void firstDemonstation(GLFWwindow* window); // Number of moving elements
 
 
 /**
@@ -98,7 +98,7 @@ int main() {
 	GLFWwindow* window = glInitialize();
 
 	// Demonstations
-	firstDemonstation(window, 5, 5);
+	firstDemonstation(window);
 
 	return glStop(window);
 }
@@ -144,11 +144,9 @@ int glStop(GLFWwindow* window) {
 	return 0;
 }
 
-void firstDemonstation(GLFWwindow* window, int xParam, int zParam) {
-
+void firstDemonstation(GLFWwindow* window) {
 	// Put pos according to the cubes
-	// (1.5 / 2) cubes per width/height
-	const glm::vec3 camPos(xParam * 0.5, 5.0f, -5.0f);
+	const glm::vec3 camPos(2.5, 5.0f, -5.0f);
 	const glm::vec3 camOrient(0.0f, -0.5f, 1.0f);
 	Camera camera(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, camPos, camOrient);
 
@@ -186,34 +184,51 @@ void firstDemonstation(GLFWwindow* window, int xParam, int zParam) {
 	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
 
 	// Populate scene with objects
+	int xParam = 5;
+	int zParam = 5;
+	float multiplier = 3;
+	float boxSize = 0.45;
+
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
-	glm::vec3 scale(0.45f, 0.45f, 0.45f);
+	glm::vec3 scale(boxSize / multiplier);
 	glm::vec3 rotation(0.0f, 0.0f, 0.0f);
-
-	glm::vec3 lightpos = glm::vec3(0.0f, 2.0f, 0.0f);
-	glm::vec4 lightcolor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	glm::vec3 lightdirection = glm::vec3(0.0f, 1.0f, 0.0f);
-	float innercone = 0.95f;
-	float outercone = 0.90f;
-
-	for (int curH = 0; curH < zParam; curH++) {
-		for (int curW = 0; curW < xParam; curW++) {
-			// Create objects
+	for (int curH = 0; curH < zParam * multiplier; curH++) {
+		for (int curW = 0; curW < xParam * multiplier; curW++) {
 			scene.createObject(0, pos, scale, rotation);
-			pos.x += 1;
+			pos.x += (1.0f / multiplier);
 
-			// Create light
-			lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
-			lightpos.x += 1;
-			
 		}
-		pos.x = 0;
-		pos.z += 1;
-
-		lightpos.x = 0;
-		lightpos.z += 1;
+		pos.x = 0.0f;
+		pos.z += (1.0f / multiplier);
 	}
 
+	scene.createObject(0, glm::vec3(xParam / 2, -2, zParam / 2),
+		glm::vec3(xParam, 0.1, zParam), glm::vec3(0, 0, 0));
+
+	// With and without shadowing as well!
+	glm::vec3 lightpos = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec4 lightcolor = glm::vec4(0.8f, 0.5f, 1.0f, 1.0f);
+	glm::vec3 lightdirection = glm::vec3(0.3f, -1.0f, 0.3f);
+	float innercone = 0.95f;
+	float outercone = 0.90f;
+	for (int curH = 0; curH < 2; curH++) {
+		for (int curW = 0; curW < 2; curW++) {
+			// Create light
+			lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
+			lightpos.x += 3.5f;
+		}
+		lightpos.x = 0.0f;
+		lightpos.z += 1.5f;
+	}
+	//for (int curH = 0; curH < zParam; curH++) {
+	//	for (int curW = 0; curW < xParam; curW++) {
+	//		// Create light
+	//		lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
+	//		lightpos.x += 1.0f;
+	//	}
+	//	lightpos.x = 0.0f;
+	//	lightpos.z += 1.0f;
+	//}
 
 	// Run the loop
 	while (!glfwWindowShouldClose(window)) {
