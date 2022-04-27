@@ -178,10 +178,10 @@ void firstDemonstation(GLFWwindow* window) {
 	*/
 
 	// Directinal light for now
-	glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
+	/*glm::vec3 lightPos0 = glm::vec3(0.0f, 10.0f, 0.0f);
 	glm::vec4 lightColor0 = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 	glm::vec3 lightDirection0 = glm::vec3(-0.3f, -1.0f, -0.1f);
-	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
+	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);*/
 
 	// Populate scene with objects
 	const float sceneSize = 10;
@@ -191,7 +191,7 @@ void firstDemonstation(GLFWwindow* window) {
 	GameObject* objects[xParam][zParam];
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
-	glm::vec3 scale(boxSize);
+	glm::vec3 scale(boxSize, boxSize * 2, boxSize);
 	glm::vec3 rotation(0.0f, 0.0f, 0.0f);
 	for (int curH = 0; curH < zParam; curH++) {
 		for (int curW = 0; curW < xParam; curW++) {
@@ -203,55 +203,45 @@ void firstDemonstation(GLFWwindow* window) {
 		pos.z += sceneSize / xParam;
 	}
 
-	/*scene.createObject(0, glm::vec3(xParam / 2, -2, zParam / 2),
-		glm::vec3(xParam, 0.1, zParam), glm::vec3(0, 0, 0));*/
+	scene.createObject(0, glm::vec3(sceneSize / 2, -2, sceneSize / 2),
+		glm::vec3(sceneSize, 0.1, sceneSize), glm::vec3(0, 0, 0));
 
-		// With and without shadowing as well!
-	glm::vec3 lightpos = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::vec4 lightcolor = glm::vec4(0.8f, 0.5f, 1.0f, 1.0f);
-	glm::vec3 lightdirection = glm::vec3(0.3f, -1.0f, 0.3f);
-	float innercone = 0.95f;
-	float outercone = 0.90f;
+	// Create 2 light sources
+	glm::vec3 lightTo = glm::vec3(sceneSize / 2, 0.0f, sceneSize / 2);
 
-	/*
-	* Old light 
-	*/
+	glm::vec3 sunPos = glm::vec3(sceneSize / 2, 10.0f, sceneSize / 2);
+	glm::vec3 moonPos = glm::vec3(sceneSize / 2, -10.0f, sceneSize / 2);
 
-	//for (int curH = 0; curH < 2; curH++) {
-	//	for (int curW = 0; curW < 2; curW++) {
-	//		// Create light
-	//		lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
-	//		lightpos.x += 3.5f;
-	//	}
-	//	lightpos.x = 0.0f;
-	//	lightpos.z += 1.5f;
-	//}
-	//for (int curH = 0; curH < zParam; curH++) {
-	//	for (int curW = 0; curW < xParam; curW++) {
-	//		// Create light
-	//		lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
-	//		lightpos.x += 1.0f;
-	//	}
-	//	lightpos.x = 0.0f;
-	//	lightpos.z += 1.0f;
-	//}
+	glm::vec4 sunColor = glm::vec4(0.97265625f, 0.83984375f, 0.109375f, 1.0f);
+	glm::vec4 moonColor = glm::vec4(0.7578125f, 0.76953125f, 0.796875f, 1.0f);
 
-	// Before running update cur value
-	/*for (int i = 0; i < zParam * multiplier; i++) {
-		for (int j = 0; j < xParam * multiplier; j++) {
-			objects[i][j]->addAcceleration(glm::vec3(0, 0.00002f * (i + j), 0));
-		}
-	}*/
+	glm::vec3 sunDirection = glm::vec3(0.0f, -1.0f, 0.0f);
+	glm::vec3 moonDirection = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	/*objects[0][0]->addVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
-	objects[0][0]->setScale(glm::vec3(100.0f, 100.0f, 100.0f));*/
+	float innercone = 0.98f;
+	float outercone = 0.75f;
+
+	SpotLight* sun = lightFactory.generateSpotLight(sunPos, sunColor, sunDirection, innercone, outercone);
+	SpotLight* moon = lightFactory.generateSpotLight(moonPos, moonColor, moonDirection, innercone, outercone);
 
 	// Run the loop
-	double curTime;
 	double yPos;
 	double param;
+
+	// FPS counter
+	double curTime;
+	float prevTime = 0;
+	float timeDiff = 0;
+	float fps = 0;
+
+	// Extra info
+	double pi = 3.1415926535;
 	while (!glfwWindowShouldClose(window)) {
 		curTime = glfwGetTime();
+		timeDiff = curTime - prevTime;
+		prevTime = curTime;
+		fps = 1 / timeDiff;
+		std::cout << "FPS: " << static_cast<int>(fps) << std::endl;
 
 		for (int i = 0; i < zParam; i++) {
 			for (int j = 0; j < xParam; j++) {
@@ -263,6 +253,10 @@ void firstDemonstation(GLFWwindow* window) {
 				objects[i][j]->setPosition(glm::vec3(sceneSize / xParam * j, yPos, sceneSize / zParam * i));
 			}
 		}
+
+		// Also change the location of the light
+		
+
 		scene.iterate();
 	}
 }
