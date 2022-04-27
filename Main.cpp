@@ -184,46 +184,48 @@ void firstDemonstation(GLFWwindow* window) {
 	DirectionalLight* dirLight = lightFactory.generateDirectionalLight(lightPos0, lightColor0, lightDirection0);
 
 	// Populate scene with objects
-	const int xParam = 5;
-	const int zParam = 5;
-	float multiplier = 3;
-	float boxSize = 0.45;
-	GameObject* objects[15][15];
+	const float sceneSize = 10;
+	const int xParam = 50;
+	const int zParam = 50;
+	float boxSize = 0.095;
+	GameObject* objects[xParam][zParam];
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
-	glm::vec3 scale(boxSize / multiplier);
+	glm::vec3 scale(boxSize);
 	glm::vec3 rotation(0.0f, 0.0f, 0.0f);
-	for (int curH = 0; curH < zParam * multiplier; curH++) {
-		for (int curW = 0; curW < xParam * multiplier; curW++) {
-			/*GameObject& newObject = scene.createObject(0, pos, scale, rotation);
-			objects[curH][curW] = newObject;*/
-
+	for (int curH = 0; curH < zParam; curH++) {
+		for (int curW = 0; curW < xParam; curW++) {
 			objects[curH][curW] = scene.createObject(0, pos, scale, rotation);
 
-			pos.x += (1.0f / multiplier);
+			pos.x += sceneSize / xParam;
 		}
 		pos.x = 0.0f;
-		pos.z += (1.0f / multiplier);
+		pos.z += sceneSize / xParam;
 	}
 
-	scene.createObject(0, glm::vec3(xParam / 2, -2, zParam / 2),
-		glm::vec3(xParam, 0.1, zParam), glm::vec3(0, 0, 0));
+	/*scene.createObject(0, glm::vec3(xParam / 2, -2, zParam / 2),
+		glm::vec3(xParam, 0.1, zParam), glm::vec3(0, 0, 0));*/
 
-	// With and without shadowing as well!
+		// With and without shadowing as well!
 	glm::vec3 lightpos = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec4 lightcolor = glm::vec4(0.8f, 0.5f, 1.0f, 1.0f);
 	glm::vec3 lightdirection = glm::vec3(0.3f, -1.0f, 0.3f);
 	float innercone = 0.95f;
 	float outercone = 0.90f;
-	for (int curH = 0; curH < 2; curH++) {
-		for (int curW = 0; curW < 2; curW++) {
-			// Create light
-			lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
-			lightpos.x += 3.5f;
-		}
-		lightpos.x = 0.0f;
-		lightpos.z += 1.5f;
-	}
+
+	/*
+	* Old light 
+	*/
+
+	//for (int curH = 0; curH < 2; curH++) {
+	//	for (int curW = 0; curW < 2; curW++) {
+	//		// Create light
+	//		lightFactory.generateSpotLight(lightpos, lightcolor, lightdirection, innercone, outercone);
+	//		lightpos.x += 3.5f;
+	//	}
+	//	lightpos.x = 0.0f;
+	//	lightpos.z += 1.5f;
+	//}
 	//for (int curH = 0; curH < zParam; curH++) {
 	//	for (int curW = 0; curW < xParam; curW++) {
 	//		// Create light
@@ -235,17 +237,32 @@ void firstDemonstation(GLFWwindow* window) {
 	//}
 
 	// Before running update cur value
-	for (int i = 0; i < zParam * multiplier; i++) {
+	/*for (int i = 0; i < zParam * multiplier; i++) {
 		for (int j = 0; j < xParam * multiplier; j++) {
 			objects[i][j]->addAcceleration(glm::vec3(0, 0.00002f * (i + j), 0));
 		}
-	}
+	}*/
 
 	/*objects[0][0]->addVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
 	objects[0][0]->setScale(glm::vec3(100.0f, 100.0f, 100.0f));*/
 
 	// Run the loop
+	double curTime;
+	double yPos;
+	double param;
 	while (!glfwWindowShouldClose(window)) {
+		curTime = glfwGetTime();
+
+		for (int i = 0; i < zParam; i++) {
+			for (int j = 0; j < xParam; j++) {
+				param = (double)i + (double)j + curTime;
+				if (param > 263 || param < -263) {
+					param -= 360;
+				}
+				yPos = 0.1 * sin(param);
+				objects[i][j]->setPosition(glm::vec3(sceneSize / xParam * j, yPos, sceneSize / zParam * i));
+			}
+		}
 		scene.iterate();
 	}
 }
