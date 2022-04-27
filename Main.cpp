@@ -157,9 +157,15 @@ void firstDemonstation(GLFWwindow* window) {
 
 	// Brick texture
 	// 1024 x 1024, 5.5 MB, 72 dpi, 64 bit
-	Texture brickTextures[]{
+	/*Texture brickTextures[]{
 		Texture((texturePath + "brick.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
+	};*/
+
+	// Wall texture 
+	Texture brickTextures[]{
+		Texture((texturePath + "container.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
+		Texture((texturePath + "container_specular.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
 	};
 	scene.addTexture(brickTextures);
 
