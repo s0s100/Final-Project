@@ -12,7 +12,7 @@ private:
 	GLuint ID;
 	// Texture type (such as diffuse, specular, etc)
 	const char* type;
-	// Texture slot at open GL engine
+	// Texture slot at openGL engine
 	GLuint unit;
 
 public:

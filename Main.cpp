@@ -162,7 +162,9 @@ void firstDemonstation(GLFWwindow* window) {
 		Texture((texturePath + "brick.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
 	};*/
 
-	// Wall texture 
+	// Brick textures
+	// Taken from: https://learnopengl.com/img/textures/container2.png
+	//			   https://learnopengl.com/img/textures/container2_specular.png
 	Texture brickTextures[]{
 		Texture((texturePath + "container.png").c_str(), "diffuse", 0, GL_RGBA, GL_UNSIGNED_BYTE),
 		Texture((texturePath + "container_specular.png").c_str(), "specular", 1, GL_RGBA, GL_UNSIGNED_BYTE)
@@ -191,9 +193,9 @@ void firstDemonstation(GLFWwindow* window) {
 
 	// Populate scene with objects
 	const float sceneSize = 10;
-	const int xParam = 50;
-	const int zParam = 50;
-	float boxSize = 0.095;
+	const int xParam = 75;
+	const int zParam = 75;
+	float boxSize = 0.060;
 	GameObject* objects[xParam][zParam];
 
 	glm::vec3 pos(0.0f, 0.0f, 0.0f);
@@ -209,8 +211,9 @@ void firstDemonstation(GLFWwindow* window) {
 		pos.z += sceneSize / xParam;
 	}
 
-	scene.createObject(0, glm::vec3(sceneSize / 2, -2, sceneSize / 2),
-		glm::vec3(sceneSize, 0.1, sceneSize), glm::vec3(0, 0, 0));
+	// 
+	/*scene.createObject(0, glm::vec3(sceneSize / 2, -2, sceneSize / 2),
+		glm::vec3(sceneSize, 0.1, sceneSize), glm::vec3(0, 0, 0));*/
 
 	// Create 2 light sources
 	glm::vec3 lightTo = glm::vec3(sceneSize / 2, 0.0f, sceneSize / 2);
@@ -228,7 +231,9 @@ void firstDemonstation(GLFWwindow* window) {
 	float outercone = 0.75f;
 
 	SpotLight* sun = lightFactory.generateSpotLight(sunPos, sunColor, sunDirection, innercone, outercone);
-	SpotLight* moon = lightFactory.generateSpotLight(moonPos, moonColor, moonDirection, innercone, outercone);
+	/*SpotLight* moon = lightFactory.generateSpotLight(moonPos, moonColor, moonDirection, innercone, outercone);*/
+	sun->setShadowActive(false);
+	/*moon->setShadowActive(false);*/
 
 	// Run the loop
 	double yPos;

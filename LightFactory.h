@@ -15,9 +15,6 @@ private:
 	std::vector<DirectionalLight*> directionalLights;
 	std::vector<PointLight*> pointLights;
 	std::vector<SpotLight*> spotLights;
-
-	// Texture shift in the shader slot
-	inline static const int texFrom = 16;
 public:
 	LightFactory();
 
