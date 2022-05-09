@@ -13,7 +13,7 @@ const std::string iconPath = "Resources\\Other\\";
 //void renderQuad();
 GLFWwindow* glInitialize();
 int glStop(GLFWwindow* window);
-void firstDemonstation(GLFWwindow* window); // Number of moving elements
+void firstDemonstation(GLFWwindow* window);
 
 
 /**
@@ -94,10 +94,8 @@ GLuint indiceCube[] = {
 */
 
 int main() {
-	// First initialize glFW and create scene
 	GLFWwindow* window = glInitialize();
 
-	// Demonstations
 	firstDemonstation(window);
 
 	return glStop(window);
@@ -110,9 +108,9 @@ GLFWwindow* glInitialize() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create window with the game scene
-	GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
+	// GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Default window", NULL, NULL);
 	// Create full screen window with the game scene
-	// GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Test window", glfwGetPrimaryMonitor(), NULL);
+	 GLFWwindow* window = glfwCreateWindow(DEFAULT_MONITOR_WIDTH, DEFAULT_MONITOR_HEIGHT, "Test window", glfwGetPrimaryMonitor(), NULL);
 
 	// Adding icon
 	GLFWimage windowIcon[1]{ FileManager::getImageContent((iconPath + "Fox_icon.png").c_str()) };
@@ -269,5 +267,5 @@ void firstDemonstation(GLFWwindow* window) {
 		
 
 		scene.iterate();
-	}
+	}	
 }

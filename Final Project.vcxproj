@@ -24,6 +24,7 @@
     <ProjectGuid>{6f096eca-17ab-4e30-92e3-d8c069b8cf8c}</ProjectGuid>
     <RootNamespace>FinalProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Graphics-engine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -80,8 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\s0s10\Desktop\Final project\Current github version\Final Project\Libraries\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\s0s10\Desktop\Final project\Current github version\Final Project\Libraries\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Programing Projects\C++\Graphics-engine\Libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Programing Projects\C++\Graphics-engine\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -194,6 +195,8 @@
     <None Include="Shaders\depthMapShader.vert" />
     <None Include="Shaders\depthMapShaderDebug.frag" />
     <None Include="Shaders\depthMapShaderDebug.vert" />
+    <None Include="Shaders\FractalFragShader.frag" />
+    <None Include="Shaders\FractalFragShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\Other\Fox_icon.png" />
