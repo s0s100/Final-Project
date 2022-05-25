@@ -12,9 +12,9 @@ constexpr int TEXTURE_SHIFT = 16;
 
 class Light {
 private:
-	glm::vec3 position = glm::vec3(0.0f);
-	glm::vec4 color = glm::vec4(1.0f);
-	glm::mat4 lightSpaceMatrix = glm::mat4(0.0f);
+	glm::vec3 position;
+	glm::vec4 color;
+	glm::mat4 lightSpaceMatrix;
 
 
 public:

@@ -1,8 +1,9 @@
 #include "PointLight.h"
 
-PointLight::PointLight(){}
+PointLight::PointLight() : constant(0.5f), linear(1.0f), quadratic(1.0f) {}
 
-PointLight::PointLight(glm::vec3 position, glm::vec4 color) : Light(position, color) {}
+PointLight::PointLight(glm::vec3 position, glm::vec4 color) : Light(position, color),
+	constant(0.5f), linear(1.0f), quadratic(1.0f) {}
 
 PointLight::PointLight(glm::vec3 position, glm::vec4 color, float constant, float linear, float quadratic) : Light(position, color) {
 	this->constant = constant;

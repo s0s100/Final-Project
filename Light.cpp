@@ -1,8 +1,9 @@
 #include "Light.h"
 
-Light::Light() {}
+Light::Light() : position(glm::vec3(0.0f)), color(glm::vec4(1.0f)),
+	lightSpaceMatrix(glm::mat4(0.0f)) {}
 
-Light::Light(glm::vec3 position, glm::vec4 color) {
+Light::Light(glm::vec3 position, glm::vec4 color) : lightSpaceMatrix(glm::mat4(0.0f)) {
 	Light::position = position;
 	Light::color = color;
 }

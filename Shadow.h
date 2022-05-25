@@ -18,7 +18,7 @@ private:
 	unsigned int bufferId;
 	unsigned int textureId;
 	// Matrix which represents light path
-	glm::mat4 lightMatrix = glm::mat4(0.0f);
+	glm::mat4 lightMatrix;
 
 	// Shadow width/height for the texture
 	inline static const int shadowWidth = 2000;

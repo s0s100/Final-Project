@@ -5,7 +5,7 @@
 #include "Camera.h"
 
 // Empty constructor
-Camera::Camera() {
+Camera::Camera() : cameraMatrix(glm::mat4(1.0f)) {
 	Camera::width = DEFAULT_MONITOR_WIDTH;
 	Camera::height = DEFAULT_MONITOR_HEIGHT;
 	Camera::orientation = glm::vec3(0.0f);
@@ -13,7 +13,8 @@ Camera::Camera() {
 }
 
 // Basic constructor for the camera
-Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation) {
+Camera::Camera(int width, int height, glm::vec3 position, glm::vec3 orientation) :
+	cameraMatrix(glm::mat4(1.0f)) {
 	// Get input values and set camera values to it
 	Camera::width = width;
 	Camera::height = height;

@@ -6,9 +6,9 @@
 class PointLight: public Light {
 private:
 	// Defines distance of the light
-	float constant = 0.5f;
-	float linear = 0.5f;
-	float quadratic = 1.0f;
+	float constant;
+	float linear;
+	float quadratic;
 
 public:
 	PointLight();

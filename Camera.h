@@ -32,7 +32,7 @@ private:
 	// Camera position, orientation and it's result  cameraMatrix
 	glm::vec3 position;
 	glm::vec3 orientation;
-	glm::mat4 cameraMatrix = glm::mat4(1.0f);
+	glm::mat4 cameraMatrix;
 
 	// Size of the camera
 	int width;

@@ -5,7 +5,7 @@
 
 #include "Shadow.h"
 
-Shadow::Shadow() {
+Shadow::Shadow() : lightMatrix(glm::mat4(0.0f)) {
 	// Generate buffer to store the depth
 	glGenFramebuffers(1, &bufferId);
 	// Generate texture to save the depth data
